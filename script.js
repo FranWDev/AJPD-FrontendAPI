@@ -141,4 +141,155 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Llamar a la función de inicialización del slider
     initHeroSlider();
+
+    // Inicializar slider de actividades
+    function initActivitySlider() {
+        const sliderTrack = document.querySelector('.slider-track');
+        const slides = document.querySelectorAll('.slide');
+        const dots = document.querySelectorAll('.slider-dot');
+        let currentSlide = 0;
+        const totalSlides = slides.length;
+
+        // Variables para el deslizamiento
+        let isDragging = false;
+        let startPos = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationID = 0;
+        let dragStartX = 0;
+
+        // Prevenir el comportamiento por defecto de las imágenes
+        slides.forEach(slide => {
+            slide.addEventListener('dragstart', e => e.preventDefault());
+        });
+
+        // Touch events
+        sliderTrack.addEventListener('touchstart', touchStart);
+        sliderTrack.addEventListener('touchmove', touchMove);
+        sliderTrack.addEventListener('touchend', touchEnd);
+
+        // Mouse events
+        sliderTrack.addEventListener('mousedown', touchStart);
+        sliderTrack.addEventListener('mousemove', touchMove);
+        sliderTrack.addEventListener('mouseup', touchEnd);
+        sliderTrack.addEventListener('mouseleave', touchEnd);
+
+        function touchStart(event) {
+            isDragging = true;
+            startPos = getPositionX(event);
+            dragStartX = startPos;
+            
+            // Detener la animación automática mientras se arrastra
+            cancelAnimationFrame(animationID);
+            
+            // Cambiar el cursor
+            sliderTrack.style.cursor = 'grabbing';
+        }
+
+        function touchMove(event) {
+            if (!isDragging) return;
+            
+            const currentPosition = getPositionX(event);
+            const diff = currentPosition - startPos;
+            const walk = currentPosition - dragStartX;
+            
+            // Actualizar la posición del slider
+            currentTranslate = prevTranslate + walk;
+            setSliderPosition();
+        }
+
+        function touchEnd() {
+            isDragging = false;
+            const movedBy = currentTranslate - prevTranslate;
+            
+            // Determinar si el usuario ha deslizado lo suficiente para cambiar de slide
+            if (Math.abs(movedBy) > 100) {
+                if (movedBy < 0 && currentSlide < totalSlides - 1) {
+                    currentSlide++;
+                } else if (movedBy > 0 && currentSlide > 0) {
+                    currentSlide--;
+                }
+            }
+            
+            goToSlide(currentSlide);
+            sliderTrack.style.cursor = 'grab';
+        }
+
+        function getPositionX(event) {
+            return event.type.includes('mouse') ? event.pageX : event.touches[0].clientX;
+        }
+
+        function setSliderPosition() {
+            sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
+        }
+
+        function goToSlide(index) {
+            currentSlide = index;
+            const offset = -index * 100;
+            sliderTrack.style.transform = `translateX(${offset}%)`;
+            prevTranslate = offset * sliderTrack.offsetWidth / 100;
+            currentTranslate = prevTranslate;
+            
+            // Actualizar dots
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[currentSlide].classList.add('active');
+        }
+
+        // Auto avance (solo cuando no se está interactuando)
+        let autoSlideInterval;
+        
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                if (!isDragging) {
+                    currentSlide = (currentSlide + 1) % totalSlides;
+                    goToSlide(currentSlide);
+                }
+            }, 10000);
+        }
+
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
+
+        // Iniciar auto-slide
+        startAutoSlide();
+
+        // Event listeners para los dots (mantenemos esta funcionalidad como respaldo)
+        dots.forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                stopAutoSlide();
+                goToSlide(index);
+                startAutoSlide();
+            });
+        });
+    }
+    
+    // Llamar a la función de inicialización del slider de actividades
+    initActivitySlider();
+});
+// Añadir al script.js
+document.querySelectorAll('.program-card').forEach(card => {
+    let timeoutId;
+    
+    card.addEventListener('click', (e) => {
+        // Verificar si el click fue en el enlace "saber más"
+        if (e.target.classList.contains('learn-more')) {
+            // Si es el enlace, no ejecutar la animación
+            return;
+        }
+
+        // Limpiar timeout anterior si existe
+        if (timeoutId) clearTimeout(timeoutId);
+
+        // Añadir delay para la animación
+        timeoutId = setTimeout(() => {
+            const randomRotation = Math.random() < 0.5 ? -3 : 3;
+            card.style.transform = `scale(1.1) rotate(${randomRotation}deg)`;
+            
+            // Volver al estado original después de 500ms
+            setTimeout(() => {
+                card.style.transform = '';
+            }, 500);
+        }, 50); // 50ms de delay para permitir el click en el enlace
+    });
 });
