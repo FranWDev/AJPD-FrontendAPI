@@ -17,3 +17,8 @@
     background-position: center !important;
     background-attachment: fixed !important;
 }
+@media (max-width: 768px) {
+    .hero {
+        background-attachment: scroll !important;
+    }
+}

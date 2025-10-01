@@ -45,6 +45,10 @@
     font-size: 1.5rem;
     color: var(--color-primary);
 }
+.logo-container h1 a {
+    color: inherit;        
+    text-decoration: none;
+}
 
 /* Navegación Desktop */
 .desktop-nav {

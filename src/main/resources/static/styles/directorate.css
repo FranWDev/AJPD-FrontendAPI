@@ -1,0 +1,21 @@
+.program-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 0px !important;
+    justify-content: center !important; 
+}
+.program-card {
+    width: 245px;
+    justify-self: center;
+}
+
+.program-card img {
+    width: 100%;
+    height: auto;
+}   
+.featured-section h1 {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    font-size: 3rem;
+}
