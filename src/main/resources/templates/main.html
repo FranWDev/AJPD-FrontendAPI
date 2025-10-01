@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Asociación Juvenil Proyecto Dubini - Organización dedicada a la juventud">
     <title>Proyecto Dubini</title>
-    
+
     <link rel="stylesheet" href="/styles/layout/header.css">
     <link rel="stylesheet" href="/styles/layout/footer.css">
     <link rel="stylesheet" href="/styles/components/hero.css">
@@ -15,6 +16,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/styles/base.css">
 </head>
+
 <body>
     <header th:replace="fragments/header :: header"></header>
     <main role="main">
@@ -27,7 +29,8 @@
             <div class="hero-content">
                 <h2>"Un eslogan guay para que la gente se quiera unir"</h2>
                 <p>"Una subfrase tambien guay para que se quieran unir"</p>
-                <a href="https://docs.google.com/forms/d/e/1FAIpQLScpYBiXsFYA2vxVg1Azp6JnyRLz2a8QjPdm99Ur5hemTy0lfg/viewform" class="cta-button">¡Sé Socio!</a>
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLScpYBiXsFYA2vxVg1Azp6JnyRLz2a8QjPdm99Ur5hemTy0lfg/viewform"
+                    class="cta-button">¡Sé Socio!</a>
             </div>
         </section>
 
@@ -81,20 +84,21 @@
                                     <p>Con el apoyo de la científica Alexandra Dubini.</p>
                                 </div>
                             </div>
-                             <div class="slide">
+                            <div class="slide">
                                 <img src="assets/slider/slide4.jpg" alt="Actividad 3">
                                 <div class="slide-caption">
                                     <p>Junta Directiva A.J. Proyecto Dubini.</p>
                                 </div>
+                            </div>
+
                         </div>
-                        
                     </div>
                 </div>
-            </div>
         </section>
     </main>
     <div th:replace="fragments/wsp-icon :: wsp-icon"></div>
     <div th:replace="fragments/footer :: footer"></div>
 </body>
-    <script src="/scripts/script.js"></script>
+<script src="/scripts/script.js"></script>
+
 </html>

@@ -3,7 +3,6 @@ package org.dubini.frontend_api.controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
-
 @Controller
 public class PageController {
 
@@ -41,6 +40,10 @@ public class PageController {
     public String directorate() {
         return "directorate";
     }
-    
-    
+
+    @GetMapping("/premios")
+    public String awards() {
+        return "awards";
+    }
+
 }

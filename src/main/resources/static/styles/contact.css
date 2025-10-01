@@ -1,6 +1,6 @@
 .social-links {
-    justify-content: center;
-    margin-bottom: 1rem;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 .google-map {
   width: 100vh !important;
@@ -9,6 +9,6 @@
 
 @media (max-width: 768px) {
   .google-map {
-   width: 47vh !important;
+    width: 47vh !important;
   }
 }
