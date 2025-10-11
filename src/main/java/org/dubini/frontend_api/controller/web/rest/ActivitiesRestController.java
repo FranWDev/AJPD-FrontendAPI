@@ -8,10 +8,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/activities")
-public class ActivitiesController {
+public class ActivitiesRestController {
 
     public ActivitiesSerivice activitiesSerivice;
-    public ActivitiesController(ActivitiesSerivice activitiesSerivice) {
+    public ActivitiesRestController(ActivitiesSerivice activitiesSerivice) {
         this.activitiesSerivice = activitiesSerivice;
     }
     

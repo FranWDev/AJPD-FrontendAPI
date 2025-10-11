@@ -45,15 +45,5 @@ public class WebController {
     public String awards() {
         return "awards";
     }
-
-    @GetMapping("/noticias") 
-        public String news() {
-        return "news";
-    }
-
-    @GetMapping("/actividades")
-    public String activities() {
-        return "activities";
-    }
     
 }

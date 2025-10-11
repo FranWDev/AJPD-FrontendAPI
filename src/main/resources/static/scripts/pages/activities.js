@@ -1,4 +1,4 @@
-import { fetchActivitiesSummary } from "../api/fetchClient.js";
+import { fetchActivitiesSummary } from "../api/publicationService.js";
 
 document.addEventListener("DOMContentLoaded", () => {
     const container = document.getElementsByClassName("program-cards");
@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
             article.innerHTML = `
                 <img src="${item.imageUrl}" alt="${item.title}">
                 <h3>${item.title}</h3>
-                <p>${item.summary}</p>
+                <p>${item.description}</p>
                 <a href="${item.url}" target="_blank">Read more</a>
             `;
             container[0].appendChild(article);

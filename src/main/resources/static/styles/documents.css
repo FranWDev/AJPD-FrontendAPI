@@ -1,22 +1,22 @@
 .hero {
-  min-height: 80vh;
   display: flex;
-  align-items: center;
+  position: relative;
+  position: relative;
   justify-content: center;
-  text-align: center;
-  padding: 2rem;
-  color: white;
-  position: relative;
-  overflow: hidden;
-  position: relative;
+  align-items: center;
   background: linear-gradient(
       rgba(125, 179, 198, 0.85),
       rgba(84, 164, 188, 0.85)
     ),
     url("/assets/background3.png") !important;
-  background-size: cover !important;
   background-position: center !important;
+  background-size: cover !important;
   background-attachment: fixed !important;
+  padding: 2rem;
+  min-height: 80vh;
+  overflow: hidden;
+  color: white;
+  text-align: center;
 }
 @media (max-width: 768px) {
   .hero {

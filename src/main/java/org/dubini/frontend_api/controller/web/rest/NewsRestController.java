@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/api/news")
-public class NewsController {
+public class NewsRestController {
 
     private NewsSerivice newsSerivice;
 
-    public NewsController(NewsSerivice newsSerivice) {
+    public NewsRestController(NewsSerivice newsSerivice) {
         this.newsSerivice = newsSerivice;
     }
     
