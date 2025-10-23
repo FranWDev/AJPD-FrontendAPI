@@ -1,4 +1,4 @@
-package org.dubini.frontend_api.controller.web;
+package org.dubini.frontend_api.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +44,16 @@ public class WebController {
     @GetMapping("/premios")
     public String awards() {
         return "awards";
+    }
+
+    @GetMapping("/noticias")
+    public String news() {
+        return "news";
+    }
+
+    @GetMapping("/actividades")
+    public String activities() {
+        return "activities";
     }
     
 }

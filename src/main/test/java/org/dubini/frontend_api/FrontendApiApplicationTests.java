@@ -1,4 +1,4 @@
-package org.dubini.frontend_api;
+package src.test.java.org.dubini.frontend_api;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
