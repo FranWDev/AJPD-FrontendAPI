@@ -1,39 +1,25 @@
 package org.dubini.frontend_api.config;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.caffeine.CaffeineCache;
-import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
 @Configuration
 public class CacheConfig {
 
     @Bean
     public CacheManager cacheManager() {
-        SimpleCacheManager cacheManager = new SimpleCacheManager();
+        CaffeineCacheManager cacheManager = new CaffeineCacheManager("activities", "news");
+        cacheManager.setCaffeine(Caffeine.newBuilder()
+                .maximumSize(100)
+                .expireAfterWrite(10, TimeUnit.MINUTES));
 
-        CaffeineCache activitiesCache = new CaffeineCache("activities",
-                Caffeine.newBuilder()
-                        .maximumSize(100)
-                        .build());
+        cacheManager.setAsyncCacheMode(true);
 
-        CaffeineCache newsCache = new CaffeineCache("news",
-                Caffeine.newBuilder()
-                        .maximumSize(100)
-                        .build());
-        CaffeineCache newsFallbackcache = new CaffeineCache("newsFallback",
-                Caffeine.newBuilder()
-                        .maximumSize(100)
-                        .build());
-        CaffeineCache activitiesFallbackcache = new CaffeineCache("activitiesFallback",
-                Caffeine.newBuilder()
-                        .maximumSize(100)
-                        .build());
-        cacheManager.setCaches(Arrays.asList(activitiesCache, newsCache, newsFallbackcache, activitiesFallbackcache));
         return cacheManager;
     }
 }

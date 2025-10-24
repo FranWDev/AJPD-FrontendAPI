@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <img src="${item.imageUrl}" alt="${item.title}">
                 <h3>${item.title}</h3>
                 <p>${item.description}</p>
-                <a href="${item.url}" target="_blank">Read more</a>
+                <a href="http://localhost:8080/uploads/${item.url}" target="_blank">Read more</a>
             `;
             container[0].appendChild(article);
         });
