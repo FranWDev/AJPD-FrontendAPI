@@ -25,4 +25,22 @@ public class JwtProvider {
         return token;
     }
 
+     public boolean validateToken(String token) {
+        try {  
+            Claims claims = Jwts.parser()
+                    .verifyWith(key)
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+            
+            String subject = claims.getSubject();
+            Date expiration = claims.getExpiration();
+            Date now = new Date();
+
+            boolean isValid = "backoffice".equals(subject) && expiration.after(now);
+            return isValid;
+        } catch (Exception e) {
+            return false;
+        }
+    }
 }
