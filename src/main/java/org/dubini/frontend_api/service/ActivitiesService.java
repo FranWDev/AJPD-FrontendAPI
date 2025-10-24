@@ -39,6 +39,7 @@ public class ActivitiesService {
         return Mono.error(new RuntimeException("No cached news available", t));
     }
 
+    @SuppressWarnings("unused")
     @CacheEvict(value = "activities", allEntries = true)
     public void clear() {
         Mono<List<PublicationDTO>> refreshCache = get();
