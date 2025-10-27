@@ -1,0 +1,203 @@
+    /* Overlay del popup */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(16, 35, 78, 0.7);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      transition: opacity var(--transition-normal);
+      padding: 1rem;
+    }
+
+    .popup-overlay.show {
+      display: flex;
+      animation: fadeInOverlay var(--transition-normal) forwards;
+    }
+
+    .popup-overlay.hide {
+      animation: fadeOutOverlay var(--transition-fast) forwards;
+    }
+
+    /* Contenido del popup */
+    .popup-content {
+      background: white;
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      max-width: 600px;
+      width: 100%;
+      max-height: 80vh;
+      overflow-y: auto;
+      position: relative;
+      transform: scale(0.9) translateY(20px);
+      opacity: 0;
+      transition: all var(--transition-normal);
+    }
+
+    .popup-overlay.show .popup-content {
+      animation: popupSlideIn var(--transition-normal) forwards;
+    }
+
+    .popup-overlay.hide .popup-content {
+      animation: popupSlideOut var(--transition-fast) forwards;
+    }
+
+    /* Header del popup */
+    .popup-content > div:first-child {
+      background: linear-gradient(135deg, var(--color-primary), var(--color-blue-medium));
+      color: white;
+      padding: 1.5rem 2rem;
+      border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .popup-content > div:first-child h2 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin: 0;
+      padding-right: 2rem;
+    }
+
+    /* Botón de cerrar */
+    .popup-content > div:first-child button {
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.5rem;
+      font-weight: 300;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+      line-height: 1;
+    }
+
+    .popup-content > div:first-child button:hover {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: rgba(255, 255, 255, 0.5);
+      transform: rotate(90deg) scale(1.1);
+    }
+
+    /* Body del popup */
+    .popup-content > div:last-child {
+      padding: 2rem;
+      color: var(--color-primary);
+    }
+
+    .popup-content > div:last-child p {
+      margin-bottom: 1rem;
+    }
+
+    /* Botón trigger (ejemplo) */
+    .trigger-btn {
+      background: linear-gradient(135deg, var(--color-secondary), var(--color-accent));
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: var(--border-radius-md);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-md);
+      transition: all var(--transition-fast);
+      margin: 1rem;
+    }
+
+    .trigger-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .trigger-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Animaciones */
+    @keyframes fadeInOverlay {
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes fadeOutOverlay {
+      to {
+        opacity: 0;
+      }
+    }
+
+    @keyframes popupSlideIn {
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes popupSlideOut {
+      to {
+        transform: scale(0.9) translateY(20px);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .popup-content {
+        max-width: 95%;
+        max-height: 90vh;
+        border-radius: var(--border-radius-md);
+      }
+
+      .popup-content > div:first-child {
+        padding: 1rem 1.5rem;
+        border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+      }
+
+      .popup-content > div:first-child h2 {
+        font-size: 1.25rem;
+      }
+
+      .popup-content > div:last-child {
+        padding: 1.5rem;
+      }
+
+      .popup-content > div:first-child button {
+        width: 32px;
+        height: 32px;
+        font-size: 1.25rem;
+      }
+    }
+
+    /* Scrollbar personalizado */
+    .popup-content::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .popup-content::-webkit-scrollbar-track {
+      background: var(--color-background);
+      border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+    }
+
+    .popup-content::-webkit-scrollbar-thumb {
+      background: var(--color-blue-light);
+      border-radius: 4px;
+    }
+
+    .popup-content::-webkit-scrollbar-thumb:hover {
+      background: var(--color-blue-sky);
+    }
