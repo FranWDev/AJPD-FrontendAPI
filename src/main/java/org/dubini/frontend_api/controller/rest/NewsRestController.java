@@ -3,7 +3,7 @@ package org.dubini.frontend_api.controller.rest;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/news")
 public class NewsRestController {
 
-    private NewsService newsSerivice;
+    private final NewsService newsService;
     
     @GetMapping
     public Mono<List<PublicationDTO>> get() {
-        return newsSerivice.get();
+        return newsService.get();
     }
     
 }

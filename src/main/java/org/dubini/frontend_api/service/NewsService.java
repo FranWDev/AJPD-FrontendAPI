@@ -30,9 +30,11 @@ public class NewsService {
         return newsClient.get();
     }
 
+    @SuppressWarnings("unchecked")
     public Mono<List<PublicationDTO>> getBackupNews(Throwable t) {
         Cache backupCache = cacheManager.getCache(CACHE_NAME);
         if (backupCache != null) {
+
             List<PublicationDTO> cachedNews = backupCache.get(CACHE_KEY, List.class);
             if (cachedNews != null) {
                 return Mono.just(cachedNews);
@@ -41,6 +43,7 @@ public class NewsService {
         return Mono.error(new RuntimeException("No cached news available", t));
     }
 
+    @SuppressWarnings("unused")
     @CacheEvict(value = CACHE_NAME, allEntries = true)
     public void clear() {
         Mono<List<PublicationDTO>> refreshCache = get();
