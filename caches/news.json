@@ -1,0 +1,78 @@
+{
+  "newsKey" : [ {
+    "title" : "Publicacion 1",
+    "description" : "Descripcion 1",
+    "imageUrl" : "/images/31b00b70-6f4f-49a6-9045-dee7d9368494.webp",
+    "publishedAt" : "2025-10-28T23:29:03.747381900",
+    "editorContent" : {
+      "time" : 1761694143726,
+      "blocks" : [ {
+        "type" : "paragraph",
+        "data" : {
+          "text" : "Publicacion de prueba"
+        }
+      } ],
+      "version" : "2.28.2"
+    }
+  }, {
+    "title" : "Publicacion 2",
+    "description" : "Descripcion 2",
+    "imageUrl" : "/images/31b00b70-6f4f-49a6-9045-dee7d9368494.webp",
+    "publishedAt" : "2025-10-28T23:29:32.089283300",
+    "editorContent" : {
+      "time" : 1761694172084,
+      "blocks" : [ {
+        "type" : "paragraph",
+        "data" : {
+          "text" : "Publicacion de prueba"
+        }
+      } ],
+      "version" : "2.28.2"
+    }
+  }, {
+    "title" : "Publicacion 3",
+    "description" : "Descripcion 3",
+    "imageUrl" : "/images/31b00b70-6f4f-49a6-9045-dee7d9368494.webp",
+    "publishedAt" : "2025-10-28T23:32:08.437918",
+    "editorContent" : {
+      "time" : 1761694328433,
+      "blocks" : [ {
+        "type" : "paragraph",
+        "data" : {
+          "text" : "Publicacion de prueba"
+        }
+      } ],
+      "version" : "2.28.2"
+    }
+  }, {
+    "title" : "Publicacion 4",
+    "description" : "Descripcion 4",
+    "imageUrl" : "/images/31b00b70-6f4f-49a6-9045-dee7d9368494.webp",
+    "publishedAt" : "2025-10-28T23:37:01.591721800",
+    "editorContent" : {
+      "time" : 1761694621581,
+      "blocks" : [ {
+        "type" : "paragraph",
+        "data" : {
+          "text" : "Publicacion de prueba"
+        }
+      } ],
+      "version" : "2.28.2"
+    }
+  }, {
+    "title" : "Publicacion 5",
+    "description" : "Descripcion 5",
+    "imageUrl" : "/images/31b00b70-6f4f-49a6-9045-dee7d9368494.webp",
+    "publishedAt" : "2025-10-28T23:40:58.449803200",
+    "editorContent" : {
+      "time" : 1761694858438,
+      "blocks" : [ {
+        "type" : "paragraph",
+        "data" : {
+          "text" : "Publicacion de prueba"
+        }
+      } ],
+      "version" : "2.28.2"
+    }
+  } ]
+}
