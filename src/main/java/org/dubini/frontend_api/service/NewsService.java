@@ -6,8 +6,6 @@ import org.dubini.frontend_api.client.NewsClient;
 import org.dubini.frontend_api.dto.PublicationDTO;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -25,27 +23,43 @@ public class NewsService {
     private static final String CACHE_KEY = "newsKey";
 
     @CircuitBreaker(name = "newsCircuitBreaker", fallbackMethod = "getBackupNews")
-    @Cacheable(CACHE_NAME)
     public Mono<List<PublicationDTO>> get() {
-        return newsClient.get();
+        return Mono.defer(() -> {
+            Cache cache = cacheManager.getCache(CACHE_NAME);
+
+            if (cache != null) {
+                List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
+                if (cached != null) {
+                    return Mono.just(cached);
+                }
+            }
+
+            return newsClient.get()
+                .doOnNext(news -> {
+                    if (cache != null) {
+                        cache.put(CACHE_KEY, news);
+                    }
+                });
+        });
     }
 
     @SuppressWarnings("unchecked")
     public Mono<List<PublicationDTO>> getBackupNews(Throwable t) {
-        Cache backupCache = cacheManager.getCache(CACHE_NAME);
-        if (backupCache != null) {
-
-            List<PublicationDTO> cachedNews = backupCache.get(CACHE_KEY, List.class);
-            if (cachedNews != null) {
-                return Mono.just(cachedNews);
+        Cache cache = cacheManager.getCache(CACHE_NAME);
+        
+        if (cache != null) {
+            List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
+            if (cached != null) {
+                return Mono.just(cached);
             }
         }
+        
         return Mono.error(new RuntimeException("No cached news available", t));
     }
 
-    @SuppressWarnings("unused")
-    @CacheEvict(value = CACHE_NAME, allEntries = true)
     public void clear() {
-        Mono<List<PublicationDTO>> refreshCache = get();
+        Cache cache = cacheManager.getCache(CACHE_NAME); 
+        if (cache != null) cache.clear();
+        get().subscribe();
     }
 }

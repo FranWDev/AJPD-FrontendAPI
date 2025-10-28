@@ -6,8 +6,6 @@ import org.dubini.frontend_api.client.ActivitiesClient;
 import org.dubini.frontend_api.dto.PublicationDTO;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -25,27 +23,47 @@ public class ActivitiesService {
     private final CacheManager cacheManager;
 
     @CircuitBreaker(name = "activitiesCircuitBreaker", fallbackMethod = "getBackupActivities")
-    @Cacheable(CACHE_NAME)
     public Mono<List<PublicationDTO>> get() {
-        return activitiesClient.get();
+        return Mono.defer(() -> {
+            Cache cache = cacheManager.getCache(CACHE_NAME);
+
+            if (cache != null) {
+                List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
+                if (cached != null) {
+                    System.out.println("Activities cache hit");
+                    return Mono.just(cached);
+                }
+            }
+            
+            System.out.println("Activities cache miss - fetching from client");
+            return activitiesClient.get()
+                .doOnNext(activities -> {
+                    if (cache != null) {
+                        cache.put(CACHE_KEY, activities);
+                    }
+                });
+        });
     }
 
     @SuppressWarnings("unchecked")
     public Mono<List<PublicationDTO>> getBackupActivities(Throwable t) {
-        Cache backupCache = cacheManager.getCache(CACHE_NAME);
-        if (backupCache != null) {
-
-            List<PublicationDTO> cachedActivities= backupCache.get(CACHE_KEY, List.class);
-            if (cachedActivities != null) {
-                return Mono.just(cachedActivities);
+        Cache cache = cacheManager.getCache(CACHE_NAME);
+        
+        if (cache != null) {
+            List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
+            if (cached != null) {
+                return Mono.just(cached);
             }
         }
-        return Mono.error(new RuntimeException("No cached news available", t));
+        
+        return Mono.error(new RuntimeException("No cached activities available", t));
     }
 
-    @SuppressWarnings("unused")
-    @CacheEvict(value = "activities", allEntries = true)
     public void clear() {
-        Mono<List<PublicationDTO>> refreshCache = get();
+        Cache cache = cacheManager.getCache(CACHE_NAME);
+        
+        if (cache != null) cache.clear();
+
+        get().subscribe();
     }
 }

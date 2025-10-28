@@ -21,6 +21,7 @@ public class CacheController {
 
     @GetMapping("/api/cache/activities/clear")
     public ResponseEntity<HttpResponse> clearActivitiesCache() {
+        System.out.println("Activities cache cleared");
         try {
             activitiesService.clear();
             return ResponseEntity.ok(new HttpResponse("Activities cache cleared"));
