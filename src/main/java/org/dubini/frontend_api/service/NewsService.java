@@ -112,6 +112,7 @@ public class NewsService implements CacheWarmable {
             log.info("In-memory cache empty, attempting to load from disk...");
             pcm.reloadCache(CACHE_NAME);
 
+            @SuppressWarnings("unchecked")
             List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
             if (cached != null && !cached.isEmpty()) {
                 log.info("✓ Returning {} news from disk cache", cached.size());

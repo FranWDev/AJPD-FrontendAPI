@@ -15,6 +15,7 @@ public class JwtProvider {
     private final SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey));
 
     public String generateToken() {
+        @SuppressWarnings("deprecation")
         String token = Jwts.builder()
                 .setSubject("backoffice")
                 .setIssuedAt(new Date())
