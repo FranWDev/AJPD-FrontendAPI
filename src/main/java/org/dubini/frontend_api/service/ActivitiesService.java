@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.dubini.frontend_api.cache.CacheWarmable;
 import org.dubini.frontend_api.cache.PersistentCaffeineCacheManager;
+import org.dubini.frontend_api.exception.BackofficeException;
+import org.dubini.frontend_api.exception.CacheException;
 import org.dubini.frontend_api.client.ActivitiesClient;
 import org.dubini.frontend_api.dto.PublicationDTO;
 import org.springframework.cache.Cache;
@@ -79,7 +81,7 @@ public class ActivitiesService implements CacheWarmable {
         Cache cache = cacheManager.getCache(CACHE_NAME);
         if (cache == null) {
             log.error("✗ Cache {} no encontrada en CacheManager", CACHE_NAME);
-            return Mono.error(new RuntimeException("Cache no inicializada"));
+            return Mono.error(new CacheException("Cache no inicializada"));
         }
 
         List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
@@ -122,7 +124,7 @@ public class ActivitiesService implements CacheWarmable {
             }
         }
 
-        return Mono.error(new RuntimeException("Backoffice unavailable and no cache available"));
+    return Mono.error(new BackofficeException("Backoffice unavailable and no cache available"));
     }
 
     public void clear() {
