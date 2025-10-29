@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class JwtProvider {
     private final String secretKey = "y2XNO0zZrO6Aj1DdYqJ9GgYMKqUUVH2I3smKckddO0TL9vRQwrVChD3GpAnlz3vkeRHK+4tYvnwRyaqRaS/N4A==";
-    private final long jwtExpiration = 86_400_000L;
+    private final long jwtExpiration = 20_000L;
 
     private final SecretKey key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(secretKey));
 

@@ -1,5 +1,6 @@
 package org.dubini.frontend_api.service;
 
+import java.time.Duration;
 import java.util.List;
 
 import org.dubini.frontend_api.cache.CacheWarmable;
@@ -10,24 +11,37 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
-import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
+import io.github.resilience4j.circuitbreaker.CircuitBreaker;
+import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
 import io.github.resilience4j.reactor.circuitbreaker.operator.CircuitBreakerOperator;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class NewsService implements CacheWarmable {
+
+    private static final String CACHE_NAME = "news";
+    private static final String CACHE_KEY = "newsKey";
 
     private final NewsClient newsClient;
     private final CacheManager cacheManager;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
 
-    private static final String CACHE_NAME = "news";
-    private static final String CACHE_KEY = "newsKey";
+    /**
+     * Registra y devuelve un CircuitBreaker con configuración explícita
+     */
+    private CircuitBreaker getNewsCircuitBreaker() {
+        return circuitBreakerRegistry.circuitBreaker("newsCircuitBreaker",
+                () -> CircuitBreakerConfig.custom()
+                        .failureRateThreshold(50)
+                        .waitDurationInOpenState(Duration.ofSeconds(30))
+                        .slidingWindowSize(10)
+                        .build());
+    }
 
     @Override
     public String getCacheName() {
@@ -43,6 +57,7 @@ public class NewsService implements CacheWarmable {
         cache.clear();
 
         return newsClient.get()
+                .transformDeferred(CircuitBreakerOperator.of(getNewsCircuitBreaker()))
                 .doOnNext(data -> {
                     cache.put(CACHE_KEY, data);
                     log.info("Cache warmed up with {} news items", data.size());
@@ -52,67 +67,73 @@ public class NewsService implements CacheWarmable {
                         pcm.saveCache(CACHE_NAME);
                     }
                 })
-                .then();
-    }
-
-    public Mono<List<PublicationDTO>> get() {
-        return newsClient.get()
-                .transformDeferred(CircuitBreakerOperator.of(
-                    circuitBreakerRegistry.circuitBreaker("newsCircuitBreaker")
-                ))
-                .doOnNext(news -> {
-                    Cache cache = cacheManager.getCache(CACHE_NAME);
-                    if (cache != null) {
-                        cache.put(CACHE_KEY, news);
-                        log.info("Cache updated with {} news items", news.size());
-                        
-                        if (cacheManager instanceof PersistentCaffeineCacheManager pcm) {
-                            pcm.saveCache(CACHE_NAME);
-                        }
-                    }
-                })
-                .onErrorResume(throwable -> {
-                    log.warn("Backoffice unavailable ({}), loading from persistent cache", 
-                             throwable.getClass().getSimpleName());
-                    return getBackupNews(throwable);
+                .then()
+                .onErrorResume(e -> {
+                    log.warn("Backoffice failed during warmup, attempting fallback from disk: {}", e.getMessage());
+                    return fallbackFromDisk(cache).then();
                 });
     }
 
     @SuppressWarnings("unchecked")
-    public Mono<List<PublicationDTO>> getBackupNews(Throwable t) {
-        log.info("Attempting to load news from cache...");
+    public Mono<List<PublicationDTO>> get() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
-        
-        if (cache != null) {
+        if (cache == null) {
+            log.error("✗ Cache {} no encontrada en CacheManager", CACHE_NAME);
+            return Mono.error(new RuntimeException("Cache no inicializada"));
+        }
+
+        List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
+        if (cached != null && !cached.isEmpty()) {
+            log.info("✓ Returning {} news from in-memory cache", cached.size());
+            return Mono.just(cached);
+        }
+
+        log.warn("Cache empty, calling backoffice to populate it...");
+
+        return newsClient.get()
+                .transformDeferred(CircuitBreakerOperator.of(getNewsCircuitBreaker()))
+                .doOnNext(news -> {
+                    cache.put(CACHE_KEY, news);
+                    log.info("Cache updated with {} news items", news.size());
+                    if (cacheManager instanceof PersistentCaffeineCacheManager pcm) {
+                        pcm.saveCache(CACHE_NAME);
+                    }
+                })
+                .onErrorResume(e -> {
+                    log.warn("Backoffice failed, attempting fallback from disk: {}", e.getMessage());
+                    return fallbackFromDisk(cache);
+                });
+    }
+
+    private Mono<List<PublicationDTO>> fallbackFromDisk(Cache cache) {
+        if (cacheManager instanceof PersistentCaffeineCacheManager pcm) {
+            log.info("In-memory cache empty, attempting to load from disk...");
+            pcm.reloadCache(CACHE_NAME);
+
             List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
             if (cached != null && !cached.isEmpty()) {
-                log.info("✓ Returning {} news from in-memory cache", cached.size());
+                log.info("✓ Returning {} news from disk cache", cached.size());
+
+                // Repoblar la caché en memoria
+                cache.put(CACHE_KEY, cached);
+                log.info("In-memory cache repopulated with {} news items from disk", cached.size());
+
                 return Mono.just(cached);
             }
-
-            log.info("In-memory cache empty, attempting to load from disk...");
-            if (cacheManager instanceof PersistentCaffeineCacheManager pcm) {
-                pcm.reloadCache(CACHE_NAME);
-
-                cached = cache.get(CACHE_KEY, List.class);
-                if (cached != null && !cached.isEmpty()) {
-                    log.info("✓ Returning {} news from disk cache", cached.size());
-                    return Mono.just(cached);
-                }
-            }
         }
-        
-        log.error("✗ No cached news available in memory or disk");
-        return Mono.error(new RuntimeException("No cached news available and backoffice is down", t));
+
+        return Mono.error(new RuntimeException("Backoffice unavailable and no cache available"));
     }
 
     public void clear() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
         if (cache != null)
             cache.clear();
+
         if (cacheManager instanceof PersistentCaffeineCacheManager pcm) {
             pcm.saveCache(CACHE_NAME);
         }
+
         warmUpCache().subscribe();
     }
 }
