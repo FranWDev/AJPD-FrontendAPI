@@ -26,8 +26,8 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class FeaturedService implements CacheWarmable {
 
-    private static final String CACHE_NAME = "Featured";
-    private static final String CACHE_KEY = "FeaturedKey";
+    private static final String CACHE_NAME = "featured";
+    private static final String CACHE_KEY = "featuredKey";
 
     private final FeaturedClient FeaturedClient;
     private final CacheManager cacheManager;
