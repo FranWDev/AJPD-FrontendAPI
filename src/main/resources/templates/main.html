@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="/styles/components/cards.css">
     <link rel="stylesheet" href="/styles/components/content.css">
     <link rel="stylesheet" href="/styles/components/wsp-icon.css">
+    <link rel="stylesheet" href="/styles/components/popup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/styles/base.css">
 </head>
@@ -36,34 +37,13 @@
 
         <section class="featured-section">
             <div class="container">
-                <h2>Lo ultimo de AJPD</h2>
-                <div class="program-cards">
-                    <article class="program-card">
-                        <img src="assets/example1.jpg">
-                        <h3>Colaboración con el LICEO LEONARDO DA VINCI</h3>
-                        <p></p>
-                        <a href="#" class="learn-more">Saber más →</a>
-                    </article>
-                    <article class="program-card">
-                        <img src="assets/example2.jpg">
-                        <h3>11F: Día de la Mujer y la Niña en la Ciencia</h3>
-                        <p></p>
-                        <a href="#" class="learn-more">Saber más →</a>
-                    </article>
-                    <article class="program-card">
-                        <img src="assets/example3.png">
-                        <h3>Gala I Concurso "Cortos Por el Planeta"</h3>
-                        <p></p>
-                        <a href="#" class="learn-more">Saber más →</a>
-                    </article>
-                </div>
             </div>
         </section>
 
         <section class="activities-section">
             <div class="container">
                 <h2>¿Qué hacemos en A.J. Proyecto Dubini?</h2>
-                <div class="activities-slider">
+                <div class="activities-slider"> 
                     <div class="slider-container">
                         <div class="slider-track">
                             <div class="slide">
@@ -99,6 +79,8 @@
     <div th:replace="fragments/wsp-icon :: wsp-icon"></div>
     <div th:replace="fragments/footer :: footer"></div>
 </body>
-<script src="/scripts/script.js"></script>
+<script type="module" src="/scripts/pages/featured.js"></script>
+<script type="module" src="/scripts/components/popup.js"></script>
+<script type="module" src="/scripts/script.js"></script>
 
 </html>
