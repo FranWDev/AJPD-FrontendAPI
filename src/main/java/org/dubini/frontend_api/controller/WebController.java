@@ -46,14 +46,9 @@ public class WebController {
         return "awards";
     }
 
-    @GetMapping("/noticias")
+    @GetMapping("/noticias-y-actividades")
     public String news() {
         return "news";
-    }
-
-    @GetMapping("/actividades")
-    public String activities() {
-        return "activities";
     }
     
 }

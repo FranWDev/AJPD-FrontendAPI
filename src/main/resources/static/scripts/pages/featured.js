@@ -1,4 +1,4 @@
-import { fetchFeaturedSummary } from "../api/publicationService.js";
+import { fetchNewsSummary } from "../api/publicationService.js";
 import edjsHTML from "../components/EditorJSParser.js";
 import { sanitizeTitle, initializePopups } from "../components/popup.js";
 
@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
     programCards.classList.add("program-cards");
     container.appendChild(programCards);
 
-    fetchFeaturedSummary().then((data) => {
+    fetchNewsSummary().then((data) => {
         const parser = edjsHTML();
 
         data.slice(0, 3).forEach((item) => {
