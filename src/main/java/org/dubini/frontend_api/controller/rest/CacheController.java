@@ -1,12 +1,13 @@
 package org.dubini.frontend_api.controller.rest;
 
 import org.dubini.frontend_api.dto.HttpResponse;
-//import org.dubini.frontend_api.service.ActivitiesService;
-//import org.dubini.frontend_api.service.FeaturedService;
+import org.dubini.frontend_api.dto.UpdateStatusResponse;
+import org.dubini.frontend_api.service.CacheTimestampService;
 import org.dubini.frontend_api.service.NewsService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -17,12 +18,22 @@ import java.time.LocalDateTime;
 @RestController
 @RequiredArgsConstructor
 public class CacheController {
+    private static final String NEWS_CACHE_FILE = "news.json";
 
     private final NewsService newsService;
-   // private final ActivitiesService activitiesService;
-   // private final FeaturedService featuredService;
+    private final CacheTimestampService cacheTimestampService;
+    // private final ActivitiesService activitiesService;
+    // private final FeaturedService featuredService;
 
-   /*  @GetMapping("/api/cache/activities/clear")
+    @GetMapping("/api/news/last")
+    public Mono<ResponseEntity<UpdateStatusResponse>> checkNewsUpdate(@RequestHeader("If-Modified-Since") String clientLastUpdate) {
+        boolean hasUpdate = cacheTimestampService.hasNewsUpdate(clientLastUpdate, NEWS_CACHE_FILE);
+        return Mono.just(ResponseEntity.ok(UpdateStatusResponse.builder()
+                .status(hasUpdate ? 1 : 0)
+                .build()));
+    }
+
+    /*  @GetMapping("/api/cache/activities/clear")
     public Mono<ResponseEntity<HttpResponse>> clearActivitiesCache() {
         return activitiesService.warmUpCache()
                 .then(featuredService.warmUpCache())
@@ -36,6 +47,8 @@ public class CacheController {
 
     @GetMapping("/api/cache/news/clear")
     public Mono<ResponseEntity<HttpResponse>> clearNewsCache() {
+        // Actualizar timestamp y limpiar caché
+        cacheTimestampService.updateTimestamp(NEWS_CACHE_FILE);
         return newsService.warmUpCache()
                 .thenReturn(ResponseEntity.ok(HttpResponse.builder()
                         .timestamp(LocalDateTime.now())

@@ -1,11 +1,11 @@
 {
   "newsKey" : [ {
     "title" : "II Concurso Joven \"Cortos por el Planeta\" 2025",
-    "description" : "¡¡Inscríbete!!",
+    "description" : "si ves esto, la cache se actualizo",
     "imageUrl" : "https://uploaded.photo/2025/10/31/02016fd5a6297d17b3deb9e0afa734b2.webp",
-    "publishedAt" : "2025-12-31T09:17:49.159200",
+    "publishedAt" : "2025-11-03T14:02:27.645988800",
     "editorContent" : {
-      "time" : 1761902269082,
+      "time" : 1762178547478,
       "blocks" : [ {
         "type" : "image",
         "data" : {
@@ -18,12 +18,6 @@
           "withBorder" : false,
           "stretched" : false,
           "withBackground" : false
-        }
-      }, {
-        "type" : "header",
-        "data" : {
-          "text" : "",
-          "level" : 2
         }
       }, {
         "type" : "header",
