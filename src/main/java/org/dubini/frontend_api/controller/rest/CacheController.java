@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @RestController
 @RequiredArgsConstructor
 public class CacheController {
-    private static final String NEWS_CACHE_FILE = "news.json";
 
     private final NewsService newsService;
     private final CacheTimestampService cacheTimestampService;
@@ -26,11 +25,9 @@ public class CacheController {
     // private final FeaturedService featuredService;
 
     @GetMapping("/api/news/last")
-    public Mono<ResponseEntity<UpdateStatusResponse>> checkNewsUpdate(@RequestHeader("If-Modified-Since") String clientLastUpdate) {
-        boolean hasUpdate = cacheTimestampService.hasNewsUpdate(clientLastUpdate, NEWS_CACHE_FILE);
-        return Mono.just(ResponseEntity.ok(UpdateStatusResponse.builder()
-                .status(hasUpdate ? 1 : 0)
-                .build()));
+    public Mono<ResponseEntity<Void>> checkNewsUpdate(@RequestHeader("If-Modified-Since") String clientLastUpdate) {
+        boolean hasUpdate = cacheTimestampService.hasNewsUpdate(clientLastUpdate);
+        return Mono.just(ResponseEntity.status(hasUpdate ? HttpStatus.OK : HttpStatus.NOT_MODIFIED).build());
     }
 
     /*  @GetMapping("/api/cache/activities/clear")
@@ -48,7 +45,7 @@ public class CacheController {
     @GetMapping("/api/cache/news/clear")
     public Mono<ResponseEntity<HttpResponse>> clearNewsCache() {
         // Actualizar timestamp y limpiar caché
-        cacheTimestampService.updateTimestamp(NEWS_CACHE_FILE);
+        cacheTimestampService.updateTimestamp();
         return newsService.warmUpCache()
                 .thenReturn(ResponseEntity.ok(HttpResponse.builder()
                         .timestamp(LocalDateTime.now())

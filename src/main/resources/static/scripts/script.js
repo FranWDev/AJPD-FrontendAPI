@@ -1,3 +1,56 @@
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', async () => {
+    try {
+      await checkSWVersion();
+    } catch (err) {
+      console.error('SW registration failed:', err);
+    }
+  });
+}
+
+async function checkSWVersion() {
+  try {
+    const res = await fetch('/api/sw/version');
+    const serverVersion = await res.text(); // "v4", "v5", etc
+    const localVersion = localStorage.getItem('sw_version');
+
+    // Registrar o re-registrar con la versión en la URL
+    const swUrl = `/sw.js?version=${serverVersion}`;
+    const reg = await navigator.serviceWorker.register(swUrl);
+    
+    console.log('Service Worker registered:', reg.scope);
+
+    if (localVersion !== serverVersion) {
+      console.log(`SW version changed: ${localVersion} → ${serverVersion}`);
+      localStorage.setItem('sw_version', serverVersion);
+      
+      // Forzar actualización
+      await reg.update();
+      
+      if (reg.waiting) {
+        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+      } else if (reg.installing) {
+        reg.installing.postMessage({ type: 'SKIP_WAITING' });
+      }
+    }
+
+    // Listener para recargar cuando se active el nuevo SW
+    reg.addEventListener('updatefound', () => {
+      const newWorker = reg.installing;
+      newWorker.addEventListener('statechange', () => {
+        if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
+          console.log('New SW activated, reloading...');
+          window.location.reload();
+        }
+      });
+    });
+
+  } catch (err) {
+    console.error('Error checking SW version:', err);
+  }
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
   // INICIO MENU MOVIL
   const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
@@ -71,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // FIN MENU MOVIL
 
   // GOOGLE MAPS
-  function initMap() {
+ /* function initMap() {
     const sede = { lat: 40.416775, lng: -3.70379 };
     const map = new google.maps.Map(document.getElementById("map"), {
       zoom: 15,
@@ -101,7 +154,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   loadGoogleMaps();
-
+*/
   // Observador de intersección para animaciones
   const observer = new IntersectionObserver(
     (entries) => {

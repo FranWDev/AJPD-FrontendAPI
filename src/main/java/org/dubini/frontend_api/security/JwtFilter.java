@@ -23,7 +23,8 @@ public class JwtFilter extends OncePerRequestFilter {
 
     private boolean isBlockedUrl(String path) {
         return path.equals("/api/cache/activities/clear") ||
-                path.equals("/api/cache/news/clear");
+                path.equals("/api/cache/news/clear") ||
+                path.equals("/api/sw/update");
     }
 
     @Override
