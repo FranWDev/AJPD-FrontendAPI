@@ -39,7 +39,6 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', event => {
   const url = new URL(event.request.url);
 
-  // Cachear solo recursos estáticos
   if (url.pathname.startsWith('/scripts/') ||
       url.pathname.startsWith('/styles/') ||
       url.pathname.endsWith('.ico') ||
@@ -60,7 +59,6 @@ self.addEventListener('fetch', event => {
     );
   }
 
-  // Cachear HTML dinámico (páginas) bajo demanda
   if (url.pathname === '/') {
     event.respondWith(
       caches.match(event.request).then(cached => cached || fetch(event.request))

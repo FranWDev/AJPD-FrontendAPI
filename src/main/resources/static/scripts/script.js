@@ -10,7 +10,7 @@ if ('serviceWorker' in navigator) {
 
 async function checkSWVersion() {
   try {
-    const res = await fetch('/api/sw/version');
+    const res = await fetch('/api/service-workers/version');
     const serverVersion = await res.text(); // "v4", "v5", etc
     const localVersion = localStorage.getItem('sw_version');
 

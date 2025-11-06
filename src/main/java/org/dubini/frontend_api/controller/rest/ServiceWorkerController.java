@@ -10,7 +10,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/sw")
+@RequestMapping("/api/service-workers")
 @RequiredArgsConstructor
 public class ServiceWorkerController {
 
