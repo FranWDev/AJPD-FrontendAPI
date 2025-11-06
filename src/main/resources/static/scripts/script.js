@@ -10,36 +10,39 @@ if ('serviceWorker' in navigator) {
 
 async function checkSWVersion() {
   try {
-    const res = await fetch('/api/service-workers/version');
-    const serverVersion = await res.text(); // "v4", "v5", etc
-    const localVersion = localStorage.getItem('sw_version');
+    const localVersion = localStorage.getItem('sw_version') || null;
 
-    // Registrar o re-registrar con la versión en la URL
-    const swUrl = `/sw.js?version=${serverVersion}`;
-    const reg = await navigator.serviceWorker.register(swUrl);
-    
-    console.log('Service Worker registered:', reg.scope);
+    const res = await fetch('/api/service-workers/version', {
+      method: 'HEAD',
+      cache: 'no-store',
+      credentials: 'omit',
+      headers: localVersion ? { 'If-None-Match': localVersion } : {}
+    });
 
-    if (localVersion !== serverVersion) {
-      console.log(`SW version changed: ${localVersion} → ${serverVersion}`);
-      localStorage.setItem('sw_version', serverVersion);
-      
-      // Forzar actualización
-      await reg.update();
-      
-      if (reg.waiting) {
-        reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-      } else if (reg.installing) {
-        reg.installing.postMessage({ type: 'SKIP_WAITING' });
-      }
+    if (res.status === 304) {
+      return;
     }
 
-    // Listener para recargar cuando se active el nuevo SW
+    const newVersion = res.headers.get('ETag');
+    if (!newVersion) {
+      console.warn("Servidor no envió ETag. No se puede versionar SW.");
+      return;
+    }
+
+    const swUrl = `/sw.js?v=${newVersion}`;
+    const reg = await navigator.serviceWorker.register(swUrl);
+
+    localStorage.setItem('sw_version', newVersion);
+
+    if (reg.waiting) {
+      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+
     reg.addEventListener('updatefound', () => {
       const newWorker = reg.installing;
       newWorker.addEventListener('statechange', () => {
         if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
-          console.log('New SW activated, reloading...');
+          console.log('🔄 Nuevo SW activado, recargando...');
           window.location.reload();
         }
       });
@@ -49,6 +52,7 @@ async function checkSWVersion() {
     console.error('Error checking SW version:', err);
   }
 }
+
 
 
 document.addEventListener("DOMContentLoaded", () => {
