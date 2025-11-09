@@ -20,7 +20,7 @@ public class PersistentCaffeineCacheManager implements CacheManager {
 
     private final Map<String, CaffeineCache> caches = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
-    private final File baseDir = new File("caches");
+    private final File baseDir = new File("/tmp/storage/caches");
 
     public PersistentCaffeineCacheManager() {
         if (!baseDir.exists()) baseDir.mkdirs();

@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CacheTimestampService {
 
-    private static final String CACHE_DIRECTORY = "caches";
+    private static final String CACHE_DIRECTORY = "/tmp/storage/caches";
     private static final String CACHE_FILE = "lastModified.json";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 

@@ -16,7 +16,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 @Service
 public class ServiceWorkerService {
 
-    private static final String CACHE_DIR = "caches";
+    private static final String CACHE_DIR = "/tmp/storage/caches";
     private static final String SW_FILE = "sw.json";
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
