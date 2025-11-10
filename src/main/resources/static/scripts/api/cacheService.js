@@ -1,10 +1,10 @@
 const NEWS_CACHE_KEY = 'news_cache';
-const NEWS_TIMESTAMP_KEY = 'news_cache_timestamp';
+const NEWS_ETAG_KEY = 'news_cache_etag';
 
 export class CacheService {
-    static saveNewsToCache(news) {
+    static saveNewsToCache(news, etag) {
         localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify(news));
-        localStorage.setItem(NEWS_TIMESTAMP_KEY, new Date().toISOString());
+        if (etag) localStorage.setItem(NEWS_ETAG_KEY, etag);
     }
 
     static getNewsFromCache() {
@@ -12,12 +12,12 @@ export class CacheService {
         return cachedNews ? JSON.parse(cachedNews) : null;
     }
 
-    static getNewsCacheTimestamp() {
-        return localStorage.getItem(NEWS_TIMESTAMP_KEY);
+    static getNewsCacheEtag() {
+        return localStorage.getItem(NEWS_ETAG_KEY);
     }
 
     static clearNewsCache() {
         localStorage.removeItem(NEWS_CACHE_KEY);
-        localStorage.removeItem(NEWS_TIMESTAMP_KEY);
+        localStorage.removeItem(NEWS_ETAG_KEY);
     }
 }

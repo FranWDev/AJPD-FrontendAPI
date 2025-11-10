@@ -33,31 +33,26 @@ public class CacheEtagService {
     public String calculateEtag(Object content) {
         int contentHash = content.hashCode();
         
-        // Verificar si ya está en caché
         String cachedEtag = etagCache.get(contentHash);
         if (cachedEtag != null) {
             log.debug("ETag retrieved from memory cache: {}", cachedEtag);
             return cachedEtag;
         }
         
-        // Calcular nuevo ETag
         try {
             String jsonContent = objectMapper.writeValueAsString(content);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(jsonContent.getBytes(StandardCharsets.UTF_8));
-            
-            // Convertir a hexadecimal y tomar los primeros 16 caracteres para un ETag más compacto
+
             String fullHash = HexFormat.of().formatHex(hash);
             String etag = "\"" + fullHash.substring(0, 16) + "\"";
-            
-            // Almacenar en caché
+
             etagCache.put(contentHash, etag);
             log.debug("ETag calculated and cached: {}", etag);
             return etag;
             
         } catch (JsonProcessingException e) {
             log.error("Error serializing content for ETag calculation: {}", e.getMessage());
-            // Fallback: usar timestamp como ETag
             return "\"" + System.currentTimeMillis() + "\"";
         } catch (NoSuchAlgorithmException e) {
             log.error("SHA-256 algorithm not available: {}", e.getMessage());
@@ -73,7 +68,6 @@ public class CacheEtagService {
             return true;
         }
         
-        // Normalizar ETags (remover comillas si existen)
         String normalizedClient = normalizeEtag(clientEtag);
         String normalizedServer = normalizeEtag(serverEtag);
         

@@ -37,9 +37,6 @@ public class NewsService implements CacheWarmable {
     private final CircuitBreakerRegistry circuitBreakerRegistry;
     private final CacheEtagService cacheEtagService;
 
-    /**
-     * Registra y devuelve un CircuitBreaker con configuración explícita
-     */
     private CircuitBreaker getNewsCircuitBreaker() {
         return circuitBreakerRegistry.circuitBreaker("newsCircuitBreaker",
                 () -> CircuitBreakerConfig.custom()
@@ -65,7 +62,6 @@ public class NewsService implements CacheWarmable {
         return newsClient.get()
                 .transformDeferred(CircuitBreakerOperator.of(getNewsCircuitBreaker()))
                 .doOnNext(data -> {
-                    // Almacenar datos y calcular ETag
                     cache.put(CACHE_KEY, data);
                     String etag = cacheEtagService.calculateEtag(data);
                     cache.put(ETAG_KEY, etag);
@@ -102,7 +98,6 @@ public class NewsService implements CacheWarmable {
         return newsClient.get()
                 .transformDeferred(CircuitBreakerOperator.of(getNewsCircuitBreaker()))
                 .doOnNext(news -> {
-                    // Almacenar datos y calcular ETag
                     cache.put(CACHE_KEY, news);
                     String etag = cacheEtagService.calculateEtag(news);
                     cache.put(ETAG_KEY, etag);
@@ -127,10 +122,8 @@ public class NewsService implements CacheWarmable {
             if (cached != null && !cached.isEmpty()) {
                 log.info("✓ Returning {} news from disk cache", cached.size());
 
-                // Repoblar la caché en memoria
                 cache.put(CACHE_KEY, cached);
-                
-                // Obtener o recalcular ETag
+  
                 String etag = cache.get(ETAG_KEY, String.class);
                 if (etag == null) {
                     etag = cacheEtagService.calculateEtag(cached);
@@ -168,14 +161,12 @@ public class NewsService implements CacheWarmable {
             return null;
         }
 
-        // Primero intentar obtener el ETag cacheado
         String etag = cache.get(ETAG_KEY, String.class);
         if (etag != null) {
             log.debug("ETag retrieved from cache: {}", etag);
             return etag;
         }
 
-        // Si no hay ETag pero hay datos, calcularlo y almacenarlo
         @SuppressWarnings("unchecked")
         List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
         if (cached != null && !cached.isEmpty()) {
