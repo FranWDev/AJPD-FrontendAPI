@@ -50,5 +50,5 @@ public class WebController {
     public String news() {
         return "news";
     }
-    
+
 }

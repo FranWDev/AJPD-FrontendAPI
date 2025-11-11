@@ -1,8 +1,5 @@
 package org.dubini.frontend_api.dto;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
-
 import lombok.Data;
 
 @Data

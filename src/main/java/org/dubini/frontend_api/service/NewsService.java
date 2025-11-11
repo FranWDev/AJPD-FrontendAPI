@@ -123,7 +123,7 @@ public class NewsService implements CacheWarmable {
                 log.info("✓ Returning {} news from disk cache", cached.size());
 
                 cache.put(CACHE_KEY, cached);
-  
+
                 String etag = cache.get(ETAG_KEY, String.class);
                 if (etag == null) {
                     etag = cacheEtagService.calculateEtag(cached);
@@ -132,7 +132,7 @@ public class NewsService implements CacheWarmable {
                 } else {
                     log.info("ETag loaded from disk cache: {}", etag);
                 }
-                
+
                 log.info("In-memory cache repopulated with {} news items from disk", cached.size());
 
                 return Mono.just(cached);

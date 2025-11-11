@@ -16,39 +16,36 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class ServiceWorkerController {
 
-    private final ServiceWorkerService swService;
+        private final ServiceWorkerService swService;
 
-    @GetMapping("/version")
-    public Mono<ResponseEntity<String>> getSWVersion() {
-        return swService.getCurrentVersion()
-                .map(version -> ResponseEntity.ok()
-                        .eTag(version) 
-                        .cacheControl(CacheControl.noStore())
-                        .body(version));
-    }
+        @GetMapping("/version")
+        public Mono<ResponseEntity<String>> getSWVersion() {
+                return swService.getCurrentVersion()
+                                .map(version -> ResponseEntity.ok()
+                                                .eTag(version)
+                                                .cacheControl(CacheControl.noStore())
+                                                .body(version));
+        }
 
-@RequestMapping(value = "/version", method = RequestMethod.HEAD)
-public Mono<ResponseEntity<Object>> headSWVersion() {
-    return swService.getCurrentVersion()
-            .doOnError(err -> err.printStackTrace()) // DEBUG
-            .map(version -> ResponseEntity.ok()
-                    .eTag(version)
-                    .cacheControl(CacheControl.noStore())
-                    .build()
-            )
-            .onErrorReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
-}
+        @RequestMapping(value = "/version", method = RequestMethod.HEAD)
+        public Mono<ResponseEntity<Object>> headSWVersion() {
+                return swService.getCurrentVersion()
+                                .doOnError(err -> err.printStackTrace()) // DEBUG
+                                .map(version -> ResponseEntity.ok()
+                                                .eTag(version)
+                                                .cacheControl(CacheControl.noStore())
+                                                .build())
+                                .onErrorReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        }
 
-
-    // Actualizar la versión del SW (backoffice)
-    @PostMapping("/update")
-    public Mono<ResponseEntity<HttpResponse>> updateSWVersion() {
-        return swService.updateVersion()
-                .map(newVersion -> ResponseEntity.ok(
-                        HttpResponse.builder()
-                                .timestamp(LocalDateTime.now())
-                                .status(200)
-                                .message(newVersion)
-                                .build()));
-    }
+        @PostMapping("/update")
+        public Mono<ResponseEntity<HttpResponse>> updateSWVersion() {
+                return swService.updateVersion()
+                                .map(newVersion -> ResponseEntity.ok(
+                                                HttpResponse.builder()
+                                                                .timestamp(LocalDateTime.now())
+                                                                .status(200)
+                                                                .message(newVersion)
+                                                                .build()));
+        }
 }

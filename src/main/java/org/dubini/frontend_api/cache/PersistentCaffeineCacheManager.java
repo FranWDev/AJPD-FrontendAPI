@@ -23,7 +23,8 @@ public class PersistentCaffeineCacheManager implements CacheManager {
     private final File baseDir = new File("/tmp/storage/caches");
 
     public PersistentCaffeineCacheManager() {
-        if (!baseDir.exists()) baseDir.mkdirs();
+        if (!baseDir.exists())
+            baseDir.mkdirs();
         loadCachesFromDisk();
     }
 
@@ -34,7 +35,8 @@ public class PersistentCaffeineCacheManager implements CacheManager {
                 String name = file.getName().replace(".json", "");
                 Cache<Object, Object> nativeCache = Caffeine.newBuilder().build();
                 try {
-                    Map<Object, Object> data = mapper.readValue(file, new TypeReference<>() {});
+                    Map<Object, Object> data = mapper.readValue(file, new TypeReference<>() {
+                    });
                     data.forEach(nativeCache::put);
                     System.out.println("Cache '" + name + "' cargada desde disco (" + data.size() + " entradas)");
                 } catch (Exception e) {
@@ -61,7 +63,8 @@ public class PersistentCaffeineCacheManager implements CacheManager {
         }
 
         try {
-            Map<Object, Object> data = mapper.readValue(file, new TypeReference<>() {});
+            Map<Object, Object> data = mapper.readValue(file, new TypeReference<>() {
+            });
             cache.getNativeCache().invalidateAll();
             data.forEach(cache.getNativeCache()::put);
             System.out.println("Cache '" + name + "' recargada desde disco (" + data.size() + " entradas)");
@@ -77,7 +80,8 @@ public class PersistentCaffeineCacheManager implements CacheManager {
 
     public void saveCache(String name) {
         CaffeineCache cache = caches.get(name);
-        if (cache == null) return;
+        if (cache == null)
+            return;
 
         File file = new File(baseDir, name + ".json");
         try {

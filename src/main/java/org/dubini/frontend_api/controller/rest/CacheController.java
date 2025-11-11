@@ -30,15 +30,15 @@ public class CacheController {
             @RequestHeader(value = "If-None-Match", required = false) String clientEtag) {
 
         String serverEtag = newsService.getCurrentEtag();
-        
+
         if (serverEtag == null) {
             log.warn("Server ETag is null, returning 200 OK");
             return ResponseEntity.ok().build();
         }
 
         boolean hasChanged = cacheEtagService.hasChanged(clientEtag, serverEtag);
-        
-        log.info("ETag comparison - Client: {}, Server: {}, Changed: {}", 
+
+        log.info("ETag comparison - Client: {}, Server: {}, Changed: {}",
                 clientEtag, serverEtag, hasChanged);
 
         HttpHeaders headers = new HttpHeaders();
@@ -56,15 +56,15 @@ public class CacheController {
             @RequestHeader(value = "If-None-Match", required = false) String clientEtag) {
 
         String serverEtag = newsService.getCurrentEtag();
-        
+
         if (serverEtag == null) {
             log.warn("Server ETag is null, returning 200 OK");
             return ResponseEntity.ok().build();
         }
 
         boolean hasChanged = cacheEtagService.hasChanged(clientEtag, serverEtag);
-        
-        log.info("ETag comparison (HEAD) - Client: {}, Server: {}, Changed: {}", 
+
+        log.info("ETag comparison (HEAD) - Client: {}, Server: {}, Changed: {}",
                 clientEtag, serverEtag, hasChanged);
 
         HttpHeaders headers = new HttpHeaders();

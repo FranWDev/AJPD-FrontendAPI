@@ -1,19 +1,18 @@
-/* Overlay del popup */
 .popup-overlay {
+  display: none;
   position: fixed;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(16, 35, 78, 0.7);
-  backdrop-filter: blur(4px);
-  display: none;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
   opacity: 0;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
   transition: opacity var(--transition-normal);
+  background-color: rgba(16, 35, 78, 0.7);
   padding: 1rem;
+  width: 100%;
+  height: 100%;
 }
 
 .popup-overlay.show {
@@ -28,19 +27,18 @@
   animation: fadeOutOverlay var(--transition-normal) forwards;
 }
 
-/* Contenido del popup */
 .popup-content {
-  background: white;
-  border-radius: var(--border-radius-lg);
-  box-shadow: var(--shadow-lg);
-  max-width: 800px;
-  width: 100%;
-  max-height: 80vh;
-  overflow-y: auto;
   position: relative;
   transform: scale(0.9) translateY(20px);
   opacity: 0;
   transition: all var(--transition-normal);
+  box-shadow: var(--shadow-lg);
+  border-radius: var(--border-radius-lg);
+  background: white;
+  width: 100%;
+  max-width: 800px;
+  max-height: 80vh;
+  overflow-y: auto;
 }
 
 .popup-overlay.show .popup-content {
@@ -56,13 +54,13 @@
 .popup-content img {
   /* center self*/
   display: block;
-  margin-left: auto;
   margin-right: auto;
+  margin-bottom: 1rem;
+  margin-left: auto;
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-md);
 
   max-width: 100%;
-  border-radius: var(--border-radius-md);
-  margin-bottom: 1rem;
-  box-shadow: var(--shadow-sm);
 }
 
 .popup-content a {
@@ -77,57 +75,54 @@
   text-decoration: underline;
 }
 
-/* Header del popup */
 .popup-content > div:first-child {
+  display: flex;
+  position: sticky;
+  top: 0;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
   background: linear-gradient(
     135deg,
     var(--color-primary),
     var(--color-blue-medium)
   );
-  color: white;
   padding: 1.5rem 2rem;
-  border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  color: white;
 }
 
 .popup-content > div:first-child h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
   margin: 0;
   padding-right: 2rem;
+  font-weight: 600;
+  font-size: 1.5rem;
 }
 
-/* Botón de cerrar */
 .popup-content > div:first-child button {
-  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  transition: all var(--transition-fast);
+  cursor: pointer;
   border: 2px solid rgba(255, 255, 255, 0.3);
-  color: white;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
   width: 36px;
   height: 36px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  font-size: 1.5rem;
+  color: white;
   font-weight: 300;
-  transition: all var(--transition-fast);
-  flex-shrink: 0;
+  font-size: 1.5rem;
   line-height: 1;
 }
 
 .popup-content > div:first-child button:hover {
-  background: rgba(255, 255, 255, 0.3);
-  border-color: rgba(255, 255, 255, 0.5);
   transform: rotate(90deg) scale(1.1);
+  border-color: rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.3);
 }
 
-/* Body del popup */
 .popup-content > div:last-child {
   padding: 2rem;
   color: var(--color-primary);
@@ -137,23 +132,22 @@
   margin-bottom: 1rem;
 }
 
-/* Botón trigger (ejemplo) */
 .trigger-btn {
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  margin: 1rem;
+  box-shadow: var(--shadow-md);
+  border: none;
+  border-radius: var(--border-radius-md);
   background: linear-gradient(
     135deg,
     var(--color-secondary),
     var(--color-accent)
   );
-  color: white;
-  border: none;
   padding: 1rem 2rem;
-  border-radius: var(--border-radius-md);
-  font-size: 1rem;
+  color: white;
   font-weight: 600;
-  cursor: pointer;
-  box-shadow: var(--shadow-md);
-  transition: all var(--transition-fast);
-  margin: 1rem;
+  font-size: 1rem;
 }
 
 .trigger-btn:hover {
@@ -206,17 +200,16 @@
   }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .popup-content {
+    border-radius: var(--border-radius-md);
     max-width: 95%;
     max-height: 90vh;
-    border-radius: var(--border-radius-md);
   }
 
   .popup-content > div:first-child {
-    padding: 1rem 1.5rem;
     border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
+    padding: 1rem 1.5rem;
   }
 
   .popup-content > div:first-child h2 {
@@ -234,25 +227,24 @@
   }
 }
 
-/* Scrollbar flotante sobre el contenido */
 .popup-content {
-  overflow-y: overlay; /* Scroll flotante */
-  scrollbar-width: thin; /* Para Firefox */
+  overflow-y: overlay;
+  scrollbar-width: thin;
 }
 
 .popup-content::-webkit-scrollbar {
+  background: transparent;
   width: 8px;
-  background: transparent; /* Track transparente para overlay */
 }
 
 .popup-content::-webkit-scrollbar-track {
-  background: transparent;
   border-radius: 0 var(--border-radius-lg) var(--border-radius-lg) 0;
+  background: transparent;
 }
 
 .popup-content::-webkit-scrollbar-thumb {
-  background: var(--color-blue-light);
   border-radius: 4px;
+  background: var(--color-blue-light);
 }
 
 .popup-content::-webkit-scrollbar-thumb:hover {

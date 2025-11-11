@@ -56,7 +56,6 @@ async function checkSWVersion() {
 
 
 document.addEventListener("DOMContentLoaded", () => {
-  // INICIO MENU MOVIL
   const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
   const mobileNav = document.querySelector(".mobile-nav");
   const mobileDropdownBtns = document.querySelectorAll(".mobile-dropdown-btn");
@@ -159,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadGoogleMaps();
 */
-  // Observador de intersección para animaciones
+
   const observer = new IntersectionObserver(
     (entries) => {
       entries.forEach((entry) => {
@@ -193,7 +192,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initHeroSlider();
 
-  // INICIO SLIDER
   function initActivitySlider() {
     const sliderTrack = document.querySelector(".slider-track");
     const slides = document.querySelectorAll(".slide");
@@ -211,12 +209,10 @@ document.addEventListener("DOMContentLoaded", () => {
       slide.addEventListener("dragstart", (e) => e.preventDefault());
     });
 
-    // Touch events
     sliderTrack.addEventListener("touchstart", touchStart);
     sliderTrack.addEventListener("touchmove", touchMove);
     sliderTrack.addEventListener("touchend", touchEnd);
 
-    // Mouse events
     sliderTrack.addEventListener("mousedown", touchStart);
     sliderTrack.addEventListener("mousemove", touchMove);
     sliderTrack.addEventListener("mouseup", touchEnd);
@@ -295,10 +291,8 @@ document.addEventListener("DOMContentLoaded", () => {
       clearInterval(autoSlideInterval);
     }
 
-    // Iniciar auto-slide
     startAutoSlide();
 
-    // Funcionalidades de los puntos que no se usan
     dots.forEach((dot, index) => {
       dot.addEventListener("click", () => {
         stopAutoSlide();
@@ -311,7 +305,6 @@ document.addEventListener("DOMContentLoaded", () => {
   initActivitySlider();
 });
 
-// Animación de tarjetas de programas
 document.querySelectorAll(".program-card").forEach((card) => {
   let timeoutId;
 

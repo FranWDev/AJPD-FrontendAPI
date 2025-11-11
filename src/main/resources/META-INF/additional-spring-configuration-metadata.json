@@ -1,5 +1,17 @@
-{"properties": [{
-  "name": "backofficeAPI.url",
-  "type": "java.lang.String",
-  "description": "Backoffice URL'"
-}]}
+{"properties": [
+  {
+    "name": "jwt.secret",
+    "type": "java.lang.String",
+    "description": "Clave para el firmado de los JWT'"
+  },
+  {
+    "name": "jwt.access.expiration",
+    "type": "java.lang.String",
+    "description": "Tiempo de expiración para los tokens de acceso JWT'"
+  },
+  {
+    "name": "backoffice.api.url",
+    "type": "java.lang.String",
+    "description": "URL del Backoffice API'"
+  }
+]}

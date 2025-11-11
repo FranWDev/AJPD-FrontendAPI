@@ -29,7 +29,8 @@ public class ServiceWorkerService {
     private void loadVersionFromFile() {
         try {
             File cacheDir = new File(CACHE_DIR);
-            if (!cacheDir.exists()) cacheDir.mkdirs();
+            if (!cacheDir.exists())
+                cacheDir.mkdirs();
 
             Path filePath = Paths.get(CACHE_DIR, SW_FILE);
             if (Files.exists(filePath)) {

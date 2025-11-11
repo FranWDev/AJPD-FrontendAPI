@@ -16,7 +16,7 @@ export async function fetchNewsSummary() {
     if (headResponse.status === 304 && cachedNews) {
       return cachedNews;
     }
-    
+
     const response = await fetch("/api/news");
     if (!response.ok) {
       throw new Error("Network response was not ok");
@@ -25,7 +25,6 @@ export async function fetchNewsSummary() {
     const news = await response.json();
     CacheService.saveNewsToCache(news, serverEtag);
     return news;
-
   } catch (error) {
     console.error("Error fetching news:", error);
     if (cachedNews) return cachedNews;

@@ -3,11 +3,10 @@ const VERSION = urlParams.get('version') || 'v1';
 const CACHE_NAME = `dubini-static-cache-${VERSION}`;
 
 self.addEventListener('install', event => {
-  // Precachea la página base (o varias si quieres)
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache =>
       cache.addAll([
-        '/'         // página principal
+        '/'        
       ])
     )
   );
