@@ -1,57 +1,15 @@
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', async () => {
-    try {
-      await checkSWVersion();
-    } catch (err) {
-      console.error('SW registration failed:', err);
-    }
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js')
+      .then(reg => {
+        console.log('Service Worker registrado con éxito:', reg);
+      })
+      .catch(err => {
+        console.error('Error al registrar el Service Worker:', err);
+      });
   });
 }
 
-async function checkSWVersion() {
-  try {
-    const localVersion = localStorage.getItem('sw_version') || null;
-
-    const res = await fetch('/api/service-workers/version', {
-      method: 'HEAD',
-      cache: 'no-store',
-      credentials: 'omit',
-      headers: localVersion ? { 'If-None-Match': localVersion } : {}
-    });
-
-    if (res.status === 304) {
-      return;
-    }
-
-    const newVersion = res.headers.get('ETag');
-    if (!newVersion) {
-      console.warn("Servidor no envió ETag. No se puede versionar SW.");
-      return;
-    }
-
-    const swUrl = `/sw.js?v=${newVersion}`;
-    const reg = await navigator.serviceWorker.register(swUrl);
-
-    localStorage.setItem('sw_version', newVersion);
-
-    if (reg.waiting) {
-      reg.waiting.postMessage({ type: 'SKIP_WAITING' });
-    }
-
-    reg.addEventListener('updatefound', () => {
-      const newWorker = reg.installing;
-      newWorker.addEventListener('statechange', () => {
-        if (newWorker.state === 'activated' && navigator.serviceWorker.controller) {
-          console.log('🔄 Nuevo SW activado, recargando...');
-          window.location.reload();
-        }
-      });
-    });
-
-  } catch (err) {
-    console.error('Error checking SW version:', err);
-  }
-}
 
 
 
