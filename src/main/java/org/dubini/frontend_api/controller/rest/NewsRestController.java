@@ -12,16 +12,17 @@ import org.dubini.frontend_api.dto.PublicationDTO;
 import org.dubini.frontend_api.service.NewsService;
 import org.springframework.web.bind.annotation.GetMapping;
 
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/news")
 public class NewsRestController {
 
     private final NewsService newsService;
-
+    
     @GetMapping
     public Mono<List<PublicationDTO>> get() {
         return newsService.get();
     }
-
+    
 }

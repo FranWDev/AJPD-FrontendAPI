@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html lang="es" xmlns:th="http://www.thymeleaf.org">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Asociación Juvenil Proyecto Dubini - Organización dedicada a la juventud"
-    />
+    <meta name="description" content="Asociación Juvenil Proyecto Dubini - Organización dedicada a la juventud" />
     <title>Alexandra Dubini</title>
     <link rel="stylesheet" href="/styles/alexandra.css" />
     <link rel="stylesheet" href="/styles/layout/header.css" />
@@ -15,61 +13,52 @@
     <link rel="stylesheet" href="/styles/components/hero.css" />
     <link rel="stylesheet" href="/styles/components/content.css" />
     <link rel="stylesheet" href="/styles/components/wsp-icon.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
     <link rel="stylesheet" href="/styles/base.css" />
-  </head>
+</head>
 
-  <body>
+<body>
     <header th:replace="fragments/header :: header"></header>
     <main role="main">
-      <section class="hero">
-        <div class="hero-content">
-          <h2>Alexadra Dubini</h2>
-          <img
-            src="/assets/alexandra.jpg"
-            alt="Foto de Alexandra Dubini"
-            class="photo"
-          />
-          <p>
-            Alexandra Dubini es la
-            <strong
-              >Presidenta Honorífica de la Asociación Juvenil Proyecto
-              Dubini.</strong
-            >
-            Nacida en Francia, investiga como Doctora en
-            <strong>Biología Molecular en la Universidad de Córdoba</strong>,
-            destacando internacionalmente por sus estudios con microalgas.
-            <strong>Medalla de Oro por la Cruz Roja Española en 2018</strong>,
-            tiene <strong>experiencia con la NASA</strong> y formó parte del
-            proyecto <strong>Homeward Bound</strong>, con el que se desplazó
-            hasta la Antartida para continuar sus investigaciones. En 2020 fue
-            <strong>finalista de los Premios Mujeres a Seguir</strong> en la
-            categoría de Ciencia. Actualmente es la
-            <strong>vicepresidenta de Marie Curie Alumni Association.</strong>
-          </p>
-          <p>
-            En 2021 se contactó con ella para iniciar una iniciativa educativa
-            para estudiantes de Secundaria denominada
-            <strong>Proyecto Dubini</strong>. Bajo su guía, apoyo y referencia,
-            se han ido realizando a lo largo de varios años retos climáticos con
-            estudiantes, en principio, de la isla de Tenerife (España), pero al
-            que se han ido sumando un
-            <strong
-              >millar de jóvenes desde otras partes del mundo: España, Italia,
-              India, Senegal, Chile y Túnez.</strong
-            >
-            Desde 2024, algunos de estos jóvenes, han decidido unir fuerzas en
-            la lucha contra el Cambio Climático formando la Asociación Juvenil
-            Proyecto Dubini.
-          </p>
-        </div>
-      </section>
+        <section class="hero">
+            <div class="hero-content">
+                <h2>Alexadra Dubini</h2>
+                <img src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/alexandra.webp" alt="Foto de Alexandra Dubini" class="photo" />
+                <p>
+                    Alexandra Dubini es la
+                    <strong>Presidenta Honorífica de la Asociación Juvenil Proyecto
+                        Dubini.</strong>
+                    Nacida en Francia, investiga como Doctora en
+                    <strong>Biología Molecular en la Universidad de Córdoba</strong>,
+                    destacando internacionalmente por sus estudios con microalgas.
+                    <strong>Medalla de Oro por la Cruz Roja Española en 2018</strong>,
+                    tiene <strong>experiencia con la NASA</strong> y formó parte del
+                    proyecto <strong>Homeward Bound</strong>, con el que se desplazó
+                    hasta la Antartida para continuar sus investigaciones. En 2020 fue
+                    <strong>finalista de los Premios Mujeres a Seguir</strong> en la
+                    categoría de Ciencia. Actualmente es la
+                    <strong>vicepresidenta de Marie Curie Alumni Association.</strong>
+                </p>
+                <p>
+                    En 2021 se contactó con ella para iniciar una iniciativa educativa
+                    para estudiantes de Secundaria denominada
+                    <strong>Proyecto Dubini</strong>. Bajo su guía, apoyo y referencia,
+                    se han ido realizando a lo largo de varios años retos climáticos con
+                    estudiantes, en principio, de la isla de Tenerife (España), pero al
+                    que se han ido sumando un
+                    <strong>millar de jóvenes desde otras partes del mundo: España, Italia,
+                        India, Senegal, Chile y Túnez.</strong>
+                    Desde 2024, algunos de estos jóvenes, han decidido unir fuerzas en
+                    la lucha contra el Cambio Climático formando la Asociación Juvenil
+                    Proyecto Dubini.
+                </p>
+            </div>
+
+        </section>
     </main>
     <div th:replace="fragments/wsp-icon :: wsp-icon"></div>
     <div th:replace="fragments/footer :: footer"></div>
-  </body>
-  <script src="/scripts/script.js"></script>
+</body>
+<script src="/scripts/script.js"></script>
+
 </html>

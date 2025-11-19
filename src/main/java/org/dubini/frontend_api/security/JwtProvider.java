@@ -19,7 +19,7 @@ public class JwtProvider {
         this.key = Keys.hmacShaKeyFor(Base64.getDecoder().decode(props.getSecret()));
         this.jwtExpiration = 5000L;
     }
-
+    
     public String generateToken() {
         @SuppressWarnings("deprecation")
         String token = Jwts.builder()

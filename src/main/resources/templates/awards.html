@@ -1,75 +1,68 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="description"
-      content="Asociación Juvenil Proyecto Dubini - Organización dedicada a la juventud"
-    />
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Asociación Juvenil Proyecto Dubini - Organización dedicada a la juventud">
     <title>Junta Directiva</title>
-    <link rel="stylesheet" href="/styles/directorate.css" />
-    <link rel="stylesheet" href="/styles/awards.css" />
-    <link rel="stylesheet" href="/styles/components/medal.css" />
+    <link rel="stylesheet" href="/styles/directorate.css">
+    <link rel="stylesheet" href="/styles/awards.css">
+    <link rel="stylesheet" href="/styles/components/medal.css">
 
-    <link rel="stylesheet" href="/styles/layout/header.css" />
-    <link rel="stylesheet" href="/styles/layout/footer.css" />
-    <link rel="stylesheet" href="/styles/components/hero.css" />
-    <link rel="stylesheet" href="/styles/components/content.css" />
-    <link rel="stylesheet" href="/styles/components/wsp-icon.css" />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
-    />
-    <link rel="stylesheet" href="/styles/base.css" />
-  </head>
+    <link rel="stylesheet" href="/styles/layout/header.css">
+    <link rel="stylesheet" href="/styles/layout/footer.css">
+    <link rel="stylesheet" href="/styles/components/hero.css">
+    <link rel="stylesheet" href="/styles/components/content.css">
+    <link rel="stylesheet" href="/styles/components/wsp-icon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles/base.css">
+</head>
 
-  <body>
+<body>
     <header th:replace="fragments/header :: header"></header>
     <main role="main">
-      <section class="featured-section">
-        <h1>Premios</h1>
-        <div class="container">
-          <div class="scene">
-            <div class="medalla" id="medalla">
-              <div class="cara front">
-                <div class="medal-content">
-                  <h1>Peonza<br />de Oro</h1>
-                  <p>
-                    XVI Premio<br />Internacional Espiral<br />(octubre 2022)
-                  </p>
+
+        <section class="featured-section">
+            <h1>Premios</h1>
+            <div class="container">
+                <div class="scene">
+                    <div class="medalla" id="medalla">
+                        <div class="cara front">
+                            <div class="medal-content">
+                                <h1>Peonza<br>de Oro</h1>
+                                <p>XVI Premio<br>Internacional Espiral<br>(octubre 2022)</p>
+                            </div>
+                        </div>
+                        <div class="cara back">
+                            <div class="medal-content">
+                                <img src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/premio1.webp" alt="Reverso de la medalla" loading="lazy"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
-              <div class="cara back">
-                <div class="medal-content">
-                  <img src="/assets/premio1.png" alt="Reverso de la medalla" />
+                <div class="scene">
+                    <div class="medalla" id="medalla2">
+                        <div class="cara front">
+                            <div class="medal-content">
+                                <h1>Premio <br>Fundación Ibercaja</h1>
+                                <p style="margin-top: -2px;">II Concurso R7 <br>por el Planeta 2022</p>
+                            </div>
+                        </div>
+                        <div class="cara back">
+                            <div class="medal-content">
+                                <img src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/premio2.webp" alt="Reverso de la medalla" loading="lazy"/>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="scene">
-            <div class="medalla" id="medalla2">
-              <div class="cara front">
-                <div class="medal-content">
-                  <h1>Premio <br />Fundación Ibercaja</h1>
-                  <p style="margin-top: -2px">
-                    II Concurso R7 <br />por el Planeta 2022
-                  </p>
-                </div>
-              </div>
-              <div class="cara back">
-                <div class="medal-content">
-                  <img src="/assets/premio2.png" alt="Reverso de la medalla" />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
     </main>
     <div th:replace="fragments/wsp-icon :: wsp-icon"></div>
     <div th:replace="fragments/footer :: footer"></div>
-  </body>
-  <script src="/scripts/script.js"></script>
-  <script src="/scripts/components/medal.js"></script>
+</body>
+<script src="/scripts/script.js"></script>
+<script src="/scripts/components/medal.js"></script>
+
 </html>

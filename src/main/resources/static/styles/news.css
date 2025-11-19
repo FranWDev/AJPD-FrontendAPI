@@ -1,14 +1,14 @@
 main h1 {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
 }
 main {
-  background: linear-gradient(
+    background: linear-gradient(
       rgba(125, 179, 198, 0.85),
       rgba(84, 164, 188, 0.85)
     ),
-    url("/assets/background3.png") !important;
+    url("https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/background.webp") !important;
   background-position: center !important;
   background-size: cover !important;
   background-attachment: fixed !important;

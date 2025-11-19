@@ -19,6 +19,7 @@
   --transition-slow: 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Reset y estilos base */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -37,10 +38,12 @@ body {
 }
 @media (max-width: 768px) {
   .slide img {
-    aspect-ratio: 1/1;
+    /* Eliminar height fijo */
+    aspect-ratio: 1/1; /* Mantener proporción cuadrada */
   }
 }
 
+/* Ajustes responsive */
 @media (max-width: 768px) {
   .whatsapp-float {
     right: 20px;
@@ -106,6 +109,7 @@ body {
   }
 }
 
+/* Animaciones */
 @keyframes fadeIn {
   from {
     transform: translateY(10px);

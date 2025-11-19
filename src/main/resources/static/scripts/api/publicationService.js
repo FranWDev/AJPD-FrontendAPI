@@ -2,44 +2,61 @@ import { CacheService } from "./cacheService.js";
 
 export async function fetchNewsSummary() {
   const cachedNews = CacheService.getNewsFromCache();
-  const cachedEtag = CacheService.getNewsCacheEtag();
+  const cacheTimestamp = CacheService.getNewsCacheTimestamp();
 
   try {
-    const headResponse = await fetch("/api/news/last", {
+    if (!cachedNews || !cacheTimestamp) {
+      const response = await fetch("/api/news");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const news = await response.json();
+      CacheService.saveNewsToCache(news);
+      return news;
+    }
+
+    const lastModifiedResponse = await fetch("/api/news/last", {
       method: "HEAD",
-      headers: cachedEtag ? { "If-None-Match": cachedEtag } : {},
+      headers: {
+        "If-Modified-Since": cacheTimestamp,
+      },
       cache: "no-store",
     });
 
-    const serverEtag = headResponse.headers.get("ETag");
-
-    if (headResponse.status === 304 && cachedNews) {
+    if (lastModifiedResponse.status === 304) {
       return cachedNews;
     }
 
-    const response = await fetch("/api/news");
-    if (!response.ok) {
-      throw new Error("Network response was not ok");
+    if (lastModifiedResponse.ok) {
+      const response = await fetch("/api/news");
+      if (!response.ok) {
+        throw new Error("Network response was not ok");
+      }
+      const news = await response.json();
+      CacheService.saveNewsToCache(news);
+      return news;
     }
 
-    const news = await response.json();
-    CacheService.saveNewsToCache(news, serverEtag);
-    return news;
+    return cachedNews;
   } catch (error) {
     console.error("Error fetching news:", error);
-    if (cachedNews) return cachedNews;
+    if (cachedNews) {
+      return cachedNews;
+    }
     throw error;
   }
 }
-
 export async function fetchActivitiesSummary() {
   const response = await fetch("/api/activities");
-  if (!response.ok) throw new Error("Network response was not ok");
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
   return await response.json();
 }
-
 export async function fetchFeaturedSummary() {
   const response = await fetch("/api/featured");
-  if (!response.ok) throw new Error("Network response was not ok");
+  if (!response.ok) {
+    throw new Error("Network response was not ok");
+  }
   return await response.json();
 }

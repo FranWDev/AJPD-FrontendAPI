@@ -9,10 +9,13 @@ export function sanitizeTitle(title) {
 export function closePopup(overlay) {
   if (!overlay) return;
 
+  // IMPORTANTE: Remover show Y añadir hide simultáneamente
   overlay.classList.remove('show');
   overlay.classList.add('hide');
 
+  // Escuchar el fin de la animación
   const handleAnimationEnd = (e) => {
+    // Solo actuar si la animación es del overlay mismo, no de sus hijos
     if (e.target === overlay) {
       overlay.style.display = 'none';
       overlay.classList.remove('hide');
@@ -28,9 +31,11 @@ export function openPopup(titleId) {
   const overlay = document.getElementById(`overlay-${titleId}`);
   if (!overlay) return;
 
+  // Limpiar cualquier estado previo
   overlay.classList.remove('hide');
   overlay.style.display = 'flex';
-
+  
+  // Forzar reflow
   void overlay.offsetWidth;
 
   overlay.classList.add('show');

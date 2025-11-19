@@ -13,8 +13,6 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -30,13 +28,14 @@ public class NewsService implements CacheWarmable {
 
     private static final String CACHE_NAME = "news";
     private static final String CACHE_KEY = "newsKey";
-    private static final String ETAG_KEY = "newsEtag";
 
     private final NewsClient newsClient;
     private final CacheManager cacheManager;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
-    private final CacheEtagService cacheEtagService;
 
+    /**
+     * Registra y devuelve un CircuitBreaker con configuración explícita
+     */
     private CircuitBreaker getNewsCircuitBreaker() {
         return circuitBreakerRegistry.circuitBreaker("newsCircuitBreaker",
                 () -> CircuitBreakerConfig.custom()
@@ -63,9 +62,7 @@ public class NewsService implements CacheWarmable {
                 .transformDeferred(CircuitBreakerOperator.of(getNewsCircuitBreaker()))
                 .doOnNext(data -> {
                     cache.put(CACHE_KEY, data);
-                    String etag = cacheEtagService.calculateEtag(data);
-                    cache.put(ETAG_KEY, etag);
-                    log.info("Cache warmed up with {} news items, ETag: {}", data.size(), etag);
+                    log.info("Cache warmed up with {} news items", data.size());
                 })
                 .doOnSuccess(v -> {
                     if (cacheManager instanceof PersistentCaffeineCacheManager pcm) {
@@ -99,9 +96,7 @@ public class NewsService implements CacheWarmable {
                 .transformDeferred(CircuitBreakerOperator.of(getNewsCircuitBreaker()))
                 .doOnNext(news -> {
                     cache.put(CACHE_KEY, news);
-                    String etag = cacheEtagService.calculateEtag(news);
-                    cache.put(ETAG_KEY, etag);
-                    log.info("Cache updated with {} news items, ETag: {}", news.size(), etag);
+                    log.info("Cache updated with {} news items", news.size());
                     if (cacheManager instanceof PersistentCaffeineCacheManager pcm) {
                         pcm.saveCache(CACHE_NAME);
                     }
@@ -122,17 +117,8 @@ public class NewsService implements CacheWarmable {
             if (cached != null && !cached.isEmpty()) {
                 log.info("✓ Returning {} news from disk cache", cached.size());
 
+                // Repoblar la caché en memoria
                 cache.put(CACHE_KEY, cached);
-
-                String etag = cache.get(ETAG_KEY, String.class);
-                if (etag == null) {
-                    etag = cacheEtagService.calculateEtag(cached);
-                    cache.put(ETAG_KEY, etag);
-                    log.info("ETag recalculated and cached: {}", etag);
-                } else {
-                    log.info("ETag loaded from disk cache: {}", etag);
-                }
-
                 log.info("In-memory cache repopulated with {} news items from disk", cached.size());
 
                 return Mono.just(cached);
@@ -152,50 +138,5 @@ public class NewsService implements CacheWarmable {
         }
 
         warmUpCache().subscribe();
-    }
-
-    public String getCurrentEtag() {
-        Cache cache = cacheManager.getCache(CACHE_NAME);
-        if (cache == null) {
-            log.warn("Cache not found when getting ETag");
-            return null;
-        }
-
-        String etag = cache.get(ETAG_KEY, String.class);
-        if (etag != null) {
-            log.debug("ETag retrieved from cache: {}", etag);
-            return etag;
-        }
-
-        @SuppressWarnings("unchecked")
-        List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
-        if (cached != null && !cached.isEmpty()) {
-            etag = cacheEtagService.calculateEtag(cached);
-            cache.put(ETAG_KEY, etag);
-            log.info("ETag calculated on demand and cached: {}", etag);
-            return etag;
-        }
-
-        log.warn("No data available to calculate ETag");
-        return null;
-    }
-
-    public String getNewsSnapshot() {
-        Cache cache = cacheManager.getCache(CACHE_NAME);
-        if (cache == null)
-            return "";
-
-        @SuppressWarnings("unchecked")
-        List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
-        if (cached == null || cached.isEmpty())
-            return "";
-
-        try {
-            ObjectMapper mapper = new ObjectMapper();
-            return mapper.writeValueAsString(cached);
-        } catch (Exception e) {
-            log.error("Error generating news snapshot: {}", e.getMessage());
-            return "";
-        }
     }
 }
