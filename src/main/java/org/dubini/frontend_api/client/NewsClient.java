@@ -5,7 +5,6 @@ import java.util.List;
 import org.dubini.frontend_api.config.BackofficeApiUrlProperties;
 import org.dubini.frontend_api.dto.PublicationDTO;
 import org.dubini.frontend_api.security.JwtProvider;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 

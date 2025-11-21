@@ -1,7 +1,6 @@
 package org.dubini.frontend_api.controller.rest;
 
 import org.dubini.frontend_api.dto.HttpResponse;
-import org.dubini.frontend_api.dto.UpdateStatusResponse;
 import org.dubini.frontend_api.service.CacheTimestampService;
 import org.dubini.frontend_api.service.NewsService;
 import org.springframework.http.HttpStatus;
