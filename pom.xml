@@ -92,13 +92,13 @@
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-impl</artifactId>
       <version>0.12.6</version>
-      <scope>runtime</scope> <!-- CAMBIO: scope runtime -->
+      <scope>runtime</scope>
     </dependency>
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt-jackson</artifactId>
       <version>0.12.6</version>
-      <scope>runtime</scope> <!-- CAMBIO: scope runtime -->
+      <scope>runtime</scope>
     </dependency>
 
     <!-- Cache -->
@@ -160,7 +160,6 @@
               <groupId>org.projectlombok</groupId>
               <artifactId>lombok</artifactId>
             </exclude>
-            <!-- AÑADIDO: Excluir DevTools si existe -->
             <exclude>
               <groupId>org.springframework.boot</groupId>
               <artifactId>spring-boot-devtools</artifactId>
@@ -179,7 +178,6 @@
         <skipTests>true</skipTests>
       </properties>
       
-      <!-- AÑADIDO: Excluir DevTools del classpath -->
       <dependencies>
         <dependency>
           <groupId>org.springframework.boot</groupId>
@@ -204,7 +202,6 @@
                   <artifactId>spring-boot-devtools</artifactId>
                 </exclude>
               </excludes>
-              <!-- AÑADIDO: igual que backoffice -->
               <excludeDevtools>true</excludeDevtools>
             </configuration>
             <executions>
