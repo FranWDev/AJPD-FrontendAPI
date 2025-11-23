@@ -33,11 +33,11 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime
 RUN groupadd -r spring && useradd -r -g spring spring
 
 WORKDIR /app
-COPY --from=builder --chown=spring:spring /build/target/backofficeAPI /app/backofficeAPI
-RUN chmod +x /app/backofficeAPI
+COPY --from=builder --chown=spring:spring /build/target/frontend-api /app/frontend-api
+RUN chmod +x /app/frontend-api
 USER spring:spring
 
 HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
     CMD curl -f http://localhost:${PORT:-8081}/actuator/health || exit 1
 
-ENTRYPOINT ["/app/backofficeAPI"]
+ENTRYPOINT ["/app/frontend-api"]
