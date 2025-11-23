@@ -1,99 +1,122 @@
 package org.dubini.frontend_api.config;
 
+import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
-import org.springframework.aot.hint.MemberCategory;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.ImportRuntimeHints;
 
-@Configuration
-@ImportRuntimeHints(JwtNativeConfig.JwtHintsRegistrar.class)
 public class JwtNativeConfig {
 
     static class JwtHintsRegistrar implements RuntimeHintsRegistrar {
         @Override
         public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-            registerJjwtClasses(hints);
+    
+            // ============ JJWT Core Classes ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwtBuilder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwtParser");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwtParserBuilder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwsHeader");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultClaims");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultClaimsBuilder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultHeader");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwt");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJws");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwe");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultMutableJwsHeader");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultMutableJweHeader");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultProtectedHeader");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.ParameterMap");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJweHeaderMutator");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwsHeaderMutator");
+            
+            // ============ Key Operations  ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardKeyOperations");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.KeyOperationConverter");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.AbstractJwk");
+            registerClassIfExists(hints, "io.jsonwebtoken.security.Jwks");
+            
+            // ============ JJWT Security - Algoritmos ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardSecureDigestAlgorithms");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardEncryptionAlgorithms");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardKeyAlgorithms");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardHashAlgorithms");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardSignatureAlgorithms");
+            
+            // ============ JJWT Security - Keys ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyParser");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyPairBuilder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultSecretKeyBuilder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultRsaKeyAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultEcKeyAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.EdwardsCurve");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyOperationBuilder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyRequest");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.KeysBridge");
+            
+            // ============ JJWT Security - MAC ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultMacAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.HmacShaKeyAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardMacAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.HmacAesAeadAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultVerifySecureDigestRequest");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultSecureDigestAlgorithm");
+            
+            // ============ JJWT Security - Signature ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.RsaSignatureAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.EcSignatureAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.EdSignatureAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultSignatureAlgorithm");
+            
+            // ============ JJWT Security - Encryption ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultAeadAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.AesGcmKeyAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DirectKeyAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.RsaKeyAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.EcdhKeyAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.security.Pbes2HsAkwAlgorithm");
+            
+            // ============ JJWT IO ============
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.StandardCompressionAlgorithms");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.ConvertingParser");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.DelegateStringDecoder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.DelegateStringEncoder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.Base64UrlStreamEncoder");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.DeflateCompressionAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.GzipCompressionAlgorithm");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.RuntimeClasspathDeserializer");
+            registerClassIfExists(hints, "io.jsonwebtoken.impl.io.RuntimeClasspathSerializer");
+            
+            // ============ JJWT Jackson Integration ============
+            registerClassIfExists(hints, "io.jsonwebtoken.jackson.io.JacksonDeserializer");
+            registerClassIfExists(hints, "io.jsonwebtoken.jackson.io.JacksonSerializer");
+            
+            // ============ JJWT Lang ============
+            registerClassIfExists(hints, "io.jsonwebtoken.lang.Collections");
+            registerClassIfExists(hints, "io.jsonwebtoken.lang.Strings");
+            registerClassIfExists(hints, "io.jsonwebtoken.lang.Classes");
+            registerClassIfExists(hints, "io.jsonwebtoken.lang.Arrays");
+            registerClassIfExists(hints, "io.jsonwebtoken.lang.Assert");
+            
+            // ============ Java Security ============
+            registerClassIfExists(hints, "javax.crypto.SecretKey");
+            registerClassIfExists(hints, "javax.crypto.spec.SecretKeySpec");
+            registerClassIfExists(hints, "java.security.Key");
+            registerClassIfExists(hints, "java.security.PublicKey");
+            registerClassIfExists(hints, "java.security.PrivateKey");
+            
+            // ============ Recursos JJWT ============
+            hints.resources().registerPattern("META-INF/services/io.jsonwebtoken.*");
+            
+            System.out.println("✓ JJWT classes registered for Native Image");
         }
 
-        private void registerJjwtClasses(RuntimeHints hints) {
-            try {
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.StandardKeyOperations");
-                
-                // Core JJWT classes
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.security.KeysBridge");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJwtBuilder");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJwtParser");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJwtParserBuilder");
-
-                // Security classes
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.DefaultKeyPairBuilder");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.DefaultSecretKeyBuilder");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.StandardSecureDigestAlgorithms");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.StandardHashAlgorithms");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.StandardKeyAlgorithms");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.StandardEncryptionAlgorithms");
-                
-                // Key Operation Converter and related
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.KeyOperationConverter");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.AbstractJwk");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.DefaultJwkContext");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.DefaultMacAlgorithm");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.DefaultAeadAlgorithm");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.EdSignatureAlgorithm");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.RsaSignatureAlgorithm");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.EcSignatureAlgorithm");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.HmacAesAeadAlgorithm");
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.impl.security.GcmAesAeadAlgorithm");
-
-                // JWT Headers and Claims
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultClaims");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultHeader");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJwsHeader");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJweHeader");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultProtectedHeader");
-                
-                // JWE Header Builder
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJweHeaderMutator");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJweHeaderBuilder");
-                registerJjwtClass(hints, "io.jsonwebtoken.impl.DefaultJwtBuilder$DefaultBuilderHeader");
-
-                // Security Jwks
-                registerJjwtSecurityClass(hints, "io.jsonwebtoken.security.Jwks$OP");
-                
-            } catch (Exception e) {
-                throw new RuntimeException("Failed to register JJWT classes for native image", e);
-            }
-        }
-
-        private void registerJjwtSecurityClass(RuntimeHints hints, String className) {
+        private void registerClassIfExists(RuntimeHints hints, String className) {
             try {
                 Class<?> clazz = Class.forName(className);
                 hints.reflection().registerType(
-                    clazz,
-                    MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                    MemberCategory.INVOKE_DECLARED_METHODS,
-                    MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS,
-                    MemberCategory.INVOKE_PUBLIC_METHODS,
-                    MemberCategory.DECLARED_FIELDS,
-                    MemberCategory.PUBLIC_FIELDS
-                );
+                        clazz,
+                        MemberCategory.values());
             } catch (ClassNotFoundException e) {
-                System.err.println("JJWT Security class not found (optional): " + className);
-            }
-        }
-
-        private void registerJjwtClass(RuntimeHints hints, String className) {
-            try {
-                Class<?> clazz = Class.forName(className);
-                hints.reflection().registerType(
-                    clazz,
-                    MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                    MemberCategory.INVOKE_DECLARED_METHODS,
-                    MemberCategory.DECLARED_FIELDS
-                );
-            } catch (ClassNotFoundException e) {
-                System.err.println("JJWT class not found (optional): " + className);
+                // Ignorar si no existe
             }
         }
     }

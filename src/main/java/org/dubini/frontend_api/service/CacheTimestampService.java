@@ -1,6 +1,5 @@
 package org.dubini.frontend_api.service;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -18,26 +17,23 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class CacheTimestampService {
 
-    private static final String CACHE_DIRECTORY = "/tmp/storage/caches";
     private static final String CACHE_FILE = "lastModified.json";
-    private static final ObjectMapper objectMapper = new ObjectMapper();
+    private final SupabaseStorageService storageService;
+    private final ObjectMapper objectMapper;
 
     public boolean hasNewsUpdate(String clientLastUpdate) {
         try {
-            File cacheDir = new File(CACHE_DIRECTORY);
-            if (!cacheDir.exists()) {
-                cacheDir.mkdirs();
-            }
-
-            File cacheFile = new File(cacheDir, CACHE_FILE);
-            if (!cacheFile.exists()) {
-                log.info("Cache file not found, creating a new one...");
+            // Verificar si existe el archivo en Supabase
+            if (!storageService.exists(CACHE_FILE)) {
+                log.info("Cache file not found in Supabase, creating a new one...");
                 updateTimestamp();
                 return true;
             }
 
-            ObjectNode cacheData = objectMapper.readValue(cacheFile, ObjectNode.class);
-            if (cacheData.get("lastModified") == null) {
+            // Descargar el archivo desde Supabase
+            ObjectNode cacheData = storageService.downloadJson(CACHE_FILE, ObjectNode.class);
+            
+            if (cacheData == null || cacheData.get("lastModified") == null) {
                 log.warn("Cache file is missing 'lastModified', updating...");
                 updateTimestamp();
                 return true;
@@ -49,7 +45,7 @@ public class CacheTimestampService {
 
             return clientDate.isBefore(serverDate);
 
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             log.error("Error checking for news update: {}", e.getMessage());
             return true;
         } catch (Exception e) {
@@ -60,20 +56,16 @@ public class CacheTimestampService {
 
     public void updateTimestamp() {
         try {
-            File cacheDir = new File(CACHE_DIRECTORY);
-            if (!cacheDir.exists())
-                cacheDir.mkdirs();
-
-            File cacheFile = new File(cacheDir, CACHE_FILE);
             ObjectNode cacheData = objectMapper.createObjectNode();
-
             Instant now = Instant.now().truncatedTo(ChronoUnit.MILLIS);
             cacheData.put("lastModified", now.toString());
-            objectMapper.writeValue(cacheFile, cacheData);
 
-            log.info("Cache timestamp updated: {}", cacheData.get("lastModified").asText());
-        } catch (IOException e) {
-            log.error("Error updating cache timestamp: {}", e.getMessage());
+            // Subir el archivo a Supabase
+            storageService.uploadJson(CACHE_FILE, cacheData);
+
+            log.info("Cache timestamp updated in Supabase: {}", cacheData.get("lastModified").asText());
+        } catch (IOException | InterruptedException e) {
+            log.error("Error updating cache timestamp in Supabase: {}", e.getMessage());
         }
     }
 }

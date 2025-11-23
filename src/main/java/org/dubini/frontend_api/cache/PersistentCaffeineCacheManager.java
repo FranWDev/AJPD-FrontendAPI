@@ -4,13 +4,13 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
+import org.dubini.frontend_api.service.SupabaseStorageService;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
 
 import jakarta.annotation.PreDestroy;
-import java.io.File;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -20,38 +20,27 @@ public class PersistentCaffeineCacheManager implements CacheManager {
 
     private final Map<String, CaffeineCache> caches = new ConcurrentHashMap<>();
     private final ObjectMapper mapper = new ObjectMapper();
-    private final File baseDir = new File("/tmp/storage/caches");
+    private final SupabaseStorageService storageService;
 
-    public PersistentCaffeineCacheManager() {
-        if (!baseDir.exists()) baseDir.mkdirs();
-        loadCachesFromDisk();
+    public PersistentCaffeineCacheManager(SupabaseStorageService storageService) {
+        this.storageService = storageService;
+        loadCachesFromSupabase();
     }
 
-    private void loadCachesFromDisk() {
-        File[] files = baseDir.listFiles((dir, name) -> name.endsWith(".json"));
-        if (files != null) {
-            for (File file : files) {
-                String name = file.getName().replace(".json", "");
-                Cache<Object, Object> nativeCache = Caffeine.newBuilder().build();
-                try {
-                    Map<Object, Object> data = mapper.readValue(file, new TypeReference<>() {});
-                    data.forEach(nativeCache::put);
-                    System.out.println("Cache '" + name + "' cargada desde disco (" + data.size() + " entradas)");
-                } catch (Exception e) {
-                    System.err.println("Error cargando cache '" + name + "': " + e.getMessage());
-                }
-                caches.put(name, new CaffeineCache(name, nativeCache));
-            }
-        }
+    private void loadCachesFromSupabase() {
+        // Aquí podrías listar los archivos del bucket si implementas listFiles()
+        // Por ahora, las caches se cargarán bajo demanda con getCache()
+        System.out.println("CacheManager inicializado con Supabase Storage");
     }
 
     /**
-     * Recarga una cache específica desde disco
+     * Recarga una cache específica desde Supabase
      */
     public void reloadCache(String name) {
-        File file = new File(baseDir, name + ".json");
-        if (!file.exists()) {
-            System.err.println("No existe archivo de cache en disco para: " + name);
+        String fileName = name + ".json";
+        
+        if (!storageService.exists(fileName)) {
+            System.err.println("No existe archivo de cache en Supabase para: " + name);
             return;
         }
 
@@ -61,17 +50,48 @@ public class PersistentCaffeineCacheManager implements CacheManager {
         }
 
         try {
-            Map<Object, Object> data = mapper.readValue(file, new TypeReference<>() {});
-            cache.getNativeCache().invalidateAll();
-            data.forEach(cache.getNativeCache()::put);
-            System.out.println("Cache '" + name + "' recargada desde disco (" + data.size() + " entradas)");
+            Map<Object, Object> data = storageService.downloadJson(
+                fileName, 
+                new TypeReference<Map<Object, Object>>() {}
+            );
+            
+            if (data != null) {
+                cache.getNativeCache().invalidateAll();
+                data.forEach(cache.getNativeCache()::put);
+                System.out.println("Cache '" + name + "' recargada desde Supabase (" + data.size() + " entradas)");
+            }
         } catch (Exception e) {
-            System.err.println("Error recargando cache '" + name + "' desde disco: " + e.getMessage());
+            System.err.println("Error recargando cache '" + name + "' desde Supabase: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Intenta cargar una cache desde Supabase al acceder por primera vez
+     */
+    private void tryLoadCache(String name, Cache<Object, Object> nativeCache) {
+        String fileName = name + ".json";
+        
+        try {
+            if (storageService.exists(fileName)) {
+                Map<Object, Object> data = storageService.downloadJson(
+                    fileName, 
+                    new TypeReference<Map<Object, Object>>() {}
+                );
+                
+                if (data != null && !data.isEmpty()) {
+                    data.forEach(nativeCache::put);
+                    System.out.println("Cache '" + name + "' cargada desde Supabase (" + data.size() + " entradas)");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Error cargando cache '" + name + "' desde Supabase: " + e.getMessage());
         }
     }
 
     @PreDestroy
     public void saveCaches() {
+        System.out.println("Guardando caches en Supabase...");
         caches.keySet().forEach(this::saveCache);
     }
 
@@ -79,23 +99,32 @@ public class PersistentCaffeineCacheManager implements CacheManager {
         CaffeineCache cache = caches.get(name);
         if (cache == null) return;
 
-        File file = new File(baseDir, name + ".json");
+        String fileName = name + ".json";
+        
         try {
             Map<Object, Object> cacheMap = cache.getNativeCache().asMap();
+            
             if (cacheMap.isEmpty()) {
                 System.out.println("Cache '" + name + "' está vacía, no se guarda");
                 return;
             }
-            mapper.writerWithDefaultPrettyPrinter().writeValue(file, cacheMap);
-            System.out.println("Cache '" + name + "' guardada en disco (" + cacheMap.size() + " entradas)");
+            
+            storageService.uploadJson(fileName, cacheMap);
+            System.out.println("Cache '" + name + "' guardada en Supabase (" + cacheMap.size() + " entradas)");
         } catch (Exception e) {
-            System.err.println("Error guardando cache '" + name + "': " + e.getMessage());
+            System.err.println("Error guardando cache '" + name + "' en Supabase: " + e.getMessage());
+            e.printStackTrace();
         }
     }
 
     @Override
     public org.springframework.cache.Cache getCache(String name) {
-        return caches.computeIfAbsent(name, this::createCache);
+        return caches.computeIfAbsent(name, cacheName -> {
+            Cache<Object, Object> nativeCache = Caffeine.newBuilder().build();
+            tryLoadCache(cacheName, nativeCache);
+            System.out.println("Cache '" + cacheName + "' inicializada");
+            return new CaffeineCache(cacheName, nativeCache);
+        });
     }
 
     private CaffeineCache createCache(String name) {

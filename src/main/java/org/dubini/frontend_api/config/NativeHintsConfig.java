@@ -42,6 +42,7 @@ public class NativeHintsConfig {
             registerService(hints, "org.dubini.frontend_api.service.CacheEtagService");
             registerService(hints, "org.dubini.frontend_api.service.CacheTimestampService");
             registerService(hints, "org.dubini.frontend_api.service.ServiceWorkerService");
+            registerService(hints, "org.dubini.frontend_api.service.SupabaseStorageService");
 
             // ============ CLIENTS ============
             registerService(hints, "org.dubini.frontend_api.client.NewsClient");
@@ -54,6 +55,7 @@ public class NativeHintsConfig {
             registerConfig(hints, "org.dubini.frontend_api.config.JwtProperties");
             registerConfig(hints, "org.dubini.frontend_api.config.SecurityConfig");
             registerConfig(hints, "org.dubini.frontend_api.config.WebClientConfig");
+            registerConfig(hints, "org.dubini.frontend_api.config.SupabaseStorageProperties");
 
             // ============ RECURSOS ESTÁTICOS ============
             hints.resources().registerPattern("templates/**");
@@ -90,6 +92,9 @@ public class NativeHintsConfig {
 
             // ============ CAFFEINE CACHE ============
             registerCaffeineClasses(hints);
+
+            // ============ SUPABASE STORAGE ============
+            registerSupabaseClasses(hints);
         }
 
         private void registerDto(RuntimeHints hints, String className) {
@@ -239,6 +244,11 @@ public class NativeHintsConfig {
                 hints.reflection().registerType(
                         com.fasterxml.jackson.databind.node.ArrayNode.class,
                         MemberCategory.values());
+                
+                // TypeReference para deserialización genérica
+                hints.reflection().registerType(
+                        com.fasterxml.jackson.core.type.TypeReference.class,
+                        MemberCategory.values());
             } catch (Exception e) {
                 System.err.println("Jackson class issue: " + e.getMessage());
             }
@@ -349,6 +359,41 @@ public class NativeHintsConfig {
                 
             } catch (Exception e) {
                 System.err.println("Caffeine class issue: " + e.getMessage());
+            }
+        }
+
+        private void registerSupabaseClasses(RuntimeHints hints) {
+            try {
+                // Java HTTP Client (usado por SupabaseStorageService)
+                hints.reflection().registerType(
+                        java.net.http.HttpClient.class,
+                        MemberCategory.values());
+                
+                registerClassIfExists(hints, "java.net.http.HttpRequest");
+                registerClassIfExists(hints, "java.net.http.HttpRequest$Builder");
+                registerClassIfExists(hints, "java.net.http.HttpRequest$BodyPublisher");
+                registerClassIfExists(hints, "java.net.http.HttpRequest$BodyPublishers");
+                registerClassIfExists(hints, "java.net.http.HttpResponse");
+                registerClassIfExists(hints, "java.net.http.HttpResponse$BodyHandler");
+                registerClassIfExists(hints, "java.net.http.HttpResponse$BodyHandlers");
+                
+                // Map types usados en cache persistence
+                hints.reflection().registerType(
+                        java.util.Map.class,
+                        MemberCategory.values());
+                hints.reflection().registerType(
+                        java.util.HashMap.class,
+                        MemberCategory.values());
+                hints.reflection().registerType(
+                        java.util.concurrent.ConcurrentHashMap.class,
+                        MemberCategory.values());
+                
+                // Serialization hints para Map<Object, Object>
+                hints.serialization().registerType(java.util.HashMap.class);
+                hints.serialization().registerType(java.util.concurrent.ConcurrentHashMap.class);
+                
+            } catch (Exception e) {
+                System.err.println("Supabase class issue: " + e.getMessage());
             }
         }
 
