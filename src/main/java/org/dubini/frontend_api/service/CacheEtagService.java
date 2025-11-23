@@ -21,8 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 public class CacheEtagService {
 
     private final ObjectMapper objectMapper;
-    
-    // Caché en memoria simple para ETags (no necesita persistencia)
+
     private final Map<Integer, String> etagCache = new ConcurrentHashMap<>();
 
     /**
@@ -60,9 +59,6 @@ public class CacheEtagService {
         }
     }
 
-    /**
-     * Compara si dos ETags son diferentes
-     */
     public boolean hasChanged(String clientEtag, String serverEtag) {
         if (clientEtag == null || serverEtag == null) {
             return true;
@@ -74,19 +70,13 @@ public class CacheEtagService {
         return !normalizedClient.equals(normalizedServer);
     }
 
-    /**
-     * Normaliza un ETag removiendo comillas y espacios
-     */
     private String normalizeEtag(String etag) {
         if (etag == null) {
             return "";
         }
         return etag.trim().replaceAll("^\"|\"$", "");
     }
-    
-    /**
-     * Limpia la caché de ETags (útil para testing o cuando se reinicia la caché de noticias)
-     */
+
     public void clearEtagCache() {
         etagCache.clear();
         log.info("ETag cache cleared");

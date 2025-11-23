@@ -28,14 +28,9 @@ public class PersistentCaffeineCacheManager implements CacheManager {
     }
 
     private void loadCachesFromSupabase() {
-        // Aquí podrías listar los archivos del bucket si implementas listFiles()
-        // Por ahora, las caches se cargarán bajo demanda con getCache()
         System.out.println("CacheManager inicializado con Supabase Storage");
     }
 
-    /**
-     * Recarga una cache específica desde Supabase
-     */
     public void reloadCache(String name) {
         String fileName = name + ".json";
         
@@ -66,9 +61,6 @@ public class PersistentCaffeineCacheManager implements CacheManager {
         }
     }
 
-    /**
-     * Intenta cargar una cache desde Supabase al acceder por primera vez
-     */
     private void tryLoadCache(String name, Cache<Object, Object> nativeCache) {
         String fileName = name + ".json";
         
