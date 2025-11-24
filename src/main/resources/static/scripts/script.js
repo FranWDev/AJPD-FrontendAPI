@@ -10,9 +10,6 @@ if ('serviceWorker' in navigator) {
   });
 }
 
-
-
-
 document.addEventListener("DOMContentLoaded", () => {
   const mobileMenuBtn = document.querySelector(".mobile-menu-btn");
   const mobileNav = document.querySelector(".mobile-nav");
