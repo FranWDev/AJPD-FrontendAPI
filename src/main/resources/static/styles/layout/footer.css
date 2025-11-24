@@ -46,7 +46,11 @@
   display: flex;
   gap: 1rem;
 }
-
+@media (max-width: 768px) {
+  .social-links {
+    justify-content: center;
+  }
+}
 .social-links a {
   color: white;
   font-size: 1.5rem;
