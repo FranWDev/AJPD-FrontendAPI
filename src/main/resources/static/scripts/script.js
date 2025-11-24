@@ -259,24 +259,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initActivitySlider();
 });
-
-document.querySelectorAll(".program-card").forEach((card) => {
-  let timeoutId;
-
-  card.addEventListener("click", (e) => {
-    if (e.target.classList.contains("learn-more")) {
-      return;
-    }
-
-    if (timeoutId) clearTimeout(timeoutId);
-
-    timeoutId = setTimeout(() => {
-      const randomRotation = Math.random() < 0.5 ? -3 : 3;
-      card.style.transform = `scale(1.1) rotate(${randomRotation}deg)`;
-
-      setTimeout(() => {
-        card.style.transform = "";
-      }, 500);
-    }, 50);
-  });
-});
