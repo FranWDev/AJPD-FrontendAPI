@@ -2,7 +2,7 @@ import { fetchNewsByTitle } from "../api/publicationService.js";
 import edjsHTML from "../components/EditorJSParser.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-
+    // Obtener el título de la URL
     const path = window.location.pathname;
     const urlTitle = path.split('/').pop();
     
@@ -18,15 +18,15 @@ document.addEventListener("DOMContentLoaded", () => {
         .then(news => {
 
             document.title = `AJPD - ${news.title}`;
-            h1.textContent = news.title;
-            
+            h1.textContent = "";
+
             const parser = edjsHTML();
             const htmlContent = parser.parse(news.editorContent);
-            
+ 
             container.innerHTML = `
                 <article class="news-detail">
                     ${news.imageUrl ? `<img src="${news.imageUrl}" alt="${news.title}" class="news-image">` : ''}
-
+                    <h2>${news.title}</h2>
                     <div class="news-content">
                         ${htmlContent}
                     </div>
@@ -40,6 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <p>Lo sentimos, no se pudo cargar la noticia solicitada.</p>
                 <a href="/noticias-y-actividades" class="btn">Volver a noticias</a>
             `;
+
             setTimeout(() => {
                 window.location.href = '/noticias-y-actividades';
             }, 3000);

@@ -145,7 +145,6 @@ private String normalizeTitle(String title) {
             .trim();
 }
 
-@SuppressWarnings("unchecked")
 public Mono<PublicationDTO> getByTitle(String title) {
     if (title == null || title.trim().isEmpty()) {
         return Mono.error(new IllegalArgumentException("Title cannot be null or empty"));
