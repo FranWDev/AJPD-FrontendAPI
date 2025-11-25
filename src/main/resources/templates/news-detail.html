@@ -1,36 +1,34 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="AJPD - Asociación Juvenil Proyecto Dubini: noticias, actividades y participación juvenil. Únete a nuestro proyecto y forma parte del cambio.">
-
-    <title>AJPD - Actividades</title>
+    <title>AJPD - Noticia</title>
+    <link rel="stylesheet" href="/styles/directorate.css">
+    <link rel="stylesheet" href="/styles/awards.css">
     <link rel="stylesheet" href="/styles/layout/header.css">
     <link rel="stylesheet" href="/styles/layout/footer.css">
     <link rel="stylesheet" href="/styles/components/hero.css">
     <link rel="stylesheet" href="/styles/components/content.css">
     <link rel="stylesheet" href="/styles/components/wsp-icon.css">
-    <link rel="stylesheet" href="/styles/news.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles/news-detail.css">
     <link rel="stylesheet" href="/styles/base.css">
-    <link rel="stylesheet" href="/styles/components/popup.css">
 </head>
-
 <body>
     <header th:replace="fragments/header :: header"></header>
     <main role="main">
-        <h1>Actividades</h1>
-        <div class="program-cards">
-
-        </div>
+        <section class="featured-section">
+            <h1>Cargando noticia...</h1>
+            <div class="container" id="news-container">
+                <p>Cargando contenido...</p>
+            </div>
+        </section>
     </main>
     <div th:replace="fragments/wsp-icon :: wsp-icon"></div>
     <div th:replace="fragments/footer :: footer"></div>
 </body>
 <script src="/scripts/script.js"></script>
-<script type="module" src="/scripts/components/popup.js"></script>
-<script type="module" src="/scripts/pages/activities.js"></script>
-
+<script type="module" src="/scripts/pages/news-detail.js"></script>
 </html>

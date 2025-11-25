@@ -1,4 +1,4 @@
-import { fetchNewsSummary } from "../api/publicationService.js";
+import { fetchNewsSummary, normalizeTitle } from "../api/publicationService.js";
 import edjsHTML from "../components/EditorJSParser.js";
 import { sanitizeTitle, initializePopups } from "../components/popup.js";
 
@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const container = document.getElementsByClassName("program-cards");
   fetchNewsSummary().then((data) => {
     const parser = edjsHTML();
-    data.forEach((item) => {
+    data.forEach(async (item) => {
       console.log(parser.parse(item.editorContent));
 
       const article = document.createElement("article");
@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 <img src="${item.imageUrl}" alt="${item.title}">
                 <h3>${item.title}</h3>
                 <p>${item.description}</p>
-                <a href="#" id="${sanitizeTitle(
+                <a href="/noticias-y-actividades/${await normalizeTitle(item.title)}" id="${sanitizeTitle(
                   item.title
                 )}" class="learn-more read-more">Saber más →</a>
             `;
@@ -45,6 +45,6 @@ document.addEventListener("DOMContentLoaded", () => {
       container[0].appendChild(article);
     });
 
-    initializePopups();
+    /* initializePopups(); */
   });
 });

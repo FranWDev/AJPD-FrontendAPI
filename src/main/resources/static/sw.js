@@ -1,5 +1,5 @@
 const urlParams = new URLSearchParams(self.location.search);
-const VERSION = 'v3.5.9';
+const VERSION = 'v6.5.9';
 const CACHE_NAME = `dubini-static-cache-${VERSION}`;
 
 self.addEventListener('install', event => {

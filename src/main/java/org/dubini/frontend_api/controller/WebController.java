@@ -2,6 +2,7 @@ package org.dubini.frontend_api.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
 public class WebController {
@@ -51,4 +52,8 @@ public class WebController {
         return "news";
     }
 
+    @GetMapping("/noticias-y-actividades/{title}")
+    public String newsDetail(@PathVariable String title) {
+        return "news-detail";
+    }
 }

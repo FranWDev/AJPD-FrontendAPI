@@ -7,6 +7,7 @@ import org.dubini.frontend_api.service.CacheEtagService;
 import org.dubini.frontend_api.service.NewsService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
@@ -27,13 +28,39 @@ public class NewsRestController {
                 .map(newsList -> {
                     String etag = cacheEtagService.calculateEtag(newsList);
                     log.debug("Returning {} news items with ETag: {}", newsList.size(), etag);
-                    
+
                     return ResponseEntity.ok()
                             .header("ETag", etag)
                             .body(newsList);
                 })
                 .onErrorResume(e -> {
                     log.error("Error fetching news: {}", e.getMessage());
+                    return Mono.just(ResponseEntity.internalServerError().build());
+                });
+    }
+
+    @GetMapping("/api/news/title/{title}")
+    public Mono<ResponseEntity<PublicationDTO>> getNewsByTitle(@PathVariable String title) {
+        return newsService.getByTitle(title)
+                .map(news -> {
+                    String etag = cacheEtagService.calculateEtag(news);
+                    log.debug("Returning news with title '{}' and ETag: {}", title, etag);
+
+                    return ResponseEntity.ok()
+                            .header("ETag", etag)
+                            .body(news);
+                })
+                .onErrorResume(e -> {
+                    log.error("Error fetching news by title '{}': {}", title, e.getMessage());
+
+                    if (e instanceof IllegalArgumentException) {
+                        return Mono.just(ResponseEntity.badRequest().build());
+                    }
+
+                    if (e.getMessage().contains("not found")) {
+                        return Mono.just(ResponseEntity.notFound().build());
+                    }
+
                     return Mono.just(ResponseEntity.internalServerError().build());
                 });
     }

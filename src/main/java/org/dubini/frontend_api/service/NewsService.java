@@ -128,6 +128,56 @@ public class NewsService implements CacheWarmable {
         return Mono.error(new BackofficeException("Backoffice unavailable and no cache available"));
     }
 
+private String normalizeTitle(String title) {
+    if (title == null) {
+        return "";
+    }
+    
+    return title.toLowerCase()
+            .replaceAll("[áàäâ]", "a")
+            .replaceAll("[éèëê]", "e")
+            .replaceAll("[íìïî]", "i")
+            .replaceAll("[óòöô]", "o")
+            .replaceAll("[úùüû]", "u")
+            .replaceAll("[ñ]", "n")
+            .replaceAll("[^a-z0-9]+", "-")  // Reemplaza cualquier caracter no alfanumérico por guión
+            .replaceAll("^-+|-+$", "")      // Elimina guiones al inicio y al final
+            .trim();
+}
+
+@SuppressWarnings("unchecked")
+public Mono<PublicationDTO> getByTitle(String title) {
+    if (title == null || title.trim().isEmpty()) {
+        return Mono.error(new IllegalArgumentException("Title cannot be null or empty"));
+    }
+
+    String normalizedRequestTitle = normalizeTitle(title);
+    log.debug("Searching for news with normalized title: {}", normalizedRequestTitle);
+
+    return get()
+            .flatMap(newsList -> {
+                PublicationDTO found = newsList.stream()
+                        .filter(news -> {
+                            if (news.getTitle() == null) {
+                                return false;
+                            }
+                            String normalizedNewsTitle = normalizeTitle(news.getTitle());
+                            return normalizedNewsTitle.equals(normalizedRequestTitle);
+                        })
+                        .findFirst()
+                        .orElse(null);
+
+                if (found != null) {
+                    log.info("✓ Found news with title: {} (normalized: {})", found.getTitle(), normalizedRequestTitle);
+                    return Mono.just(found);
+                } else {
+                    log.warn("✗ News with normalized title '{}' not found", normalizedRequestTitle);
+                    return Mono.error(new BackofficeException(
+                            String.format("News with title '%s' not found", title)));
+                }
+            });
+}
+
     public void clear() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
         if (cache != null)
