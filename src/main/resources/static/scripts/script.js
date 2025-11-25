@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const mobileNav = document.querySelector(".mobile-nav");
   const mobileDropdownBtns = document.querySelectorAll(".mobile-dropdown-btn");
   const body = document.body;
-
+8
   const overlay = document.createElement("div");
   overlay.className = "mobile-nav-overlay";
   document.body.appendChild(overlay);
@@ -135,6 +135,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initHeroSlider() {
     const slides = document.querySelectorAll(".hero-slide");
+    try {
     let currentSlide = 0;
 
     slides[0].classList.add("active");
@@ -144,6 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
       currentSlide = (currentSlide + 1) % slides.length;
       slides[currentSlide].classList.add("active");
     }, 5000);
+    } catch (err) {
+      return;
+    }
   }
 
   initHeroSlider();
@@ -257,6 +261,31 @@ document.addEventListener("DOMContentLoaded", () => {
       });
     });
   }
-
   initActivitySlider();
+
+  
+});
+
+document.addEventListener('DOMContentLoaded', function() {
+  const fadeElements = document.querySelectorAll('.fade-in-element');
+
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+  
+  const observerCallback = (entries, observer) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+        observer.unobserve(entry.target);
+      }
+    });
+  };
+  
+  const observer = new IntersectionObserver(observerCallback, observerOptions);
+
+  fadeElements.forEach(element => {
+    observer.observe(element);
+  });
 });

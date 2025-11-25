@@ -20,7 +20,6 @@
     <link rel="stylesheet" href="/styles/components/hero.css">
     <link rel="stylesheet" href="/styles/components/content.css">
     <link rel="stylesheet" href="/styles/components/wsp-icon.css">
-    <link rel="stylesheet" href="/styles/components/popup.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="/styles/base.css">
 </head>
@@ -34,7 +33,7 @@
                 <div class="hero-slide" style="background-image: url('https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/example.webp')"></div>
                 <div class="hero-slide" style="background-image: url('https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/example.webp')"></div>
             </div>
-            <div class="hero-content">
+            <div class="hero-content animate-fadeIn">
                 <h2>Asociación Juvenil Proyecto Dubini</h2>
                 <p></p>
                 <a href="https://docs.google.com/forms/d/e/1FAIpQLScpYBiXsFYA2vxVg1Azp6JnyRLz2a8QjPdm99Ur5hemTy0lfg/viewform"
@@ -43,10 +42,9 @@
         </section>
 
         <section class="featured-section">
-
             <div class="container">
-                <h2 class="featured-section-title">Lo ultimo de AJPD</h2>
-                <div class="program-cards">
+                <h2 class="featured-section-title fade-in-element">Lo ultimo de AJPD</h2>
+                <div class="program-cards fade-in-element fade-in-delay-1">
 
                 </div>
             </div>
@@ -54,8 +52,8 @@
 
         <section class="activities-section">
             <div class="container">
-                <h2>¿Qué hacemos en A.J. Proyecto Dubini?</h2>
-                <div class="activities-slider">
+                <h2 class="fade-in-element">¿Qué hacemos en A.J. Proyecto Dubini?</h2>
+                <div class="activities-slider fade-in-element fade-in-delay-1">
                     <div class="slider-container">
                         <div class="slider-track">
                             <div class="slide">
@@ -110,7 +108,5 @@
     <div th:replace="fragments/footer :: footer"></div>
 </body>
 <script type="module" src="/scripts/pages/featured.js"></script>
-<script type="module" src="/scripts/components/popup.js"></script>
 <script type="module" src="/scripts/script.js"></script>
-
 </html>

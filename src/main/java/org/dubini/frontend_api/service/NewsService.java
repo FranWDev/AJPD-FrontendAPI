@@ -13,6 +13,8 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import io.github.resilience4j.circuitbreaker.CircuitBreaker;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry;
@@ -32,6 +34,7 @@ public class NewsService implements CacheWarmable {
     private final NewsClient newsClient;
     private final CacheManager cacheManager;
     private final CircuitBreakerRegistry circuitBreakerRegistry;
+    private final ObjectMapper objectMapper;
 
     /**
      * Registra y devuelve un CircuitBreaker con configuración explícita
@@ -77,6 +80,26 @@ public class NewsService implements CacheWarmable {
     }
 
     @SuppressWarnings("unchecked")
+    private List<PublicationDTO> getFromCache(Cache cache) {
+        Object cached = cache.get(CACHE_KEY, Object.class);
+        if (cached == null) {
+            return null;
+        }
+
+        if (cached instanceof List<?> list && !list.isEmpty()
+                && list.get(0) instanceof PublicationDTO) {
+            return (List<PublicationDTO>) cached;
+        }
+
+        try {
+            return objectMapper.convertValue(cached,
+                    objectMapper.getTypeFactory().constructCollectionType(List.class, PublicationDTO.class));
+        } catch (Exception e) {
+            log.error("Error converting cache value to List<PublicationDTO>: {}", e.getMessage());
+            return null;
+        }
+    }
+
     public Mono<List<PublicationDTO>> get() {
         Cache cache = cacheManager.getCache(CACHE_NAME);
         if (cache == null) {
@@ -84,7 +107,7 @@ public class NewsService implements CacheWarmable {
             return Mono.error(new CacheException("Cache no inicializada"));
         }
 
-        List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
+        List<PublicationDTO> cached = getFromCache(cache);
         if (cached != null && !cached.isEmpty()) {
             log.info("✓ Returning {} news from in-memory cache", cached.size());
             return Mono.just(cached);
@@ -112,12 +135,16 @@ public class NewsService implements CacheWarmable {
             log.info("In-memory cache empty, attempting to load from disk...");
             pcm.reloadCache(CACHE_NAME);
 
-            @SuppressWarnings("unchecked")
-            List<PublicationDTO> cached = cache.get(CACHE_KEY, List.class);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+
+            List<PublicationDTO> cached = getFromCache(cache);
             if (cached != null && !cached.isEmpty()) {
                 log.info("✓ Returning {} news from disk cache", cached.size());
 
-                // Repoblar la caché en memoria
                 cache.put(CACHE_KEY, cached);
                 log.info("In-memory cache repopulated with {} news items from disk", cached.size());
 
@@ -128,54 +155,55 @@ public class NewsService implements CacheWarmable {
         return Mono.error(new BackofficeException("Backoffice unavailable and no cache available"));
     }
 
-private String normalizeTitle(String title) {
-    if (title == null) {
-        return "";
-    }
-    
-    return title.toLowerCase()
-            .replaceAll("[áàäâ]", "a")
-            .replaceAll("[éèëê]", "e")
-            .replaceAll("[íìïî]", "i")
-            .replaceAll("[óòöô]", "o")
-            .replaceAll("[úùüû]", "u")
-            .replaceAll("[ñ]", "n")
-            .replaceAll("[^a-z0-9]+", "-")  // Reemplaza cualquier caracter no alfanumérico por guión
-            .replaceAll("^-+|-+$", "")      // Elimina guiones al inicio y al final
-            .trim();
-}
+    private String normalizeTitle(String title) {
+        if (title == null) {
+            return "";
+        }
 
-public Mono<PublicationDTO> getByTitle(String title) {
-    if (title == null || title.trim().isEmpty()) {
-        return Mono.error(new IllegalArgumentException("Title cannot be null or empty"));
+        return title.toLowerCase()
+                .replaceAll("[áàäâ]", "a")
+                .replaceAll("[éèëê]", "e")
+                .replaceAll("[íìïî]", "i")
+                .replaceAll("[óòöô]", "o")
+                .replaceAll("[úùüû]", "u")
+                .replaceAll("[ñ]", "n")
+                .replaceAll("[^a-z0-9]+", "-")
+                .replaceAll("^-+|-+$", "")
+                .trim();
     }
 
-    String normalizedRequestTitle = normalizeTitle(title);
-    log.debug("Searching for news with normalized title: {}", normalizedRequestTitle);
+    public Mono<PublicationDTO> getByTitle(String title) {
+        if (title == null || title.trim().isEmpty()) {
+            return Mono.error(new IllegalArgumentException("Title cannot be null or empty"));
+        }
 
-    return get()
-            .flatMap(newsList -> {
-                PublicationDTO found = newsList.stream()
-                        .filter(news -> {
-                            if (news.getTitle() == null) {
-                                return false;
-                            }
-                            String normalizedNewsTitle = normalizeTitle(news.getTitle());
-                            return normalizedNewsTitle.equals(normalizedRequestTitle);
-                        })
-                        .findFirst()
-                        .orElse(null);
+        String normalizedRequestTitle = normalizeTitle(title);
+        log.debug("Searching for news with normalized title: {}", normalizedRequestTitle);
 
-                if (found != null) {
-                    log.info("✓ Found news with title: {} (normalized: {})", found.getTitle(), normalizedRequestTitle);
-                    return Mono.just(found);
-                } else {
-                    log.warn("✗ News with normalized title '{}' not found", normalizedRequestTitle);
-                    return Mono.error(new BackofficeException(
-                            String.format("News with title '%s' not found", title)));
-                }
-            });
-}
+        return get()
+                .flatMap(newsList -> {
+                    PublicationDTO found = newsList.stream()
+                            .filter(news -> {
+                                if (news.getTitle() == null) {
+                                    return false;
+                                }
+                                String normalizedNewsTitle = normalizeTitle(news.getTitle());
+                                return normalizedNewsTitle.equals(normalizedRequestTitle);
+                            })
+                            .findFirst()
+                            .orElse(null);
+
+                    if (found != null) {
+                        log.info("✓ Found news with title: {} (normalized: {})", found.getTitle(),
+                                normalizedRequestTitle);
+                        return Mono.just(found);
+                    } else {
+                        log.warn("✗ News with normalized title '{}' not found", normalizedRequestTitle);
+                        return Mono.error(new BackofficeException(
+                                String.format("News with title '%s' not found", title)));
+                    }
+                });
+    }
 
     public void clear() {
         Cache cache = cacheManager.getCache(CACHE_NAME);

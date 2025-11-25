@@ -1,5 +1,4 @@
 import { CacheService } from "./cacheService.js";
-// Función para normalizar títulos (igual que en el backend)
 export async function normalizeTitle(title) {
     if (!title) return "";
     
@@ -15,24 +14,21 @@ export async function normalizeTitle(title) {
         .trim();
 }
 
-// Nueva función para obtener noticia por título
 export async function fetchNewsByTitle(urlTitle) {
-    // Primero intentar desde la caché
+
     const cachedNews = CacheService.getNewsFromCache();
     
     if (cachedNews && Array.isArray(cachedNews)) {
-        const normalizedUrlTitle = normalizeTitle(urlTitle);
-        const found = cachedNews.find(news => 
-            normalizeTitle(news.title) === normalizedUrlTitle
-        );
+        const normalizedUrlTitle = await normalizeTitle(urlTitle);
         
-        if (found) {
-            console.log('✓ Noticia encontrada en caché:', found.title);
-            return found;
+        for (const news of cachedNews) {
+            const normalizedNewsTitle = await normalizeTitle(news.title);
+            if (normalizedNewsTitle === normalizedUrlTitle) {
+                return news;
+            }
         }
     }
     
-    // Si no está en caché, hacer petición al API
     try {
         const response = await fetch(`/api/news/title/${encodeURIComponent(urlTitle)}`);
         
@@ -44,13 +40,13 @@ export async function fetchNewsByTitle(urlTitle) {
         }
         
         const news = await response.json();
-        console.log('✓ Noticia obtenida del servidor:', news.title);
         return news;
     } catch (error) {
         console.error('Error fetching news by title:', error);
         throw error;
     }
 }
+
 export async function fetchNewsSummary() {
   const cachedNews = CacheService.getNewsFromCache();
   const cacheEtag = CacheService.getNewsEtag();

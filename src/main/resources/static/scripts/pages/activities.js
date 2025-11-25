@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchActivitiesSummary().then((data) => {
     const parser = edjsHTML();
     data.forEach((item) => {
-      console.log(parser.parse(item.editorContent));
+
 
       const article = document.createElement("article");
       article.classList.add("program-card");
