@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Configuration
 @ConfigurationProperties(prefix = "supabase")
 public class SupabaseStorageProperties {
-    
+
     private String api;
     private String bucket;
     private String key;

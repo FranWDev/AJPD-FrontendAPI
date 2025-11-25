@@ -13,6 +13,7 @@ public class JwtProperties {
     public String getSecret() {
         return secret;
     }
+
     public void setSecret(String secret) {
         this.secret = secret;
     }
@@ -20,6 +21,7 @@ public class JwtProperties {
     public long getAccessExpiration() {
         return accessExpiration;
     }
+
     public void setAccessExpiration(long accessExpiration) {
         this.accessExpiration = accessExpiration;
     }

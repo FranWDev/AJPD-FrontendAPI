@@ -27,28 +27,18 @@ public class SupabaseStorageService {
         this.baseUrl = props.getApi() + "/storage/v1/object/" + props.getBucket();
     }
 
-    /**
-     * Sube o actualiza un archivo JSON al bucket de Supabase
-     * Si el archivo existe, lo actualiza (upsert behavior)
-     */
     public void uploadJson(String fileName, Object data) throws IOException, InterruptedException {
         String jsonContent = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(data);
-        
-        // Primero intentar verificar si existe
+
         boolean fileExists = exists(fileName);
-        
+
         if (fileExists) {
-            // Si existe, usar PUT para actualizar
             updateJson(fileName, jsonContent);
         } else {
-            // Si no existe, usar POST para crear
             createJson(fileName, jsonContent);
         }
     }
 
-    /**
-     * Crea un nuevo archivo JSON en Supabase
-     */
     private void createJson(String fileName, String jsonContent) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/" + fileName))
@@ -58,34 +48,28 @@ public class SupabaseStorageService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        
+
         if (response.statusCode() >= 400) {
             throw new IOException("Error creando archivo en Supabase: " + response.body());
         }
     }
 
-    /**
-     * Actualiza un archivo JSON existente en Supabase
-     */
     private void updateJson(String fileName, String jsonContent) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/" + fileName))
                 .header("Authorization", "Bearer " + props.getKey())
                 .header("Content-Type", "application/json")
-                .header("x-upsert", "true")  // Header de Supabase para upsert
+                .header("x-upsert", "true") // Header de Supabase para upsert
                 .PUT(HttpRequest.BodyPublishers.ofString(jsonContent, StandardCharsets.UTF_8))
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        
+
         if (response.statusCode() >= 400) {
             throw new IOException("Error actualizando archivo en Supabase: " + response.body());
         }
     }
 
-    /**
-     * Descarga un archivo JSON desde Supabase
-     */
     public <T> T downloadJson(String fileName, Class<T> clazz) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/" + fileName))
@@ -94,11 +78,11 @@ public class SupabaseStorageService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        
+
         if (response.statusCode() == 404) {
             return null;
         }
-        
+
         if (response.statusCode() >= 400) {
             throw new IOException("Error descargando archivo de Supabase: " + response.body());
         }
@@ -106,9 +90,6 @@ public class SupabaseStorageService {
         return mapper.readValue(response.body(), clazz);
     }
 
-    /**
-     * Descarga un archivo JSON desde Supabase con TypeReference
-     */
     public <T> T downloadJson(String fileName, TypeReference<T> typeRef) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/" + fileName))
@@ -117,11 +98,11 @@ public class SupabaseStorageService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        
+
         if (response.statusCode() == 404) {
             return null;
         }
-        
+
         if (response.statusCode() >= 400) {
             throw new IOException("Error descargando archivo de Supabase: " + response.body());
         }
@@ -129,9 +110,6 @@ public class SupabaseStorageService {
         return mapper.readValue(response.body(), typeRef);
     }
 
-    /**
-     * Verifica si existe un archivo en Supabase
-     */
     public boolean exists(String fileName) {
         try {
             HttpRequest request = HttpRequest.newBuilder()
@@ -147,9 +125,6 @@ public class SupabaseStorageService {
         }
     }
 
-    /**
-     * Elimina un archivo del bucket de Supabase
-     */
     public void deleteFile(String fileName) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(baseUrl + "/" + fileName))
@@ -158,15 +133,12 @@ public class SupabaseStorageService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        
+
         if (response.statusCode() >= 400 && response.statusCode() != 404) {
             throw new IOException("Error eliminando archivo de Supabase: " + response.body());
         }
     }
 
-    /**
-     * Lista todos los archivos del bucket (opcional, para debugging)
-     */
     public String[] listFiles() throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(props.getApi() + "/storage/v1/object/list/" + props.getBucket()))
@@ -175,12 +147,11 @@ public class SupabaseStorageService {
                 .build();
 
         HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-        
+
         if (response.statusCode() >= 400) {
             throw new IOException("Error listando archivos: " + response.body());
         }
 
-        // Parsear respuesta según formato de Supabase
-        return new String[0]; // Implementar según necesidad
+        return new String[0];
     }
 }

@@ -97,6 +97,7 @@ public class NativeHintsConfig {
             registerSupabaseClasses(hints);
         }
 
+        @SuppressWarnings("unchecked")
         private void registerDto(RuntimeHints hints, String className) {
             try {
                 Class<?> clazz = Class.forName(className);
@@ -244,7 +245,7 @@ public class NativeHintsConfig {
                 hints.reflection().registerType(
                         com.fasterxml.jackson.databind.node.ArrayNode.class,
                         MemberCategory.values());
-                
+
                 // TypeReference para deserialización genérica
                 hints.reflection().registerType(
                         com.fasterxml.jackson.core.type.TypeReference.class,
@@ -263,29 +264,37 @@ public class NativeHintsConfig {
 
                 // WebClient Exceptions
                 registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientException");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientRequestException");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientResponseException");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientResponseException$BadRequest");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientResponseException$Unauthorized");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientResponseException$Forbidden");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientResponseException$NotFound");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientResponseException$InternalServerError");
-                registerClassIfExists(hints, "org.springframework.web.reactive.function.client.WebClientResponseException$ServiceUnavailable");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientRequestException");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientResponseException");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientResponseException$BadRequest");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientResponseException$Unauthorized");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientResponseException$Forbidden");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientResponseException$NotFound");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientResponseException$InternalServerError");
+                registerClassIfExists(hints,
+                        "org.springframework.web.reactive.function.client.WebClientResponseException$ServiceUnavailable");
 
                 // Reactor core types
                 registerClassIfExists(hints, "reactor.core.publisher.Mono");
                 registerClassIfExists(hints, "reactor.core.publisher.Flux");
-                
+
                 // Netty classes
                 registerClassIfExists(hints, "io.netty.channel.Channel");
                 registerClassIfExists(hints, "io.netty.channel.EventLoopGroup");
                 registerClassIfExists(hints, "io.netty.channel.nio.NioEventLoopGroup");
                 registerClassIfExists(hints, "io.netty.channel.socket.nio.NioSocketChannel");
-                
+
                 // Reactor Netty
                 registerClassIfExists(hints, "reactor.netty.http.client.HttpClient");
                 registerClassIfExists(hints, "reactor.netty.resources.ConnectionProvider");
-                
+
             } catch (Exception e) {
                 System.err.println("WebClient class issue: " + e.getMessage());
             }
@@ -297,41 +306,50 @@ public class NativeHintsConfig {
                 registerClassIfExists(hints, "io.github.resilience4j.circuitbreaker.CircuitBreaker");
                 registerClassIfExists(hints, "io.github.resilience4j.circuitbreaker.CircuitBreakerConfig");
                 registerClassIfExists(hints, "io.github.resilience4j.circuitbreaker.CircuitBreakerRegistry");
-                
+
                 // Retry
                 registerClassIfExists(hints, "io.github.resilience4j.retry.Retry");
                 registerClassIfExists(hints, "io.github.resilience4j.retry.RetryConfig");
                 registerClassIfExists(hints, "io.github.resilience4j.retry.RetryRegistry");
-                
+
                 // Time Limiter
                 registerClassIfExists(hints, "io.github.resilience4j.timelimiter.TimeLimiter");
                 registerClassIfExists(hints, "io.github.resilience4j.timelimiter.TimeLimiterConfig");
-                
+
                 // Bulkhead
                 registerClassIfExists(hints, "io.github.resilience4j.bulkhead.Bulkhead");
                 registerClassIfExists(hints, "io.github.resilience4j.bulkhead.BulkheadConfig");
-                
+
                 // Rate Limiter
                 registerClassIfExists(hints, "io.github.resilience4j.ratelimiter.RateLimiter");
                 registerClassIfExists(hints, "io.github.resilience4j.ratelimiter.RateLimiterConfig");
-                
+
                 // Spring Boot integration
-                registerClassIfExists(hints, "io.github.resilience4j.spring6.circuitbreaker.configure.CircuitBreakerConfiguration");
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.spring6.circuitbreaker.configure.CircuitBreakerConfiguration");
                 registerClassIfExists(hints, "io.github.resilience4j.spring6.retry.configure.RetryConfiguration");
-                
+
                 // Configuration Properties - CRÍTICO
-                registerClassIfExists(hints, "io.github.resilience4j.springboot3.circuitbreaker.autoconfigure.CircuitBreakerProperties");
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.springboot3.circuitbreaker.autoconfigure.CircuitBreakerProperties");
                 registerClassIfExists(hints, "io.github.resilience4j.springboot3.retry.autoconfigure.RetryProperties");
-                registerClassIfExists(hints, "io.github.resilience4j.springboot3.timelimiter.autoconfigure.TimeLimiterProperties");
-                registerClassIfExists(hints, "io.github.resilience4j.springboot3.bulkhead.autoconfigure.BulkheadProperties");
-                registerClassIfExists(hints, "io.github.resilience4j.springboot3.ratelimiter.autoconfigure.RateLimiterProperties");
-                
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.springboot3.timelimiter.autoconfigure.TimeLimiterProperties");
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.springboot3.bulkhead.autoconfigure.BulkheadProperties");
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.springboot3.ratelimiter.autoconfigure.RateLimiterProperties");
+
                 // Instance Configuration
-                registerClassIfExists(hints, "io.github.resilience4j.common.circuitbreaker.configuration.CircuitBreakerConfigurationProperties");
-                registerClassIfExists(hints, "io.github.resilience4j.common.circuitbreaker.configuration.CircuitBreakerConfigurationProperties$InstanceProperties");
-                registerClassIfExists(hints, "io.github.resilience4j.common.retry.configuration.RetryConfigurationProperties");
-                registerClassIfExists(hints, "io.github.resilience4j.common.retry.configuration.RetryConfigurationProperties$InstanceProperties");
-                
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.common.circuitbreaker.configuration.CircuitBreakerConfigurationProperties");
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.common.circuitbreaker.configuration.CircuitBreakerConfigurationProperties$InstanceProperties");
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.common.retry.configuration.RetryConfigurationProperties");
+                registerClassIfExists(hints,
+                        "io.github.resilience4j.common.retry.configuration.RetryConfigurationProperties$InstanceProperties");
+
             } catch (Exception e) {
                 System.err.println("Resilience4j class issue: " + e.getMessage());
             }
@@ -343,7 +361,7 @@ public class NativeHintsConfig {
                 hints.reflection().registerType(
                         com.github.benmanes.caffeine.cache.Caffeine.class,
                         MemberCategory.values());
-                
+
                 registerClassIfExists(hints, "com.github.benmanes.caffeine.cache.Cache");
                 registerClassIfExists(hints, "com.github.benmanes.caffeine.cache.LoadingCache");
                 registerClassIfExists(hints, "com.github.benmanes.caffeine.cache.AsyncCache");
@@ -352,11 +370,11 @@ public class NativeHintsConfig {
                 registerClassIfExists(hints, "com.github.benmanes.caffeine.cache.RemovalListener");
                 registerClassIfExists(hints, "com.github.benmanes.caffeine.cache.Weigher");
                 registerClassIfExists(hints, "com.github.benmanes.caffeine.cache.Expiry");
-                
+
                 // Spring Cache integration
                 registerClassIfExists(hints, "org.springframework.cache.caffeine.CaffeineCacheManager");
                 registerClassIfExists(hints, "org.springframework.cache.caffeine.CaffeineCache");
-                
+
             } catch (Exception e) {
                 System.err.println("Caffeine class issue: " + e.getMessage());
             }
@@ -368,7 +386,7 @@ public class NativeHintsConfig {
                 hints.reflection().registerType(
                         java.net.http.HttpClient.class,
                         MemberCategory.values());
-                
+
                 registerClassIfExists(hints, "java.net.http.HttpRequest");
                 registerClassIfExists(hints, "java.net.http.HttpRequest$Builder");
                 registerClassIfExists(hints, "java.net.http.HttpRequest$BodyPublisher");
@@ -376,7 +394,7 @@ public class NativeHintsConfig {
                 registerClassIfExists(hints, "java.net.http.HttpResponse");
                 registerClassIfExists(hints, "java.net.http.HttpResponse$BodyHandler");
                 registerClassIfExists(hints, "java.net.http.HttpResponse$BodyHandlers");
-                
+
                 // Map types usados en cache persistence
                 hints.reflection().registerType(
                         java.util.Map.class,
@@ -387,11 +405,11 @@ public class NativeHintsConfig {
                 hints.reflection().registerType(
                         java.util.concurrent.ConcurrentHashMap.class,
                         MemberCategory.values());
-                
+
                 // Serialization hints para Map<Object, Object>
                 hints.serialization().registerType(java.util.HashMap.class);
                 hints.serialization().registerType(java.util.concurrent.ConcurrentHashMap.class);
-                
+
             } catch (Exception e) {
                 System.err.println("Supabase class issue: " + e.getMessage());
             }

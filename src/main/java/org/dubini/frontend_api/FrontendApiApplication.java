@@ -11,7 +11,7 @@ public class FrontendApiApplication {
 
     public static void main(String[] args) {
         Dotenv dotenv = Dotenv.configure()
-                .ignoreIfMissing() 
+                .ignoreIfMissing()
                 .load();
 
         dotenv.entries().forEach(entry -> {

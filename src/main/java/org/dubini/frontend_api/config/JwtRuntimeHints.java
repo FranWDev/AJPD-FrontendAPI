@@ -18,48 +18,41 @@ public class JwtRuntimeHints {
         private void registerJjwtClasses(RuntimeHints hints) {
             try {
                 hints.reflection()
-                    .registerType(Class.forName("io.jsonwebtoken.impl.security.KeysBridge"), 
-                        hint -> hint.withMembers(
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS,
-                            org.springframework.aot.hint.MemberCategory.DECLARED_FIELDS
-                        ));
-                
-                hints.reflection()
-                    .registerType(Class.forName("io.jsonwebtoken.impl.DefaultJwtBuilder"),
-                        hint -> hint.withMembers(
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS
-                        ));
-                
-                hints.reflection()
-                    .registerType(Class.forName("io.jsonwebtoken.impl.DefaultJwtParser"),
-                        hint -> hint.withMembers(
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS
-                        ));
-                
-                hints.reflection()
-                    .registerType(Class.forName("io.jsonwebtoken.impl.DefaultJwtParserBuilder"),
-                        hint -> hint.withMembers(
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS
-                        ));
-
-                // Security classes
-                hints.reflection()
-                    .registerType(Class.forName("io.jsonwebtoken.impl.security.DefaultKeyPairBuilder"),
-                        hint -> hint.withMembers(
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS
-                        ));
+                        .registerType(Class.forName("io.jsonwebtoken.impl.security.KeysBridge"),
+                                hint -> hint.withMembers(
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS,
+                                        org.springframework.aot.hint.MemberCategory.DECLARED_FIELDS));
 
                 hints.reflection()
-                    .registerType(Class.forName("io.jsonwebtoken.impl.security.DefaultSecretKeyBuilder"),
-                        hint -> hint.withMembers(
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
-                            org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS
-                        ));
+                        .registerType(Class.forName("io.jsonwebtoken.impl.DefaultJwtBuilder"),
+                                hint -> hint.withMembers(
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS));
+
+                hints.reflection()
+                        .registerType(Class.forName("io.jsonwebtoken.impl.DefaultJwtParser"),
+                                hint -> hint.withMembers(
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS));
+
+                hints.reflection()
+                        .registerType(Class.forName("io.jsonwebtoken.impl.DefaultJwtParserBuilder"),
+                                hint -> hint.withMembers(
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS));
+
+                hints.reflection()
+                        .registerType(Class.forName("io.jsonwebtoken.impl.security.DefaultKeyPairBuilder"),
+                                hint -> hint.withMembers(
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS));
+
+                hints.reflection()
+                        .registerType(Class.forName("io.jsonwebtoken.impl.security.DefaultSecretKeyBuilder"),
+                                hint -> hint.withMembers(
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_CONSTRUCTORS,
+                                        org.springframework.aot.hint.MemberCategory.INVOKE_DECLARED_METHODS));
 
             } catch (ClassNotFoundException e) {
                 throw new RuntimeException("Failed to register JJWT classes for native image", e);

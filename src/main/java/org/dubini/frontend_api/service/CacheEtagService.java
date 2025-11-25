@@ -31,13 +31,13 @@ public class CacheEtagService {
      */
     public String calculateEtag(Object content) {
         int contentHash = content.hashCode();
-        
+
         String cachedEtag = etagCache.get(contentHash);
         if (cachedEtag != null) {
             log.debug("ETag retrieved from memory cache: {}", cachedEtag);
             return cachedEtag;
         }
-        
+
         try {
             String jsonContent = objectMapper.writeValueAsString(content);
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -49,7 +49,7 @@ public class CacheEtagService {
             etagCache.put(contentHash, etag);
             log.debug("ETag calculated and cached: {}", etag);
             return etag;
-            
+
         } catch (JsonProcessingException e) {
             log.error("Error serializing content for ETag calculation: {}", e.getMessage());
             return "\"" + System.currentTimeMillis() + "\"";
@@ -63,10 +63,10 @@ public class CacheEtagService {
         if (clientEtag == null || serverEtag == null) {
             return true;
         }
-        
+
         String normalizedClient = normalizeEtag(clientEtag);
         String normalizedServer = normalizeEtag(serverEtag);
-        
+
         return !normalizedClient.equals(normalizedServer);
     }
 

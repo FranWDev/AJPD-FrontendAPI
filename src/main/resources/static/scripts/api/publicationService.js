@@ -5,7 +5,9 @@ export async function fetchNewsSummary() {
   const cacheEtag = CacheService.getNewsEtag();
 
   if (cachedNews) {
-    updateNewsCache(cacheEtag).catch(err => console.error("Error updating cache:", err));
+    updateNewsCache(cacheEtag).catch((err) =>
+      console.error("Error updating cache:", err)
+    );
     return cachedNews;
   }
 
@@ -51,7 +53,6 @@ async function updateNewsCache(cacheEtag) {
     console.warn("Failed to update news cache:", error);
   }
 }
-
 
 export async function fetchActivitiesSummary() {
   const response = await fetch("/api/activities");

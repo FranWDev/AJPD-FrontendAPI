@@ -17,7 +17,8 @@ public class NewsClient {
     private final WebClient webClient;
     private final BackofficeApiUrlProperties backofficeApiUrlProperties;
 
-    public NewsClient(WebClient.Builder webClientBuilder, JwtProvider jwtProvider, BackofficeApiUrlProperties backofficeApiUrlProperties) {
+    public NewsClient(WebClient.Builder webClientBuilder, JwtProvider jwtProvider,
+            BackofficeApiUrlProperties backofficeApiUrlProperties) {
         this.jwtProvider = jwtProvider;
         this.backofficeApiUrlProperties = backofficeApiUrlProperties;
         String baseUrl = backofficeApiUrlProperties.getUrl();

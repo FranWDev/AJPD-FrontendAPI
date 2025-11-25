@@ -9,7 +9,7 @@ public class JwtNativeConfig {
     static class JwtHintsRegistrar implements RuntimeHintsRegistrar {
         @Override
         public void registerHints(RuntimeHints hints, ClassLoader classLoader) {
-    
+
             // ============ JJWT Core Classes ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwtBuilder");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwtParser");
@@ -27,20 +27,20 @@ public class JwtNativeConfig {
             registerClassIfExists(hints, "io.jsonwebtoken.impl.ParameterMap");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJweHeaderMutator");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.DefaultJwsHeaderMutator");
-            
-            // ============ Key Operations  ============
+
+            // ============ Key Operations ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardKeyOperations");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.KeyOperationConverter");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.AbstractJwk");
             registerClassIfExists(hints, "io.jsonwebtoken.security.Jwks");
-            
+
             // ============ JJWT Security - Algoritmos ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardSecureDigestAlgorithms");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardEncryptionAlgorithms");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardKeyAlgorithms");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardHashAlgorithms");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.StandardSignatureAlgorithms");
-            
+
             // ============ JJWT Security - Keys ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyParser");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyPairBuilder");
@@ -51,7 +51,7 @@ public class JwtNativeConfig {
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyOperationBuilder");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultKeyRequest");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.KeysBridge");
-            
+
             // ============ JJWT Security - MAC ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultMacAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.HmacShaKeyAlgorithm");
@@ -59,13 +59,13 @@ public class JwtNativeConfig {
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.HmacAesAeadAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultVerifySecureDigestRequest");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultSecureDigestAlgorithm");
-            
+
             // ============ JJWT Security - Signature ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.RsaSignatureAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.EcSignatureAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.EdSignatureAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultSignatureAlgorithm");
-            
+
             // ============ JJWT Security - Encryption ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.DefaultAeadAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.AesGcmKeyAlgorithm");
@@ -73,7 +73,7 @@ public class JwtNativeConfig {
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.RsaKeyAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.EcdhKeyAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.security.Pbes2HsAkwAlgorithm");
-            
+
             // ============ JJWT IO ============
             registerClassIfExists(hints, "io.jsonwebtoken.impl.io.StandardCompressionAlgorithms");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.io.ConvertingParser");
@@ -84,28 +84,28 @@ public class JwtNativeConfig {
             registerClassIfExists(hints, "io.jsonwebtoken.impl.io.GzipCompressionAlgorithm");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.io.RuntimeClasspathDeserializer");
             registerClassIfExists(hints, "io.jsonwebtoken.impl.io.RuntimeClasspathSerializer");
-            
+
             // ============ JJWT Jackson Integration ============
             registerClassIfExists(hints, "io.jsonwebtoken.jackson.io.JacksonDeserializer");
             registerClassIfExists(hints, "io.jsonwebtoken.jackson.io.JacksonSerializer");
-            
+
             // ============ JJWT Lang ============
             registerClassIfExists(hints, "io.jsonwebtoken.lang.Collections");
             registerClassIfExists(hints, "io.jsonwebtoken.lang.Strings");
             registerClassIfExists(hints, "io.jsonwebtoken.lang.Classes");
             registerClassIfExists(hints, "io.jsonwebtoken.lang.Arrays");
             registerClassIfExists(hints, "io.jsonwebtoken.lang.Assert");
-            
+
             // ============ Java Security ============
             registerClassIfExists(hints, "javax.crypto.SecretKey");
             registerClassIfExists(hints, "javax.crypto.spec.SecretKeySpec");
             registerClassIfExists(hints, "java.security.Key");
             registerClassIfExists(hints, "java.security.PublicKey");
             registerClassIfExists(hints, "java.security.PrivateKey");
-            
+
             // ============ Recursos JJWT ============
             hints.resources().registerPattern("META-INF/services/io.jsonwebtoken.*");
-            
+
             System.out.println("✓ JJWT classes registered for Native Image");
         }
 

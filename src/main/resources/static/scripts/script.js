@@ -1,11 +1,12 @@
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js')
-      .then(reg => {
-        console.log('Service Worker registrado con éxito:', reg);
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("/sw.js")
+      .then((reg) => {
+        console.log("Service Worker registrado con éxito:", reg);
       })
-      .catch(err => {
-        console.error('Error al registrar el Service Worker:', err);
+      .catch((err) => {
+        console.error("Error al registrar el Service Worker:", err);
       });
   });
 }
@@ -82,7 +83,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // FIN MENU MOVIL
 
   // GOOGLE MAPS
- /* function initMap() {
+  /* function initMap() {
     const sede = { lat: 40.416775, lng: -3.70379 };
     const map = new google.maps.Map(document.getElementById("map"), {
       zoom: 15,
