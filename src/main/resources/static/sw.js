@@ -1,24 +1,22 @@
-const urlParams = new URLSearchParams(self.location.search);
-const VERSION = 'v9.9.9';
+const VERSION = "v10.0.0";
 const CACHE_NAME = `dubini-static-cache-${VERSION}`;
 
-self.addEventListener('install', event => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then(cache =>
-      cache.addAll([
-        '/'        
-      ])
-    )
-  );
+const SHELL_KEY = "Application loading";
+
+self.addEventListener("install", (event) => {
+  event.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(["/"])));
   self.skipWaiting();
 });
 
-self.addEventListener('activate', event => {
+self.addEventListener("activate", (event) => {
   event.waitUntil(
-    caches.keys().then(cacheNames =>
+    caches.keys().then((cacheNames) =>
       Promise.all(
-        cacheNames.map(cacheName => {
-          if (cacheName.startsWith('dubini-static-cache-') && cacheName !== CACHE_NAME) {
+        cacheNames.map((cacheName) => {
+          if (
+            cacheName.startsWith("dubini-static-cache-") &&
+            cacheName !== CACHE_NAME
+          ) {
             return caches.delete(cacheName);
           }
         })
@@ -28,37 +26,48 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-self.addEventListener('fetch', event => {
-  const url = new URL(event.request.url);
+self.addEventListener("fetch", (event) => {
+  const url = new URL(event.request.url); 
 
-  if (event.request.mode === 'navigate') {
+  if (event.request.mode === "navigate") {
     event.respondWith(
-      caches.match(event.request).then(cached => {
-        if (cached) return cached;
+      caches.match(event.request).then((cached) => {
+        if (cached) return cached; 
 
-        return fetch(event.request).then(networkResponse =>
-          caches.open(CACHE_NAME).then(cache => {
-            cache.put(event.request, networkResponse.clone());
-            return networkResponse;
+        return fetch(event.request)
+          .then((networkResponse) => {
+            const responseToInspect = networkResponse.clone();
+
+            return responseToInspect.text().then((text) => {
+              // Inspección: Verificamos si la respuesta HTML contiene la clave del SHELL.
+              const isShellContent = text.includes(SHELL_KEY);
+
+              return caches.open(CACHE_NAME).then((cache) => {
+                if (!isShellContent) {
+                  cache.put(event.request, networkResponse.clone());
+                }
+
+                return networkResponse;
+              });
+            });
           })
-        ).catch(() => caches.match('/')); // offline fallback
+          .catch(() => caches.match("/"));
       })
     );
     return;
-  }
-
+  } //
   if (
-    event.request.destination === 'script' ||
-    event.request.destination === 'style' ||
-    event.request.destination === 'image' ||
-    event.request.destination === 'font'
+    event.request.destination === "script" ||
+    event.request.destination === "style" ||
+    event.request.destination === "image" ||
+    event.request.destination === "font"
   ) {
     event.respondWith(
-      caches.match(event.request).then(cached => {
+      caches.match(event.request).then((cached) => {
         if (cached) return cached;
 
-        return fetch(event.request).then(networkResponse =>
-          caches.open(CACHE_NAME).then(cache => {
+        return fetch(event.request).then((networkResponse) =>
+          caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, networkResponse.clone());
             return networkResponse;
           })
