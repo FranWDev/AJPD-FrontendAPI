@@ -1,4 +1,4 @@
-const VERSION = "v10.0.0";
+const VERSION = "v10.0.1";
 const CACHE_NAME = `dubini-static-cache-${VERSION}`;
 
 const SHELL_KEY = "Application loading";
@@ -28,6 +28,16 @@ self.addEventListener("activate", (event) => {
 
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url); 
+
+    if (
+    event.request.destination === "image" &&
+    url.href.startsWith(
+      "https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/"
+    )
+  ) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
 
   if (event.request.mode === "navigate") {
     event.respondWith(
