@@ -22,10 +22,6 @@ document.addEventListener("DOMContentLoaded", () => {
         item.title
       )}" class="learn-more read-more">Saber más →</a>
             `;
-
-      const learnMore = document.createElement("div");
-
-      container[0].appendChild(learnMore);
       container[0].appendChild(article);
     });
   });
