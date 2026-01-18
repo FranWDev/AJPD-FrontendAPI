@@ -38,7 +38,13 @@ self.addEventListener("fetch", (event) => {
     event.respondWith(fetch(event.request));
     return;
   }
-
+  if (
+    event.request.destination === "image" &&
+    url.href.includes("/storage/v1/object/public/ajpd-storage/hero/")
+  ) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
   if (event.request.mode === "navigate") {
     event.respondWith(
       caches.match(event.request).then((cached) => {
