@@ -152,12 +152,30 @@ document.addEventListener("DOMContentLoaded", () => {
 
   initHeroSlider();
 
-  function initActivitySlider() {
+  async function initActivitySlider() {
     const sliderTrack = document.querySelector(".slider-track");
     const slides = document.querySelectorAll(".slide");
     const dots = document.querySelectorAll(".slider-dot");
     let currentSlide = 0;
     const totalSlides = slides.length;
+
+    // Cargar captions desde JSONs
+    for (let i = 1; i <= totalSlides; i++) {
+      try {
+        const jsonUrl = `https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/slider/slide${i}.json`;
+        const response = await fetch(jsonUrl);
+        const data = await response.json();
+        const slide = document.querySelector(`.slide[data-slide-id="${i}"]`);
+        if (slide && data.caption) {
+          const captionParagraph = slide.querySelector(".slide-caption p");
+          if (captionParagraph) {
+            captionParagraph.textContent = data.caption;
+          }
+        }
+      } catch (error) {
+        console.warn(`Error cargando caption para slide ${i}:`, error);
+      }
+    }
 
     let isDragging = false;
     let startPos = 0;
