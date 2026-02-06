@@ -56,4 +56,9 @@ public class WebController {
     public String newsDetail(@PathVariable String title) {
         return "news-detail";
     }
+
+    @GetMapping("/museo-escolar-jardin-botanico-ies-san-benito")
+    public String museoEscolar() {
+        return "main";
+    }
 }
