@@ -19,7 +19,7 @@
 </head>
 
 <body>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
     <main role="main">
         <section class="hero">
             <div class="hero-content">
@@ -91,8 +91,8 @@
             </div>
         </section>
     </main>
-    <div th:replace="fragments/wsp-icon :: wsp-icon"></div>
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="~{fragments/wsp-icon :: wsp-icon}"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 <script src="/scripts/script.js"></script>
 

@@ -48,14 +48,18 @@ export async function fetchNewsByTitle(urlTitle) {
 }
 
 export async function fetchNewsSummary() {
-  const cachedNews = CacheService.getNewsFromCache();
-  const cacheEtag = CacheService.getNewsEtag();
+  try {
+    const cachedNews = CacheService.getNewsFromCache();
+    const cacheEtag = CacheService.getNewsEtag();
 
-  if (cachedNews) {
-    updateNewsCache(cacheEtag).catch((err) =>
-      console.error("Error updating cache:", err)
-    );
-    return cachedNews;
+    if (cachedNews) {
+      updateNewsCache(cacheEtag).catch((err) =>
+        console.warn("Error updating cache:", err)
+      );
+      return cachedNews;
+    }
+  } catch (error) {
+    console.warn("Cache error, proceeding to fetch:", error);
   }
 
   try {
@@ -65,7 +69,13 @@ export async function fetchNewsSummary() {
     }
     const news = await response.json();
     const etag = response.headers.get("ETag");
-    CacheService.saveNewsToCache(news, etag);
+    
+    try {
+      CacheService.saveNewsToCache(news, etag);
+    } catch (cacheError) {
+      console.warn("Failed to save to cache:", cacheError);
+    }
+    
     return news;
   } catch (error) {
     console.error("Error fetching news:", error);

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Confirmación de inscripción</title>
+</head>
+
+<body style="margin:0;padding:0;background:#e5e0e2;font-family:Arial,sans-serif;color:#10234e;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:24px 0;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="640" cellspacing="0" cellpadding="0" style="max-width:640px;background:#ffffff;border:1px solid #d5c5d0;border-radius:12px;overflow:hidden;">
+                    <tr>
+                        <td style="background:linear-gradient(135deg,#10234e,#ca4353);padding:18px 24px;color:#ffffff;">
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0">
+                                <tr>
+                                    <td style="width:50px;font-size:0;line-height:0;padding-right:12px;">
+                                        
+                                        <img src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/logo.svg" alt="Logo Proyecto Dubini" style="height:40px;width:40px;display:block;">
+                                    </td>
+                                    <td style="vertical-align:middle;">
+                                        <h1 style="margin:0;font-size:22px;">Solicitud Recibida</h1>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:24px;">
+                            <p style="margin:0 0 12px 0;font-size:15px;"><strong>¡Hola <span th:text="${nombre}">Nombre</span>!</strong></p>
+                            <p style="margin:0 0 12px 0;font-size:15px;">Hemos recibido correctamente tu solicitud de visita presencial al Museo Escolar y nos pondremos en contacto contigo con la mayor brevedad posible para confirmar la disponibilidad.</p>
+                            <p style="margin:0 0 12px 0;font-size:15px;"><strong>Resumen de la información enviada:</strong></p>
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;">
+                                <tr>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;"><strong>Tipo de Grupo:</strong></td>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;" th:text="${tipoCaridad}">tipo</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;"><strong>Nº de Personas:&nbsp;</strong></td>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;" th:text="${numPersonas}">0</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;"><strong>Teléfono:</strong></td>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;" th:text="${telefono}">telefono</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;"><strong>Fecha:</strong></td>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;" th:text="${fecha}">fecha</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;"><strong>Rango horario:</strong></td>
+                                    <td style="padding:8px 0;border-bottom:1px solid #edf4ec;" th:text="${horaRango}">rango</td>
+                                </tr>
+                            </table>
+                            <div style="margin-top:16px;padding:12px;background:#f5f0f2;border-left:4px solid #ca4353;border-radius:6px;">
+                                <p style="margin:0 0 6px 0;"><strong>Comentarios</strong></p>
+                                <p style="margin:0;white-space:pre-wrap;" th:text="${comentarios}">comentarios</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background:#f5f0f2;padding:18px 24px;border-top:1px solid #d5c5d0;font-size:13px;color:#10234e;">
+                            <p style="margin:0 0 8px 0;"><strong>Asociación Juvenil Proyecto Dubini - AJPD</strong></p>
+                            <p style="margin:0 0 4px 0;">Email: <a href="mailto:contacto@proyectodubini.org" style="color:#ca4353;text-decoration:none;">contacto@proyectodubini.org</a></p>
+                            <p style="margin:0 0 4px 0;">CIF: G19490069 | NCI: G1/S1/27153-24/ TF</p>
+                            <p style="margin:0;"><a href="https://instagram.com/proyectodubini" style="color:#ca4353;text-decoration:none;">Instagram</a> · <a href="https://tiktok.com/@proyectodubini" style="color:#ca4353;text-decoration:none;">TikTok</a></p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

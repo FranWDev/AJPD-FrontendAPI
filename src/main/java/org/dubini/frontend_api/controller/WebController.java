@@ -59,6 +59,11 @@ public class WebController {
 
     @GetMapping("/museo-escolar-jardin-botanico-ies-san-benito")
     public String museoEscolar() {
-        return "main";
+        return "museo-escolar";
+    }
+
+    @GetMapping("/museo-escolar-jardin-botanico-ies-san-benito/museo-virtual")
+    public String museoVirtual() {
+        return "museo-virtual";
     }
 }

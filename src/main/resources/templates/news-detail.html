@@ -17,7 +17,7 @@
     <link rel="stylesheet" href="/styles/base.css">
 </head>
 <body>
-    <header th:replace="fragments/header :: header"></header>
+    <header th:replace="~{fragments/header :: header}"></header>
     <main role="main">
         <section class="featured-section">
             <div class="container" id="news-container">
@@ -25,8 +25,8 @@
             </div>
         </section>
     </main>
-    <div th:replace="fragments/wsp-icon :: wsp-icon"></div>
-    <div th:replace="fragments/footer :: footer"></div>
+    <div th:replace="~{fragments/wsp-icon :: wsp-icon}"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 <script src="/scripts/script.js"></script>
 <script type="module" src="/scripts/pages/news-detail.js"></script>

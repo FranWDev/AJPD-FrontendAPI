@@ -21,11 +21,14 @@ public class NativeHintsConfig {
             registerDto(hints, "org.dubini.frontend_api.dto.PublicationDTO");
             registerDto(hints, "org.dubini.frontend_api.dto.HttpResponse");
             registerDto(hints, "org.dubini.frontend_api.dto.UpdateStatusResponse");
+            registerDto(hints, "org.dubini.frontend_api.dto.MuseoVisitanteRegistroRequest");
+            registerDto(hints, "org.dubini.frontend_api.dto.MuseoVisitanteRegistroResponse");
 
             // ============ EXCEPCIONES ============
             registerException(hints, "org.dubini.frontend_api.exception.BackofficeException");
             registerException(hints, "org.dubini.frontend_api.exception.CacheException");
             registerException(hints, "org.dubini.frontend_api.exception.ResourceNotFoundException");
+            registerException(hints, "org.dubini.frontend_api.exception.MuseoRegistroException");
             registerException(hints, "org.dubini.frontend_api.exception.GlobalExceptionHandler");
 
             // ============ SPRING SECURITY ============
@@ -33,16 +36,17 @@ public class NativeHintsConfig {
 
             // ============ CONTROLLERS ============
             registerController(hints, "org.dubini.frontend_api.controller.WebController");
+            registerController(hints, "org.dubini.frontend_api.controller.MuseoController");
             registerController(hints, "org.dubini.frontend_api.controller.rest.CacheController");
             registerController(hints, "org.dubini.frontend_api.controller.rest.NewsRestController");
-            registerController(hints, "org.dubini.frontend_api.controller.rest.ServiceWorkerController");
 
             // ============ SERVICIOS ============
             registerService(hints, "org.dubini.frontend_api.service.NewsService");
             registerService(hints, "org.dubini.frontend_api.service.CacheEtagService");
-            registerService(hints, "org.dubini.frontend_api.service.CacheTimestampService");
-            registerService(hints, "org.dubini.frontend_api.service.ServiceWorkerService");
             registerService(hints, "org.dubini.frontend_api.service.SupabaseStorageService");
+            registerService(hints, "org.dubini.frontend_api.service.ResendEmailService");
+            registerService(hints, "org.dubini.frontend_api.service.MuseoRegistroService");
+            registerService(hints, "org.dubini.frontend_api.service.RateLimiterService");
 
             // ============ CLIENTS ============
             registerService(hints, "org.dubini.frontend_api.client.NewsClient");
@@ -56,6 +60,7 @@ public class NativeHintsConfig {
             registerConfig(hints, "org.dubini.frontend_api.config.SecurityConfig");
             registerConfig(hints, "org.dubini.frontend_api.config.WebClientConfig");
             registerConfig(hints, "org.dubini.frontend_api.config.SupabaseStorageProperties");
+            registerConfig(hints, "org.dubini.frontend_api.config.ResendProperties");
 
             // ============ RECURSOS ESTÁTICOS ============
             hints.resources().registerPattern("templates/**");
@@ -74,6 +79,7 @@ public class NativeHintsConfig {
             hints.resources().registerPattern("static/*.js");
             hints.resources().registerPattern("static/*.ico");
             hints.resources().registerPattern("application*.properties");
+            hints.resources().registerPattern("resend.properties");
             hints.resources().registerPattern("application*.yml");
             hints.resources().registerPattern("META-INF/**");
             hints.resources().registerPattern("META-INF/additional-spring-configuration-metadata.json");
@@ -95,6 +101,9 @@ public class NativeHintsConfig {
 
             // ============ SUPABASE STORAGE ============
             registerSupabaseClasses(hints);
+
+            // ============ BEAN VALIDATION / JSR 380 ============
+            registerValidationClasses(hints);
         }
 
         @SuppressWarnings("unchecked")
@@ -415,14 +424,85 @@ public class NativeHintsConfig {
             }
         }
 
+        private void registerValidationClasses(RuntimeHints hints) {
+            try {
+                // Hibernate Validator constraint validators - JSR 380 - Solo Java 8+ time
+                // NOTE: Omitiendo validadores de Joda Time ya que no están en classpath
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.time.futureorpresent.FutureOrPresentValidatorForLocalDate");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.time.futureorpresent.FutureOrPresentValidatorForLocalDateTime");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.time.futureorpresent.FutureOrPresentValidatorForLocalTime");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.time.futureorpresent.FutureOrPresentValidatorForZonedDateTime");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.time.future.FutureValidatorForLocalDate");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.assertion.AssertFalseValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.assertion.AssertTrueValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.number.bound.MinValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.number.bound.MaxValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.number.bound.DecimalMinValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.number.bound.DecimalMaxValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.size.SizeValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.size.SizeValidator$CollectionSizeValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.email.EmailValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.pattern.PatternValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.notempty.NotEmptyValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.notblank.NotBlankValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.notnull.NotNullValidator");
+                registerClassIfExists(hints,
+                        "org.hibernate.validator.internal.constraintvalidators.bv.isnull.IsNullValidator");
+
+                // Registrar las anotaciones de validación (constraints)
+                registerClassIfExists(hints, "jakarta.validation.constraints.Future");
+                registerClassIfExists(hints, "jakarta.validation.constraints.FutureOrPresent");
+                registerClassIfExists(hints, "jakarta.validation.constraints.Email");
+                registerClassIfExists(hints, "jakarta.validation.constraints.NotBlank");
+                registerClassIfExists(hints, "jakarta.validation.constraints.NotEmpty");
+                registerClassIfExists(hints, "jakarta.validation.constraints.NotNull");
+                registerClassIfExists(hints, "jakarta.validation.constraints.Pattern");
+                registerClassIfExists(hints, "jakarta.validation.constraints.Min");
+                registerClassIfExists(hints, "jakarta.validation.constraints.Max");
+                registerClassIfExists(hints, "jakarta.validation.constraints.Size");
+                registerClassIfExists(hints, "jakarta.validation.constraints.DecimalMin");
+                registerClassIfExists(hints, "jakarta.validation.constraints.DecimalMax");
+                registerClassIfExists(hints, "jakarta.validation.constraints.AssertTrue");
+                registerClassIfExists(hints, "jakarta.validation.constraints.AssertFalse");
+
+                // Hibernate Validator configuración
+                registerClassIfExists(hints, "org.hibernate.validator.HibernateValidator");
+                registerClassIfExists(hints, "org.hibernate.validator.messageinterpolation.ParameterMessageInterpolator");
+                registerClassIfExists(hints, "org.springframework.validation.beanvalidation.LocalValidatorFactoryBean");
+
+            } catch (Exception e) {
+                System.err.println("Validation class issue: " + e.getMessage());
+            }
+        }
+
         private void registerClassIfExists(RuntimeHints hints, String className) {
             try {
                 Class<?> clazz = Class.forName(className);
                 hints.reflection().registerType(
                         clazz,
                         MemberCategory.values());
-            } catch (ClassNotFoundException e) {
-                // Ignorar si no existe
+            } catch (ClassNotFoundException | NoClassDefFoundError e) {
+                // Ignorar si no existe o sus dependencias no están disponibles
+            } catch (Exception e) {
+                // Ignorar otras excepciones de carga de clases
             }
         }
     }

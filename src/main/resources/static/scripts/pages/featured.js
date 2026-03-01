@@ -1,35 +1,61 @@
 import { fetchNewsSummary, normalizeTitle } from "../api/publicationService.js";
 
 document.addEventListener("DOMContentLoaded", () => {
-  const container = document.querySelector(".featured-section .container");
+  const programCards = document.querySelector(".featured-section .program-cards");
 
-  if (!container) {
-    console.error("No se encontró el contenedor .featured-section .container");
+  if (!programCards) {
+    console.error("No se encontró el contenedor .featured-section .program-cards");
     return;
   }
 
-  const programCards = document.createElement("div");
-  programCards.classList.add("program-cards");
-  container.appendChild(programCards);
+  const createSkeletonCard = () => {
+    const article = document.createElement("article");
+    article.classList.add("program-card", "skeleton");
+    article.setAttribute("aria-hidden", "true");
+    article.innerHTML = `
+      <div class="skeleton-image"></div>
+      <div class="skeleton-line skeleton-line-title"></div>
+      <div class="skeleton-line"></div>
+      <div class="skeleton-line skeleton-line-short"></div>
+      <div class="skeleton-link"></div>
+    `;
+    return article;
+  };
+
+  programCards.innerHTML = "";
+  for (let index = 0; index < 3; index += 1) {
+    programCards.appendChild(createSkeletonCard());
+  }
+
+  const startTime = performance.now();
+  const minSkeletonDuration = 400;
 
   fetchNewsSummary()
-    .then((data) => {
+    .then(async (data) => {
+      const newsItems = data.slice(0, 3);
+      const articles = await Promise.all(
+        newsItems.map(async (item) => {
+          const normalizedTitle = await normalizeTitle(item.title);
+          return `
+            <article class="program-card">
+              <img src="${item.imageUrl}" alt="${item.title}">
+              <h3>${item.title}</h3>
+              <p>${item.description}</p>
+              <a href="/noticias-y-actividades/${normalizedTitle}" class="learn-more read-more">Saber más →</a>
+            </article>
+          `;
+        })
+      );
 
-      data.slice(0, 3).forEach(async (item) => {
-
-        const article = document.createElement("article");
-        article.classList.add("program-card");
-        article.innerHTML = `
-                <img src="${item.imageUrl}" alt="${item.title}">
-                <h3>${item.title}</h3>
-                <p>${item.description}</p>
-                <a href="/noticias-y-actividades/${await normalizeTitle(item.title)}" class="learn-more read-more">Saber más →</a>
-            `;
-
-        programCards.appendChild(article);
-      });
+      const elapsedTime = performance.now() - startTime;
+      const delayNeeded = Math.max(0, minSkeletonDuration - elapsedTime);
+      
+      setTimeout(() => {
+        programCards.innerHTML = articles.join("");
+      }, delayNeeded);
     })
     .catch((err) => {
       console.error("Error al cargar las noticias:", err);
+      programCards.innerHTML = "";
     });
 });

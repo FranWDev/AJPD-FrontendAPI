@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AJPD - Museo Escolar Jardín Botánico IES San Benito.">
+
+    <title>AJPD - Museo Escolar Jardín Botánico IES San Benito</title>
+    <link rel="stylesheet" href="/styles/museo-escolar.css">
+    <link rel="stylesheet" href="/styles/layout/header.css">
+    <link rel="stylesheet" href="/styles/layout/footer.css">
+    <link rel="stylesheet" href="/styles/components/content.css">
+    <link rel="stylesheet" href="/styles/components/wsp-icon.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/museo-theme.css">
+    <link rel="stylesheet" href="/styles/museo-escolar-form.css">
+</head>
+
+<body class="museo-theme">
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main role="main">
+        <section class="featured-section">
+            <div class="container museo-content">
+                <h2>Museo Escolar Jardín Botánico IES San Benito</h2>
+                <div class="museo-gallery">
+                    <img class="museo-image"
+                        src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-escolar/folleto1.webp"
+                        alt="Folleto 1 del Museo Escolar Jardín Botánico IES San Benito" loading="lazy">
+                    <img class="museo-image"
+                        src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-escolar/folleto2.webp"
+                        alt="Folleto 2 del Museo Escolar Jardín Botánico IES San Benito" loading="lazy">
+                </div>
+                <a href="/museo-escolar-jardin-botanico-ies-san-benito/museo-virtual" class="museo-virtual-btn">Visitar museo virtual</a>
+                <section class="registro-visitante">
+                    <h3>Inscríbete para una visita presencial</h3>
+                    <div id="form-disabled-notice" class="form-disabled-notice" hidden>
+                        El envío de solicitudes está temporalmente deshabilitado. Si necesitas contactar con nosotros, escríbenos a
+                        <a href="mailto:contacto@proyectodubini.org">contacto@proyectodubini.org</a>.
+                    </div>
+                    <form id="form-registro-jardín" class="form-registro">
+                        <div class="form-group">
+                            <label for="nombre">Nombre del representante *</label>
+                            <input type="text" id="nombre" name="nombre" required placeholder="Tu nombre completo">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Correo electrónico *</label>
+                            <input type="email" id="email" name="email" required placeholder="tu@correo.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="telefono">Número de teléfono *</label>
+                            <input type="text" id="telefono" name="telefono" required placeholder="600 000 000 (se agregará +34 automáticamente)" inputmode="tel">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="tipo-caridad">¿Qué tipo de grupo/caridad asistes? *</label>
+                            <select id="tipo-caridad" name="tipoCaridad" required>
+                                <option value="">Selecciona una opción</option>
+                                <option value="Grupo Escolar">Grupo Escolar</option>
+                                <option value="Asociación Juvenil">Asociación Juvenil</option>
+                                <option value="Asociación Vecinal">Asociación Vecinal</option>
+                                <option value="General/Público">General/Público</option>
+                                <option value="Individual">Individual</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="num-personas">Número de personas que asistirán *</label>
+                            <input type="number" id="num-personas" name="numPersonas" required min="1" max="500" placeholder="Ej: 30">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="fecha">Fecha de visita *</label>
+                            <input type="date" id="fecha" name="fecha" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="hora-rango">Rango horario preferido *</label>
+                            <select id="hora-rango" name="horaRango" required>
+                                <option value="">Selecciona un rango</option>
+                                <option value="09:00-11:00">09:00 - 11:00</option>
+                                <option value="11:00-13:00">11:00 - 13:00</option>
+                                <option value="13:00-15:00">13:00 - 15:00</option>
+                                <option value="15:00-17:00">15:00 - 17:00</option>
+                                <option value="17:00-19:00">17:00 - 19:00</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="comentarios">Comentarios adicionales</label>
+                            <textarea id="comentarios" name="comentarios" rows="4" placeholder="Cuéntanos sobre tu grupo, necesidades especiales, etc."></textarea>
+                        </div>
+
+                        <div class="form-group privacy-checkbox">
+                            <input type="checkbox" id="privacy-consent" name="privacyConsent" required>
+                            <label for="privacy-consent">
+                                Confirmo que he leído y acepto la <a href="/privacidad" target="_blank" rel="noopener noreferrer">política de privacidad y tratamiento de datos</a> *
+                            </label>
+                        </div>
+
+                        <div class="form-group privacy-checkbox">
+                            <input type="checkbox" id="horario-consent" name="horarioConsent" required>
+                            <label for="horario-consent">
+                                Entiendo que el horario solicitado puede ser flexible y estar sujeto a cambios según la disponibilidad *
+                            </label>
+                        </div>
+
+                        <button type="submit" class="btn-submit">Enviar inscripción</button>
+                    </form>
+                    <div id="form-status" class="form-status"></div>
+                </section>
+            </div>
+        </section>
+    </main>
+    <div th:replace="~{fragments/wsp-icon :: wsp-icon}"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+<script src="/scripts/script.js"></script>
+<script type="module" src="/scripts/pages/museo-form.js"></script>
+
+</html>

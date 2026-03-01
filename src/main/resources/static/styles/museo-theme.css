@@ -1,0 +1,104 @@
+.museo-theme {
+  background: linear-gradient(180deg, #eef7ed 0%, #e2f0e0 45%, #d4e8d2 100%);
+}
+
+.museo-theme .main-header {
+  background: linear-gradient(135deg, #1f5a3a, #2d7a4a);
+  box-shadow: 0 8px 24px rgba(20, 72, 46, 0.28);
+}
+
+.museo-theme .logo-container h1 a,
+.museo-theme .desktop-nav .nav-link,
+.museo-theme .dropdown-btn,
+.museo-theme .mobile-nav .nav-link,
+.museo-theme .mobile-dropdown-btn {
+  color: #f6fff6;
+}
+
+.museo-theme .desktop-nav .nav-link:hover,
+.museo-theme .dropdown-btn:hover,
+.museo-theme .mobile-nav .nav-link:hover,
+.museo-theme .mobile-dropdown-btn:hover {
+  color: #d4f8cf;
+}
+
+.museo-theme .dropdown-content,
+.museo-theme .mobile-dropdown-content,
+.museo-theme .mobile-nav {
+  background-color: #255d3d;
+}
+
+.museo-theme .mobile-nav {
+  background: linear-gradient(rgba(31, 90, 58, 0.95), rgba(45, 122, 74, 0.95)),
+    url("https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/nav.webp");
+  background-size: cover;
+  background-position: center;
+}
+
+.museo-theme .mobile-nav-list a,
+.museo-theme .mobile-dropdown-content a,
+.museo-theme .mobile-dropdown-btn {
+  color: #f3fff2;
+}
+
+.museo-theme .mobile-nav-list a:hover,
+.museo-theme .mobile-dropdown-content a:hover,
+.museo-theme .mobile-dropdown-btn:hover {
+  color: #c9f7c6;
+}
+
+.museo-theme .mobile-dropdown-content {
+  border-left-color: rgba(210, 246, 202, 0.45);
+}
+
+.museo-theme .mobile-menu-btn:hover {
+  background-color: rgba(14, 57, 34, 0.25);
+}
+
+.museo-theme .hamburger-icon,
+.museo-theme .hamburger-icon::before,
+.museo-theme .hamburger-icon::after {
+  background-color: #d7f5d2;
+}
+
+.museo-theme .mobile-menu-btn.active .hamburger-icon::before,
+.museo-theme .mobile-menu-btn.active .hamburger-icon::after {
+  background-color: #ffffff;
+}
+
+.museo-theme .mobile-nav-overlay {
+  background-color: rgba(13, 53, 31, 0.5);
+}
+
+.museo-theme .featured-section {
+  background: linear-gradient(rgba(230, 246, 230, 0.9), rgba(212, 234, 212, 0.86)),
+    url("https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/background.webp");
+  background-size: cover;
+  background-position: center;
+}
+
+.museo-theme .featured-section h2 {
+  color: #1f5a3a;
+}
+
+.museo-theme .main-footer {
+  background: linear-gradient(135deg, #17452d, #215f3a);
+}
+
+.museo-theme .main-footer h2,
+.museo-theme .main-footer p,
+.museo-theme .main-footer a,
+.museo-theme .social-links a {
+  color: #ecffeb;
+}
+
+.museo-theme .main-footer a:hover,
+.museo-theme .social-links a:hover {
+  color: #c9f7c6;
+}
+
+@media (max-width: 768px) {
+  .museo-theme .main-header {
+    background: linear-gradient(135deg, #1e5636, #2d7a4a);
+  }
+}

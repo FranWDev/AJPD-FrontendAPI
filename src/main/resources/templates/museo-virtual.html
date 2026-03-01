@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AJPD - Museo Virtual del Museo Escolar Jardín Botánico IES San Benito.">
+
+    <title>AJPD - Museo Virtual</title>
+    <link rel="stylesheet" href="/styles/layout/header.css">
+    <link rel="stylesheet" href="/styles/layout/footer.css">
+    <link rel="stylesheet" href="/styles/components/content.css">
+    <link rel="stylesheet" href="/styles/components/wsp-icon.css">
+    <link rel="stylesheet" href="/styles/museo-virtual.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="/styles/base.css">
+    <link rel="stylesheet" href="/styles/museo-theme.css">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
+    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js" defer></script>
+</head>
+
+<body class="museo-theme">
+    <header th:replace="~{fragments/header :: header}"></header>
+    <main role="main">
+        <section class="featured-section">
+            <div class="container museo-virtual-content">
+                <h2>Museo Virtual</h2>
+                <p><strong>Sección en construcción.</strong> Estamos preparando el recorrido virtual completo!.</p>
+                <p>La vista 360 de abajo es un ejemplo con <strong>puntos de desplazamiento</strong> entre dos escenas.</p>
+                <div id="virtual-tour-viewer" aria-label="Visor de museo virtual"></div>
+            </div>
+        </section>
+    </main>
+    <div th:replace="~{fragments/wsp-icon :: wsp-icon}"></div>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+</body>
+<script src="/scripts/script.js"></script>
+<script src="/scripts/pages/museo-virtual.js"></script>
+
+</html>

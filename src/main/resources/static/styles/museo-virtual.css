@@ -1,0 +1,30 @@
+.museo-virtual-content {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(46, 107, 66, 0.22);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 10px 30px rgba(31, 90, 58, 0.14);
+}
+
+.museo-virtual-content h2 {
+  color: #1f5a3a;
+  font-size: clamp(1.8rem, 3vw, 2.6rem);
+  margin-bottom: 1rem;
+}
+
+.museo-virtual-content p {
+  color: #2f6042;
+  margin-bottom: 2rem;
+  font-size: 1.05rem;
+}
+
+#virtual-tour-viewer {
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  height: min(70vh, 620px);
+  border-radius: var(--border-radius-lg);
+  border: 3px solid rgba(56, 125, 78, 0.35);
+  box-shadow: 0 10px 24px rgba(27, 78, 49, 0.2);
+  background: linear-gradient(135deg, #1f5a3a, #397e52);
+}

@@ -1,0 +1,67 @@
+.museo-content h2 {
+  text-align: center;
+  color: #1f5a3a;
+  font-size: clamp(1.6rem, 3vw, 2.5rem);
+  margin-bottom: 2rem;
+}
+
+.museo-content {
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(46, 107, 66, 0.22);
+  border-radius: var(--border-radius-lg);
+  box-shadow: 0 10px 30px rgba(31, 90, 58, 0.14);
+}
+
+.museo-gallery {
+  display: grid;
+  gap: 2rem;
+  justify-items: center;
+}
+
+.museo-virtual-btn {
+  display: block;
+  width: fit-content;
+  margin: 2.2rem auto 0;
+  padding: 0.95rem 1.9rem;
+  border-radius: 999px;
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 1.05rem;
+  letter-spacing: 0.2px;
+  color: #f6fff6;
+  background: linear-gradient(135deg, #1f5a3a, #3d935f);
+  box-shadow: 0 10px 24px rgba(27, 78, 49, 0.28);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.25s ease;
+}
+
+.museo-virtual-btn:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 30px rgba(23, 71, 43, 0.34);
+  filter: brightness(1.03);
+}
+
+.museo-virtual-btn:active {
+  transform: translateY(0) scale(0.99);
+}
+
+.museo-image {
+  width: 100%;
+  max-width: 900px;
+  height: auto;
+  border-radius: var(--border-radius-lg);
+  border: 3px solid rgba(55, 130, 80, 0.32);
+  box-shadow: 0 10px 24px rgba(27, 78, 49, 0.2);
+}
+
+@media (max-width: 768px) {
+  .museo-gallery {
+    gap: 1.25rem;
+  }
+
+  .museo-virtual-btn {
+    width: 100%;
+    max-width: 340px;
+    text-align: center;
+    margin: 2.2rem auto 0;
+  }
+}
