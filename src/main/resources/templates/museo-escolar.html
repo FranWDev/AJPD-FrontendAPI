@@ -33,6 +33,14 @@
                         alt="Folleto 2 del Museo Escolar Jardín Botánico IES San Benito" loading="lazy">
                 </div>
                 <a href="/museo-escolar-jardin-botanico-ies-san-benito/museo-virtual" class="museo-virtual-btn">Visitar museo virtual</a>
+                <section class="museo-intro">
+                    <div class="intro-content">
+                        <a href="/historia-y-mision-jardin-botanico" class="link-historia">
+                            Conoce la historia completa del Jardín Botánico y nuestras líneas de actuación
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
+                </section>
                 <section class="registro-visitante">
                     <h3>Inscríbete para una visita presencial</h3>
                     <div id="form-disabled-notice" class="form-disabled-notice" hidden>
@@ -56,7 +64,7 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="tipo-caridad">¿Qué tipo de grupo/caridad asistes? *</label>
+                            <label for="tipo-caridad">¿Qué tipo de grupo asiste? *</label>
                             <select id="tipo-caridad" name="tipoCaridad" required>
                                 <option value="">Selecciona una opción</option>
                                 <option value="Grupo Escolar">Grupo Escolar</option>
@@ -74,18 +82,16 @@
 
                         <div class="form-group">
                             <label for="fecha">Fecha de visita *</label>
-                            <input type="date" id="fecha" name="fecha" required>
+                            <input type="date" id="fecha" name="fecha" required min="2026-04-17">
+                            <small class="fecha-help-text">
+                                Solo disponible: <strong>Jueves</strong> (8:30-11:00) y <strong>Viernes</strong> (11:30-13:15), a partir del 17 de abril
+                            </small>
                         </div>
 
                         <div class="form-group">
-                            <label for="hora-rango">Rango horario preferido *</label>
-                            <select id="hora-rango" name="horaRango" required>
-                                <option value="">Selecciona un rango</option>
-                                <option value="09:00-11:00">09:00 - 11:00</option>
-                                <option value="11:00-13:00">11:00 - 13:00</option>
-                                <option value="13:00-15:00">13:00 - 15:00</option>
-                                <option value="15:00-17:00">15:00 - 17:00</option>
-                                <option value="17:00-19:00">17:00 - 19:00</option>
+                            <label for="hora-rango">Rango horario *</label>
+                            <select id="hora-rango" name="horaRango" required disabled>
+                                <option value="">Primero selecciona una fecha</option>
                             </select>
                         </div>
 

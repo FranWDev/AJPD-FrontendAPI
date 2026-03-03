@@ -66,4 +66,9 @@ public class WebController {
     public String museoVirtual() {
         return "museo-virtual";
     }
+
+    @GetMapping("/historia-y-mision-jardin-botanico")
+    public String historiaJardin() {
+        return "historia-y-mision-jardin-botanico";
+    }
 }

@@ -50,7 +50,7 @@ public class MuseoController {
     }
 
     private boolean envioSolicitudesDeshabilitado() {
-        return true;
+        return false;
     }
 
     private String extractClientIp(HttpServletRequest request) {

@@ -9,6 +9,7 @@ public class ResendProperties {
 
     private String mail;
     private String associationEmail;
+    private String associationEmail2;
 
     public String getMail() {
         return mail;
@@ -24,5 +25,13 @@ public class ResendProperties {
 
     public void setAssociationEmail(String associationEmail) {
         this.associationEmail = associationEmail;
+    }
+
+    public String getAssociationEmail2() {
+        return associationEmail2;
+    }
+
+    public void setAssociationEmail2(String associationEmail2) {
+        this.associationEmail2 = associationEmail2;
     }
 }

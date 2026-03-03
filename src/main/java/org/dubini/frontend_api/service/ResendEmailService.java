@@ -48,6 +48,9 @@ public class ResendEmailService {
         String htmlConfirmacion = templateEngine.process("emails/museo-registro-confirmacion", context);
 
         enviarCorreoHtml(resendProperties.getAssociationEmail(), "Nueva inscripción Museo Escolar", htmlNotificacion);
+        if (resendProperties.getAssociationEmail2() != null && !resendProperties.getAssociationEmail2().isBlank()) {
+            enviarCorreoHtml(resendProperties.getAssociationEmail2(), "Nueva inscripción Museo Escolar", htmlNotificacion);
+        }
         enviarCorreoHtml(solicitud.getEmail(), "Confirmación de inscripción - Museo Escolar", htmlConfirmacion);
     }
 

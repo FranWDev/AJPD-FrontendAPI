@@ -76,6 +76,8 @@
   color: #2f6042;
   background: rgba(255, 255, 255, 0.95);
   transition: border-color 0.25s ease, box-shadow 0.25s ease;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-group input:focus,
@@ -94,6 +96,23 @@
 .form-group textarea {
   resize: vertical;
   min-height: 100px;
+}
+
+.fecha-help-text {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #2f6042;
+  line-height: 1.4;
+  padding: 0.6rem 0.8rem;
+  background: rgba(31, 90, 58, 0.08);
+  border-left: 3px solid #1f5a3a;
+  border-radius: 4px;
+}
+
+.fecha-help-text strong {
+  color: #1f5a3a;
+  font-weight: 700;
 }
 
 .privacy-checkbox {
@@ -187,7 +206,70 @@
   white-space: pre-line;
 }
 
+.museo-intro {
+  margin: 2.5rem auto;
+  padding: 2rem;
+  background: linear-gradient(135deg, rgba(16, 35, 78, 0.05), rgba(31, 90, 58, 0.08));
+  border: 1px solid rgba(31, 90, 58, 0.15);
+  border-radius: var(--border-radius-lg);
+  max-width: 900px;
+}
+
+.intro-content {
+  text-align: center;
+}
+
+.intro-content p {
+  color: #2f6042;
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.intro-content strong {
+  color: #1f5a3a;
+  font-weight: 700;
+}
+
+.link-historia {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: #1f5a3a;
+  text-decoration: none;
+  font-weight: 600;
+  padding: 0.6rem 1.2rem;
+  border: 2px solid #1f5a3a;
+  border-radius: 8px;
+  transition: all 0.25s ease;
+}
+
+.link-historia:hover {
+  background: #1f5a3a;
+  color: white;
+  transform: translateX(4px);
+}
+
+.link-historia i {
+  font-size: 0.85rem;
+}
+
 @media (max-width: 768px) {
+  .museo-intro {
+    padding: 1.5rem;
+    margin: 1.8rem auto;
+  }
+
+  .intro-content p {
+    font-size: 0.9rem;
+  }
+
+  .link-historia {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
+
   .registro-visitante {
     padding: 1.8rem;
     margin-top: 2.5rem;
@@ -202,3 +284,4 @@
     max-width: 340px;
   }
 }
+

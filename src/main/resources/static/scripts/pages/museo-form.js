@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const REGISTRATION_ENABLED = false;
+  const REGISTRATION_ENABLED = true;
   const form = document.getElementById("form-registro-jardín");
   const statusDiv = document.getElementById("form-status");
   const disabledNotice = document.getElementById("form-disabled-notice");
@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   const submitBtn = form.querySelector(".btn-submit");
+  const fechaInput = document.getElementById("fecha");
+  const horaRangoSelect = document.getElementById("hora-rango");
 
   const applyFrontendDisabledState = () => {
     if (REGISTRATION_ENABLED) {
@@ -116,6 +118,100 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  // Validación de días jueves y viernes
+  const isDayAllowed = (dateString) => {
+    const date = new Date(dateString + 'T12:00:00');
+    const dayOfWeek = date.getDay(); // 0=domingo, 4=jueves, 5=viernes
+    return dayOfWeek === 4 || dayOfWeek === 5;
+  };
+
+  const getDayOfWeek = (dateString) => {
+    const date = new Date(dateString + 'T12:00:00');
+    return date.getDay();
+  };
+
+  const updateHoraRangoOptions = (dateString) => {
+    if (!dateString) {
+      horaRangoSelect.disabled = true;
+      horaRangoSelect.innerHTML = '<option value="">Primero selecciona una fecha</option>';
+      return;
+    }
+
+    if (!isDayAllowed(dateString)) {
+      horaRangoSelect.disabled = true;
+      horaRangoSelect.innerHTML = '<option value="">Solo se permiten jueves y viernes</option>';
+      statusDiv.textContent = "Solo se permiten visitas los jueves y viernes.";
+      statusDiv.className = "form-status error";
+      return;
+    }
+
+    const dayOfWeek = getDayOfWeek(dateString);
+    horaRangoSelect.disabled = false;
+    statusDiv.textContent = "";
+    statusDiv.className = "form-status";
+
+    if (dayOfWeek === 4) {
+      // Jueves: 8:30 a 11:00
+      horaRangoSelect.innerHTML = '<option value="08:30-11:00">08:30 - 11:00</option>';
+    } else if (dayOfWeek === 5) {
+      // Viernes: 11:30 a 13:15
+      horaRangoSelect.innerHTML = '<option value="11:30-13:15">11:30 - 13:15</option>';
+    }
+  };
+
+  // Función para validar y rechazar fecha inválida
+  const validateAndRejectInvalidDate = (inputElement) => {
+    const value = inputElement.value;
+    if (!value) return;
+
+    if (!isDayAllowed(value)) {
+      statusDiv.textContent = "Solo están disponibles los jueves y viernes. Por favor, selecciona uno de estos días.";
+      statusDiv.className = "form-status error";
+      inputElement.value = '';
+      updateHoraRangoOptions('');
+      
+      // Highlight temporal del campo
+      inputElement.style.borderColor = '#d32f2f';
+      inputElement.style.backgroundColor = 'rgba(211, 47, 47, 0.05)';
+      setTimeout(() => {
+        inputElement.style.borderColor = '';
+        inputElement.style.backgroundColor = '';
+      }, 2000);
+    }
+  };
+
+  // Event listener para cambio de fecha con validación inmediata
+  fechaInput?.addEventListener('change', (e) => {
+    validateAndRejectInvalidDate(e.target);
+    if (e.target.value) {
+      updateHoraRangoOptions(e.target.value);
+    }
+  });
+
+  // Validación también en input (mientras el usuario escribe/selecciona)
+  fechaInput?.addEventListener('input', (e) => {
+    if (e.target.value) {
+      validateAndRejectInvalidDate(e.target);
+    }
+  });
+
+  // Validación en blur para asegurar que no se deje un valor inválido
+  fechaInput?.addEventListener('blur', (e) => {
+    if (e.target.value) {
+      validateAndRejectInvalidDate(e.target);
+    }
+  });
+
+  // Prevenir submit del formulario con fecha inválida mediante Enter
+  fechaInput?.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      if (e.target.value) {
+        validateAndRejectInvalidDate(e.target);
+      }
+    }
+  });
+
   const buildBackendErrorMessage = (payload) => {
     if (!payload) return "Error al enviar la inscripción. Por favor, intenta nuevamente.";
 
@@ -158,6 +254,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (!nombre || !email || !telefono || !tipoCaridad || !numPersonas || !fecha || !horaRango) {
       statusDiv.textContent = "Por favor, completa todos los campos requeridos.";
+      statusDiv.className = "form-status error";
+      return;
+    }
+
+    // Validar que la fecha sea jueves o viernes
+    if (!isDayAllowed(fecha)) {
+      statusDiv.textContent = "Solo se permiten visitas los jueves y viernes.";
       statusDiv.className = "form-status error";
       return;
     }
