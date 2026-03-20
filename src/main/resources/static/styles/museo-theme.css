@@ -2,6 +2,20 @@
   background: linear-gradient(180deg, #eef7ed 0%, #e2f0e0 45%, #d4e8d2 100%);
 }
 
+.museo-logo {
+  max-width: 100px;
+  height: auto;
+  margin: 0 auto 1.5rem;
+  display: block;
+  opacity: 0.85;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.museo-logo:hover {
+  opacity: 1;
+  transform: scale(1.05);
+}
+
 .museo-theme .main-header {
   background: linear-gradient(135deg, #1f5a3a, #2d7a4a);
   box-shadow: 0 8px 24px rgba(20, 72, 46, 0.28);

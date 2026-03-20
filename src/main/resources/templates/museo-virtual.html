@@ -16,8 +16,11 @@
     <link rel="stylesheet" href="/styles/base.css">
     <link rel="stylesheet" href="/styles/museo-theme.css">
 
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
-    <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js" defer></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/three/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/core/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@photo-sphere-viewer/markers-plugin/index.min.js"></script>
 </head>
 
 <body class="museo-theme">
@@ -25,14 +28,18 @@
     <main role="main">
         <section class="featured-section">
             <div class="container museo-virtual-content">
+                <img src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/logo-museo.png" alt="Logo Jardín Botánico" class="museo-logo">
                 <h2>Museo Virtual</h2>
-                <p><strong>Sección en construcción.</strong> Estamos preparando el recorrido virtual completo!.</p>
-                <p>La vista 360 de abajo es un ejemplo con <strong>puntos de desplazamiento</strong> entre dos escenas.</p>
+                <p>¡Bienvenido al <strong>recorrido virtual interactivo!</strong> Explora nuestro jardín botánico utilizando el visor 360 de abajo.</p>
+                <p>Para navegar, busca los <strong>puntos de desplazamiento</strong> (iconos circulares) e interactúa con ellos para moverte entre las diferentes escenas. Puedes arrastrar la imagen para mirar a tu alrededor y utilizar el zoom para apreciar los detalles.</p>
+                <div class="mobile-orientation-hint">
+                    <i class="fas fa-sync-alt"></i>
+                    <span>Se recomienda pulsar el botón de pantalla completa (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="psv-fullscreen-svg-inline" style="width: 14px; height: 14px; vertical-align: middle; margin-top: -2px;"><path fill="currentColor" d="M100 40H87.1V18.8h-21V6H100zM100 93.2H66V80.3h21.1v-21H100zM34 93.2H0v-34h12.9v21.1h21zM12.9 40H0V6h34v12.9H12.8z"></path></svg>) y rotar el dispositivo a posición horizontal para una mejor experiencia.</span>
+                </div>
                 <div id="virtual-tour-viewer" aria-label="Visor de museo virtual"></div>
             </div>
         </section>
     </main>
-    <div th:replace="~{fragments/wsp-icon :: wsp-icon}"></div>
     <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 <script src="/scripts/script.js"></script>
