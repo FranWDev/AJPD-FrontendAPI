@@ -6,7 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const scenes = {
     foto1: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto1.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto1.jpg',
       markers: [
         {
           id: 'go-to-foto2',
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto2: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto2.jpeg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto2.jpeg',
       markers: [
         {
           id: 'go-to-foto1',
@@ -44,7 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto3: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto3.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto3.jpg',
       markers: [
         {
           id: 'go-to-foto2-back',
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto3_5: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto3.5.jpeg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto3.5.jpeg',
       markers: [
         {
           id: 'go-to-foto3-back',
@@ -89,7 +89,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto4: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto4.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto4.jpg',
       markers: [
         {
           id: 'go-to-foto3-back-from-4',
@@ -108,7 +108,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto5: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto5.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto5.jpg',
       markers: [
         {
           id: 'go-to-foto4-back',
@@ -127,7 +127,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto6: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto6.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto6.jpg',
       markers: [
         {
           id: 'go-to-foto5-back',
@@ -146,7 +146,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto7: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto7.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto7.jpg',
       markers: [
         {
           id: 'go-to-foto6-back',
@@ -172,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto8: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto8.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto8.jpg',
       markers: [
         {
           id: 'go-to-foto7-back-from-8',
@@ -191,7 +191,7 @@ document.addEventListener("DOMContentLoaded", () => {
       ]
     },
     foto9: {
-      panorama: 'https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/museo-virtual/foto9.jpg',
+      panorama: 'https://franwdev.github.io/ajpd-bucket/foto9.jpg',
       markers: [
         {
           id: 'go-to-foto8-back',
@@ -218,6 +218,32 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
+  const markerMapping = {
+    'go-to-foto1': 'foto1',
+    'go-to-foto1-shortcut': 'foto1',
+    'go-to-foto2': 'foto2',
+    'go-to-foto2-back': 'foto2',
+    'go-to-foto3': 'foto3',
+    'go-to-foto3-back': 'foto3',
+    'go-to-foto3-back-from-4': 'foto3',
+    'go-to-foto3_5': 'foto3_5',
+    'go-to-foto4': 'foto4',
+    'go-to-foto4-back': 'foto4',
+    'go-to-foto4-from-3_5': 'foto4',
+    'go-to-foto5': 'foto5',
+    'go-to-foto5-back': 'foto5',
+    'go-to-foto6': 'foto6',
+    'go-to-foto6-back': 'foto6',
+    'go-to-foto7': 'foto7',
+    'go-to-foto7-back-from-8': 'foto7',
+    'go-to-foto7-back-from-9': 'foto7',
+    'go-to-foto8': 'foto8',
+    'go-to-foto8-back': 'foto8',
+    'go-to-foto9-from-1': 'foto9',
+    'go-to-foto9-from-7': 'foto9',
+    'go-to-foto9-from-8': 'foto9',
+  };
+
   const viewer = new PhotoSphereViewer.Viewer({
     container: document.querySelector('#virtual-tour-viewer'),
     panorama: scenes.foto1.panorama,
@@ -236,32 +262,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const commonOptions = {
       position: viewer.getPosition(),
       zoom: viewer.getZoomLevel(),
-    };
-
-    const markerMapping = {
-      'go-to-foto1': 'foto1',
-      'go-to-foto1-shortcut': 'foto1',
-      'go-to-foto2': 'foto2',
-      'go-to-foto2-back': 'foto2',
-      'go-to-foto3': 'foto3',
-      'go-to-foto3-back': 'foto3',
-      'go-to-foto3-back-from-4': 'foto3',
-      'go-to-foto3_5': 'foto3_5',
-      'go-to-foto4': 'foto4',
-      'go-to-foto4-back': 'foto4',
-      'go-to-foto4-from-3_5': 'foto4',
-      'go-to-foto5': 'foto5',
-      'go-to-foto5-back': 'foto5',
-      'go-to-foto6': 'foto6',
-      'go-to-foto6-back': 'foto6',
-      'go-to-foto7': 'foto7',
-      'go-to-foto7-back-from-8': 'foto7',
-      'go-to-foto7-back-from-9': 'foto7',
-      'go-to-foto8': 'foto8',
-      'go-to-foto8-back': 'foto8',
-      'go-to-foto9-from-1': 'foto9',
-      'go-to-foto9-from-7': 'foto9',
-      'go-to-foto9-from-8': 'foto9',
     };
 
     const targetSceneKey = markerMapping[marker.id];

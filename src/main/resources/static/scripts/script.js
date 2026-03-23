@@ -4,6 +4,20 @@ if ("serviceWorker" in navigator) {
       .register("/sw.js")
       .then((reg) => {
         console.log("Service Worker registrado con éxito:", reg);
+        
+        reg.update();
+
+        reg.onupdatefound = () => {
+          const installingWorker = reg.installing;
+          installingWorker.onstatechange = () => {
+            if (installingWorker.state === 'activated') {
+              if (navigator.serviceWorker.controller) {
+                console.log("Nueva versión del Service Worker detectada. Recargando...");
+                window.location.reload();
+              }
+            }
+          };
+        };
       })
       .catch((err) => {
         console.error("Error al registrar el Service Worker:", err);
