@@ -1,4 +1,4 @@
-const VERSION = "v23";
+const VERSION = "v24";
 const CACHE_NAME = `ajpd-static-cache-${VERSION}`;
 const MUSEO_CACHE_NAME = "ajpd-museo-assets";
 

@@ -1,4 +1,252 @@
 document.addEventListener("DOMContentLoaded", () => {
+  let logoClicks = 0;
+  let secretModeEnabled = localStorage.getItem('secretModeActive') === 'true';
+  let currentClickData = null;
+  let capturedPlants = JSON.parse(localStorage.getItem('capturedPlants') || '[]');
+
+  const logo = document.querySelector('.museo-logo');
+  const viewerContainer = document.querySelector('#virtual-tour-viewer');
+  const modal = document.getElementById('plant-capture-modal');
+  const modalInput = document.getElementById('plant-name-input');
+  const capturedPlantsSection = document.getElementById('captured-plants-section');
+  const capturedPlantsList = document.getElementById('captured-plants-list');
+
+  const featureWrapper = document.getElementById('museum-feature-wrapper');
+  const toggleSidebarBtn = document.getElementById('toggle-sidebar-btn');
+  const tutorial = document.getElementById('secret-mode-tutorial');
+
+  // Evitar que el visor capture eventos de scroll/táctiles al interactuar con los paneles
+  [capturedPlantsSection, modal].forEach(el => {
+    if (el) {
+      el.addEventListener('wheel', e => e.stopPropagation());
+      el.addEventListener('touchmove', e => e.stopPropagation());
+      el.addEventListener('touchstart', e => e.stopPropagation());
+      el.addEventListener('touchend', e => e.stopPropagation());
+      el.addEventListener('pointerdown', e => e.stopPropagation());
+      el.addEventListener('mousedown', e => e.stopPropagation());
+    }
+  });
+
+  if (toggleSidebarBtn) {
+    toggleSidebarBtn.addEventListener('click', (e) => {
+      e.stopPropagation(); // Evitar que el visor capture el clic
+      capturedPlantsSection.classList.toggle('minimized');
+    });
+  }
+
+  const toggleSecretMode = (forceState = null) => {
+    secretModeEnabled = forceState !== null ? forceState : !secretModeEnabled;
+    localStorage.setItem('secretModeActive', secretModeEnabled.toString());
+
+    if (secretModeEnabled) {
+      capturedPlantsSection.style.setProperty('display', 'flex', 'important');
+      if (tutorial) tutorial.classList.add('show');
+      
+      if (logo) {
+        logo.classList.remove('flash-error');
+        logo.classList.add('flash-success');
+        setTimeout(() => logo.classList.remove('flash-success'), 1000);
+      }
+    } else {
+      capturedPlantsSection.style.setProperty('display', 'none', 'important');
+      if (tutorial) tutorial.classList.remove('show');
+      
+      if (logo) {
+        logo.classList.remove('flash-success');
+        logo.classList.add('flash-error');
+        setTimeout(() => logo.classList.remove('flash-error'), 1000);
+      }
+    }
+    
+    // Attempt to sync visibility if PSV is loaded
+    if (typeof updateSidebarVisibility === 'function') {
+      updateSidebarVisibility();
+    }
+    renderCapturedPlants();
+  };
+
+  const openCaptureModal = (data) => {
+    currentClickData = data;
+    const { yaw, pitch } = data;
+    const coordsEl = document.getElementById('click-coords');
+    if (coordsEl) coordsEl.textContent = `${yaw.toFixed(4)}, ${pitch.toFixed(4)}`;
+    
+    modal.classList.add('show');
+    modalInput.value = '';
+    setTimeout(() => modalInput.focus(), 50);
+  };
+
+  const savePlant = () => {
+    const input = document.getElementById('plant-name-input');
+    const name = (input ? input.value : modalInput.value).trim() || "Planta desconocida";
+    
+    // Obtener la escena actual
+    const currentPanorama = viewer.config.panorama;
+    const sceneId = Object.keys(scenes).find(key => scenes[key].panorama === currentPanorama) || 'foto1';
+
+    const newPlant = {
+      id: Date.now(),
+      name: name,
+      yaw: currentClickData.yaw,
+      pitch: currentClickData.pitch,
+      zoom: viewer.getZoomLevel(),
+      sceneId: sceneId
+    };
+
+    capturedPlants.unshift(newPlant);
+    localStorage.setItem('capturedPlants', JSON.stringify(capturedPlants));
+    renderCapturedPlants();
+    closeModal();
+  };
+
+  const closeModal = () => {
+    modal.classList.remove('show');
+  };
+
+  const deletePlant = (id, btnElement) => {
+    if (btnElement) {
+        const card = btnElement.closest('.plant-card');
+        if (card) {
+            card.classList.add('fade-out');
+            setTimeout(() => {
+                capturedPlants = capturedPlants.filter(p => p.id !== id);
+                localStorage.setItem('capturedPlants', JSON.stringify(capturedPlants));
+                renderCapturedPlants();
+            }, 280);
+            return;
+        }
+    }
+    capturedPlants = capturedPlants.filter(p => p.id !== id);
+    localStorage.setItem('capturedPlants', JSON.stringify(capturedPlants));
+    renderCapturedPlants();
+  };
+
+  const renderCapturedPlants = () => {
+    if (capturedPlants.length === 0) {
+      capturedPlantsList.innerHTML = '<p class="empty-list-msg">Doble clic para identificar.</p>';
+      return;
+    }
+
+    capturedPlantsList.innerHTML = '';
+    capturedPlants.forEach((plant, index) => {
+      const card = document.createElement('div');
+      card.className = 'plant-card';
+      card.dataset.sceneId = plant.sceneId;
+      card.dataset.yaw = plant.yaw;
+      card.dataset.pitch = plant.pitch;
+      if (plant.zoom) card.dataset.zoom = plant.zoom;
+      
+      card.style.animationDelay = `${Math.min(index * 0.05, 0.5)}s`;
+      
+      card.innerHTML = `
+        <div class="plant-card-info">
+          <h4>${plant.name}</h4>
+          <p><i class="fas fa-map-marker-alt"></i> ${plant.yaw.toFixed(3)}, ${plant.pitch.toFixed(3)}</p>
+        </div>
+        <button class="delete-plant-btn" data-id="${plant.id}">
+          <i class="fas fa-trash"></i>
+        </button>
+      `;
+      capturedPlantsList.appendChild(card);
+    });
+
+    // Listeners para teletransporte
+    capturedPlantsList.querySelectorAll('.plant-card').forEach(card => {
+      card.onclick = (e) => {
+        if (e.target.closest('.delete-plant-btn')) return;
+        
+        const sceneId = card.dataset.sceneId;
+        const position = {
+          yaw: parseFloat(card.dataset.yaw),
+          pitch: parseFloat(card.dataset.pitch)
+        };
+        const zoomLevel = card.dataset.zoom ? parseFloat(card.dataset.zoom) : viewer.getZoomLevel();
+
+        if (scenes[sceneId]) {
+          viewer.setPanorama(scenes[sceneId].panorama, { position: position, zoom: zoomLevel }).then(() => {
+             markersPlugin.setMarkers(scenes[sceneId].markers);
+          });
+        }
+      };
+    });
+
+    // Listeners para borrar
+    capturedPlantsList.querySelectorAll('.delete-plant-btn').forEach(btn => {
+      btn.onclick = (e) => {
+        e.stopPropagation();
+        deletePlant(Number(btn.dataset.id), btn);
+      };
+    });
+  };
+
+  const exportToTxt = () => {
+    if (capturedPlants.length === 0) {
+      alert("No hay datos para exportar.");
+      return;
+    }
+
+    let content = "LISTA DE PLANTAS SELECCIONADAS - MUSEO VIRTUAL AJPD\n";
+    content += "====================================================\n\n";
+    capturedPlants.forEach((plant, index) => {
+      content += `${index + 1}. ${plant.name}\n`;
+      content += `   Imagen: ${plant.sceneId || 'Desconocida'}\n`;
+      content += `   Coordenadas: Yaw: ${plant.yaw}, Pitch: ${plant.pitch}\n`;
+      content += `----------------------------------------------------\n`;
+    });
+
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `plantas-museo-virtual-${Date.now()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  // --- Initial Event Listeners ---
+  if (logo) {
+    logo.addEventListener('click', () => {
+      logoClicks++;
+      if (logoClicks >= 5) {
+        toggleSecretMode();
+        logoClicks = 0; // Reset counter after toggle
+      }
+
+      // Small visual hint of registering clicks (optional small shake or filter)
+      logo.style.transform = 'scale(0.95)';
+      setTimeout(() => logo.style.transform = 'none', 100);
+    });
+  }
+
+  document.getElementById('save-plant-btn').onclick = savePlant;
+  
+  const closeBtn = document.getElementById('close-modal-btn');
+  closeBtn.onclick = closeModal;
+  closeBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    closeModal();
+  }, { passive: false });
+
+  document.getElementById('export-txt-btn').onclick = exportToTxt;
+  
+  modalInput.onkeydown = (e) => {
+    if (e.key === 'Enter') savePlant();
+  };
+
+  window.onclick = (e) => {
+    if (e.target === modal) closeModal();
+  };
+
+  // Sincronizar estado inicial
+  if (secretModeEnabled) {
+    capturedPlantsSection.style.setProperty('display', 'flex', 'important');
+    if (tutorial) tutorial.classList.add('show');
+    renderCapturedPlants();
+  } else {
+    capturedPlantsSection.style.setProperty('display', 'none', 'important');
+  }
+
+  // Inicialización de PhotoSphereViewer
   if (typeof PhotoSphereViewer === "undefined") {
     console.error("PhotoSphereViewer is not defined");
     return;
@@ -256,6 +504,22 @@ document.addEventListener("DOMContentLoaded", () => {
     ]
   });
 
+  // Re-insertar capas sobre el visor para que persistan en pantalla completa
+  setTimeout(() => {
+    const psvInternal = viewer.container.querySelector('.psv-container') || viewer.container;
+    psvInternal.appendChild(capturedPlantsSection);
+    psvInternal.appendChild(modal);
+    updateSidebarVisibility();
+  }, 100);
+
+  const updateSidebarVisibility = () => {
+    if (secretModeEnabled) {
+      capturedPlantsSection.style.setProperty('display', 'flex', 'important');
+    } else {
+      capturedPlantsSection.style.setProperty('display', 'none', 'important');
+    }
+  };
+
   const markersPlugin = viewer.getPlugin(PhotoSphereViewer.MarkersPlugin);
 
   markersPlugin.addEventListener('select-marker', ({ marker }) => {
@@ -267,12 +531,19 @@ document.addEventListener("DOMContentLoaded", () => {
     const targetSceneKey = markerMapping[marker.id];
     if (targetSceneKey && scenes[targetSceneKey]) {
       viewer.setPanorama(scenes[targetSceneKey].panorama, commonOptions).then(() => {
-        markersPlugin.setMarkers(scenes[targetSceneKey].markers);
+         markersPlugin.setMarkers(scenes[targetSceneKey].markers);
       });
     }
   });
 
-  viewer.addEventListener('click', ({ data }) => {
-    console.log(`yaw: ${data.yaw}, pitch: ${data.pitch}`);
+  viewer.addEventListener('dblclick', ({ data }) => {
+    if (secretModeEnabled) {
+      openCaptureModal(data);
+    }
+  });
+
+  // Gestionar barra lateral en pantalla completa
+  viewer.addEventListener('fullscreen-updated', (e) => {
+    updateSidebarVisibility();
   });
 });

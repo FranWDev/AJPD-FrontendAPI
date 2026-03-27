@@ -36,10 +36,76 @@
                     <i class="fas fa-sync-alt"></i>
                     <span>Se recomienda pulsar el botón de pantalla completa (<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" class="psv-fullscreen-svg-inline" style="width: 14px; height: 14px; vertical-align: middle; margin-top: -2px;"><path fill="currentColor" d="M100 40H87.1V18.8h-21V6H100zM100 93.2H66V80.3h21.1v-21H100zM34 93.2H0v-34h12.9v21.1h21zM12.9 40H0V6h34v12.9H12.8z"></path></svg>) y rotar el dispositivo a posición horizontal para una mejor experiencia.</span>
                 </div>
-                <div id="virtual-tour-viewer" aria-label="Visor de museo virtual"></div>
+                
+                <div id="secret-mode-tutorial" class="secret-mode-tutorial">
+                    <h4><i class="fas fa-user-secret"></i> Modo Identificación de Plantas</h4>
+                    <p>Has activado la función especial de identificación. Sigue estos pasos:</p>
+                    <div class="tutorial-steps">
+                        <div class="tutorial-step">
+                            <i class="fas fa-hand-pointer"></i>
+                            <span>Haz <strong>doble clic</strong> (o doble toque) en el visor sobre cualquier planta para capturar su posición exacta y acercamiento.</span>
+                        </div>
+                        <div class="tutorial-step">
+                            <i class="fas fa-list-ul"></i>
+                            <span>Utiliza la <strong>lista lateral</strong> para ver tus descubrimientos. Haz clic en cualquiera de ellos para <strong>desplazarte</strong> de vuelta a ese lugar y observar la planta.</span>
+                        </div>
+                        <div class="tutorial-step">
+                            <i class="fas fa-download"></i>
+                            <span>Toca el <strong>botón de descarga</strong> en la cabecera de la lista para exportar un archivo `.txt` con todas las coordenadas de las plantas identificadas.</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="museum-feature-wrapper" class="museum-feature-wrapper">
+                    <!-- Las capas se movieron fuera para evitar que PSV las borre al iniciarse -->
+                    <!-- Se volverán a insertar mediante JS en el contenedor del visor para soporte de pantalla completa -->
+                    
+                    <!-- Función Secreta: Lista de Plantas Capturadas (Superposición/Barra lateral) -->
+                    <div id="captured-plants-section" class="captured-plants-section" style="display: none;">
+                        <div class="section-header">
+                            <!-- Toggle Button inside header -->
+                            <button id="toggle-sidebar-btn" class="toggle-sidebar-btn" title="Ocultar/Mostrar">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                            <h3><i class="fas fa-leaf"></i> Plantas</h3>
+                            <button id="export-txt-btn" class="btn-export" title="Descargar TXT">
+                                <i class="fas fa-download"></i>
+                            </button>
+                        </div>
+                        <div id="captured-plants-list" class="captured-plants-list">
+                            <!-- Items will be added here dynamically -->
+                            <p class="empty-list-msg">Doble clic para identificar.</p>
+                        </div>
+                    </div>
+
+                    <!-- Función Secreta: Modal de Captura (Superposición sobre el visor) -->
+                    <div id="plant-capture-modal" class="modal-overlay" style="display: none;">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h3><i class="fas fa-seedling"></i> Identificar</h3>
+                                <button id="close-modal-btn" class="close-btn">&times;</button>
+                            </div>
+                            <div class="modal-body">
+                                <p>¿Que planta es la que has seleccionado?</p>
+                                <div class="form-group">
+                                    <input type="text" id="plant-name-input" placeholder="Nombre..." autofocus>
+                                </div>
+                                <div class="coords-info">
+                                    <span><i class="fas fa-map-marker-alt"></i> <span id="click-coords">0, 0</span></span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button id="save-plant-btn" class="btn-save">Guardar</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="virtual-tour-viewer" aria-label="Visor de museo virtual" style="position: relative;"></div>
+                </div>
             </div>
         </section>
     </main>
+
     <div th:replace="~{fragments/footer :: footer}"></div>
 </body>
 <script src="/scripts/script.js"></script>
