@@ -1,17 +1,21 @@
 package org.dubini.frontend_api.service;
 
-import java.nio.charset.StandardCharsets;
+
 
 import org.dubini.frontend_api.config.ResendProperties;
 import org.dubini.frontend_api.dto.MuseoVisitanteRegistroRequest;
 import org.dubini.frontend_api.exception.MuseoRegistroException;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
 
-import jakarta.mail.internet.MimeMessage;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class ResendEmailService {
@@ -19,13 +23,12 @@ public class ResendEmailService {
     private static final String NO_COMMENTS = "Sin comentarios";
     private static final String SENDER_NAME = "Asociación Juvenil Proyecto Dubini";
 
-    private final JavaMailSender mailSender;
     private final SpringTemplateEngine templateEngine;
     private final ResendProperties resendProperties;
+    private final RestTemplate restTemplate = new RestTemplate();
 
-    public ResendEmailService(JavaMailSender mailSender, SpringTemplateEngine templateEngine,
+    public ResendEmailService(SpringTemplateEngine templateEngine,
             ResendProperties resendProperties) {
-        this.mailSender = mailSender;
         this.templateEngine = templateEngine;
         this.resendProperties = resendProperties;
     }
@@ -56,15 +59,25 @@ public class ResendEmailService {
 
     private void enviarCorreoHtml(String destinatario, String asunto, String html) {
         try {
-            MimeMessage mimeMessage = mailSender.createMimeMessage();
-            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, StandardCharsets.UTF_8.name());
-            helper.setFrom(resendProperties.getMail(), SENDER_NAME);
-            helper.setTo(destinatario);
-            helper.setSubject(asunto);
-            helper.setText(html, true);
-            mailSender.send(mimeMessage);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(resendProperties.getApiKey());
+
+            Map<String, Object> requestBody = new HashMap<>();
+            requestBody.put("from", SENDER_NAME + " <" + resendProperties.getMail() + ">");
+            requestBody.put("to", new String[]{destinatario});
+            requestBody.put("subject", asunto);
+            requestBody.put("html", html);
+
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(requestBody, headers);
+
+            ResponseEntity<String> response = restTemplate.postForEntity("https://api.resend.com/emails", entity, String.class);
+            
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new MuseoRegistroException("Error en la API de Resend: " + response.getStatusCode());
+            }
         } catch (Exception exception) {
-            throw new MuseoRegistroException("No se pudo procesar el envío de la solicitud.", exception);
+            throw new MuseoRegistroException("No se pudo procesar el envío de la solicitud.");
         }
     }
 

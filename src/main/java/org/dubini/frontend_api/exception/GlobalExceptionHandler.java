@@ -1,11 +1,5 @@
 package org.dubini.frontend_api.exception;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
 import org.dubini.frontend_api.dto.HttpResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +8,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+
+import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -26,7 +24,6 @@ public class GlobalExceptionHandler {
                 .error("Cache Error")
                 .message(ex.getMessage())
                 .path(request.getDescription(false))
-                .stackTrace(getStackTrace(ex))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
     }
@@ -39,7 +36,6 @@ public class GlobalExceptionHandler {
                 .error("Backoffice Service Error")
                 .message(ex.getMessage())
                 .path(request.getDescription(false))
-                .stackTrace(getStackTrace(ex))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.SERVICE_UNAVAILABLE);
     }
@@ -52,7 +48,6 @@ public class GlobalExceptionHandler {
                 .error("Not Found")
                 .message(ex.getMessage())
                 .path(request.getDescription(false))
-                .stackTrace(getStackTrace(ex))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
@@ -65,7 +60,6 @@ public class GlobalExceptionHandler {
                 .error("Museo Registration Error")
                 .message(ex.getMessage())
                 .path(request.getDescription(false))
-                .stackTrace(getStackTrace(ex))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -85,7 +79,6 @@ public class GlobalExceptionHandler {
                 .message("La solicitud contiene datos inválidos.")
                 .path(request.getDescription(false))
                 .data(fieldErrors)
-                .stackTrace(getStackTrace(ex))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
@@ -98,15 +91,7 @@ public class GlobalExceptionHandler {
                 .error("Internal Server Error")
                 .message("Ocurrió un error al procesar tu solicitud. Por favor, intenta más tarde.")
                 .path(request.getDescription(false))
-                .stackTrace(getStackTrace(ex))
                 .build();
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-
-    private String getStackTrace(Exception exception) {
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        exception.printStackTrace(pw);
-        return sw.toString();
     }
 }

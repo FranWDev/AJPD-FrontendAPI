@@ -1,3 +1,7 @@
+import * as THREE from 'three';
+import { Viewer } from '@photo-sphere-viewer/core';
+import { MarkersPlugin } from '@photo-sphere-viewer/markers-plugin';
+
 document.addEventListener("DOMContentLoaded", () => {
   let logoClicks = 0;
   let secretModeEnabled = localStorage.getItem('secretModeActive') === 'true';
@@ -246,11 +250,7 @@ document.addEventListener("DOMContentLoaded", () => {
     capturedPlantsSection.style.setProperty('display', 'none', 'important');
   }
 
-  // Inicialización de PhotoSphereViewer
-  if (typeof PhotoSphereViewer === "undefined") {
-    console.error("PhotoSphereViewer is not defined");
-    return;
-  }
+  // Inicialización de PhotoSphereViewer eliminada porque usamos ES Modules.
 
   const scenes = {
     foto1: {
@@ -269,7 +269,11 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-verode', position: { yaw: 0.1490125289261231, pitch: -0.04234423432468404 }, html: '<div class="plant-marker-label">Verode</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Kleinia neriifolia Haw.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-cornical', position: { yaw: 1.436835324666589, pitch: -0.30582231814953076 }, html: '<div class="plant-marker-label">Cornical</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Periploca laevigata Aiton</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-incienso', position: { yaw: 0.6951460683837772, pitch: -0.11571865001987858 }, html: '<div class="plant-marker-label">Incienso canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Artemisia thuscula Cav.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-tabaiba-dulce', position: { yaw: 5.7342698927465126, pitch: -0.26133756997801116 }, html: '<div class="plant-marker-label">Tabaiba dulce</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Euphorbia balsamifera Aiton</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto2: {
@@ -288,7 +292,11 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-cardon', position: { yaw: 3.6273332306424866, pitch: -0.17147876397533546 }, html: '<div class="plant-marker-label">Cardón</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Euphorbia canariensis L.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-tabaiba-amarga', position: { yaw: 2.9636004370868254, pitch: -0.30644693684649793 }, html: '<div class="plant-marker-label">Tabaiba amarga</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Euphorbia lamarckii Sweet</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-vinagrera', position: { yaw: 4.0706119017945195, pitch: -0.37018354950409593 }, html: '<div class="plant-marker-label">Vinagrera, calcosa</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Rumex lunaria L.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-salvia', position: { yaw: 0.33821511626619555, pitch: -0.3277814358351258 }, html: '<div class="plant-marker-label">Salvia canaria</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Salvia canariensis L.</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto3: {
@@ -314,7 +322,10 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-sabina', position: { yaw: 1.639097877832575, pitch: 0.40047208111591104 }, html: '<div class="plant-marker-label">Sabina canaria</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Juniperus turbinata Guss. subsp. canariensis</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-jazmin', position: { yaw: 5.444544442432992, pitch: -0.40753793108819125 }, html: '<div class="plant-marker-label">Jazmín silvestre</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Jasminum odoratissimum L.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-drago', position: { yaw: 2.9519666956261106, pitch: 0.524854371934387 }, html: '<div class="plant-marker-label">Drago</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Dracaena draco (L.) L.</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto3_5: {
@@ -352,7 +363,10 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-palosangre', position: { yaw: 0.6031010266997419, pitch: -0.2558135119310563 }, html: '<div class="plant-marker-label">Palosangre</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Marcetella moquiniana</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-hediondo', position: { yaw: 1.745054095324531, pitch: -0.4232953592439781 }, html: '<div class="plant-marker-label">Hediondo o Yerbamora</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Bosea yervamora</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-palmera', position: { yaw: 6.247723221306726, pitch: -0.06640254040461935 }, html: '<div class="plant-marker-label">Palmera canaria</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Phoenix canariensis</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto5: {
@@ -371,7 +385,11 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-naranjo', position: { yaw: 5.107922801598216, pitch: -0.284204470678757 }, html: '<div class="plant-marker-label">Naranjo salvaje</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Ilex perado Aiton subsp. platyphylla</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-bicacaro', position: { yaw: 1.107764882508876, pitch: -0.8193670189103006 }, html: '<div class="plant-marker-label">Bicácaro</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Canarina canariensis</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-brezo', position: { yaw: 0.37047630660511527, pitch: -0.07473119690979257 }, html: '<div class="plant-marker-label">Brezo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Erica canariensis</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-til', position: { yaw: 1.901130142387064, pitch: -0.0838013955517356 }, html: '<div class="plant-marker-label">Til</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Ocotea foetens</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto6: {
@@ -390,7 +408,8 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-vinatigo', position: { yaw: 3.2755463052296587, pitch: -0.15740727727732806 }, html: '<div class="plant-marker-label">Viñátigo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Persea indica (L.) Spreng.</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto7: {
@@ -416,7 +435,9 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-escobon', position: { yaw: 2.173905934577405, pitch: -0.08034406388899407 }, html: '<div class="plant-marker-label">Escobón de pinar</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Chamaecytisus proliferus</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-pino', position: { yaw: 3.0665594453968517, pitch: 0.2542720392789053 }, html: '<div class="plant-marker-label">Pino canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Pinus canariensis</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto8: {
@@ -435,7 +456,9 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-chevron-up"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-rosalito', position: { yaw: 5.455670023503024, pitch: -0.2618104293330932 }, html: '<div class="plant-marker-label">Rosalito salvaje</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Pterocephalus dumetorum</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-cedro', position: { yaw: 4.448176040420181, pitch: -0.33104709574760216 }, html: '<div class="plant-marker-label">Cedro canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Juniperus cedrus</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto9: {
@@ -492,13 +515,13 @@ document.addEventListener("DOMContentLoaded", () => {
     'go-to-foto9-from-8': 'foto9',
   };
 
-  const viewer = new PhotoSphereViewer.Viewer({
+  const viewer = new Viewer({
     container: document.querySelector('#virtual-tour-viewer'),
     panorama: scenes.foto1.panorama,
     loadingTxt: 'Cargando...',
     defaultZoomLvl: 0,
     plugins: [
-      [PhotoSphereViewer.MarkersPlugin, {
+      [MarkersPlugin, {
         markers: scenes.foto1.markers
       }]
     ]
@@ -520,7 +543,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   };
 
-  const markersPlugin = viewer.getPlugin(PhotoSphereViewer.MarkersPlugin);
+  const markersPlugin = viewer.getPlugin(MarkersPlugin);
 
   markersPlugin.addEventListener('select-marker', ({ marker }) => {
     const commonOptions = {
@@ -533,6 +556,8 @@ document.addEventListener("DOMContentLoaded", () => {
       viewer.setPanorama(scenes[targetSceneKey].panorama, commonOptions).then(() => {
          markersPlugin.setMarkers(scenes[targetSceneKey].markers);
       });
+    } else if (marker.id.startsWith('plant-')) {
+      markersPlugin.toggleMarkerTooltip(marker.id);
     }
   });
 

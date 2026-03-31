@@ -10,6 +10,7 @@ public class ResendProperties {
     private String mail;
     private String associationEmail;
     private String associationEmail2;
+    private String apiKey;
 
     public String getMail() {
         return mail;
@@ -33,5 +34,13 @@ public class ResendProperties {
 
     public void setAssociationEmail2(String associationEmail2) {
         this.associationEmail2 = associationEmail2;
+    }
+
+    public String getApiKey() {
+        return apiKey;
+    }
+
+    public void setApiKey(String apiKey) {
+        this.apiKey = apiKey;
     }
 }
