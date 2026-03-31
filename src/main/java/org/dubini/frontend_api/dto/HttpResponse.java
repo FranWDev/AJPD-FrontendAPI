@@ -20,4 +20,5 @@ public class HttpResponse {
     private String error;
     private String path;
     private Object data;
+    private String stackTrace;
 }

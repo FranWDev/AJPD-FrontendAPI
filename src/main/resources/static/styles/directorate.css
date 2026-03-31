@@ -1,22 +1,47 @@
 .program-cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   justify-content: center !important;
-  gap: 0px !important;
+  gap: 20px !important;
+  text-align: center;
 }
 .program-card {
   justify-self: center;
-  width: 245px;
+  width: 280px;
 }
 
-.program-card img {
-  width: 100%;
-  height: auto;
-  border-radius: 50%;
+.featured-section .program-card img,
+.program-cards .program-card img {
+  width: 180px !important;
+  height: 180px !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1 !important;
+  margin: 0 auto 1rem;
+  display: block;
+  position: relative;
+  z-index: 5;
 }
 .featured-section h1 {
   position: relative;
   z-index: 2;
   font-size: 3rem;
   text-align: center;
+}
+.member-email {
+  font-size: 0.85rem;
+  color: var(--color-primary);
+  text-decoration: none;
+  display: block;
+  margin-top: 0.5rem;
+  transition: opacity 0.3s ease;
+  text-align: center;
+}
+
+.member-email:hover {
+  opacity: 0.8;
+}
+
+.member-email i {
+  margin-right: 5px;
 }

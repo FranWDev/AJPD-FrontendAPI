@@ -115,3 +115,128 @@
   pointer-events: none; /* Permite que los clicks pasen a través del overlay */
   box-shadow: 0 20px 20px -20px rgba(16, 35, 78, 0.4);
 }
+
+/* Hero Slider Navigation */
+.hero-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero-nav:hover {
+  background: rgba(0, 0, 0, 0.6);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.hero-prev {
+  left: 20px;
+}
+
+.hero-next {
+  right: 20px;
+}
+
+.hero-dots {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 10px;
+  z-index: 10;
+}
+
+.hero-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.hero-dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+/* Actividades Slider Navigation */
+.slider-container {
+  position: relative;
+}
+
+.activity-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba(125, 179, 198, 0.4);
+  color: white;
+  border: none;
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  font-size: 1.2rem;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.activity-nav:hover {
+  background: rgba(125, 179, 198, 0.9);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.activity-prev {
+  left: 15px;
+}
+
+.activity-next {
+  right: 15px;
+}
+
+.activity-dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.activity-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid white;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.3s ease;
+}
+
+.activity-dot.active {
+  background: white;
+  transform: scale(1.2);
+}
+
+@media (max-width: 768px) {
+  .activity-nav {
+    display: none; /* Mejor navegación táctil en móvil */
+  }
+}

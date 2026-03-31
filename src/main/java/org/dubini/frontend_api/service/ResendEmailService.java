@@ -64,7 +64,7 @@ public class ResendEmailService {
             helper.setText(html, true);
             mailSender.send(mimeMessage);
         } catch (Exception exception) {
-            throw new MuseoRegistroException("No se pudo procesar el envío de la solicitud.");
+            throw new MuseoRegistroException("No se pudo procesar el envío de la solicitud.", exception);
         }
     }
 

@@ -25,7 +25,8 @@
 .museo-theme .desktop-nav .nav-link,
 .museo-theme .dropdown-btn,
 .museo-theme .mobile-nav .nav-link,
-.museo-theme .mobile-dropdown-btn {
+.museo-theme .mobile-dropdown-btn,
+.museo-theme .dropdown-content a {
   color: #f6fff6;
 }
 

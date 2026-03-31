@@ -149,19 +149,65 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function initHeroSlider() {
     const slides = document.querySelectorAll(".hero-slide");
-    try {
+    const dots = document.querySelectorAll(".hero-dot");
+    const prevBtn = document.querySelector(".hero-prev");
+    const nextBtn = document.querySelector(".hero-next");
+    
+    if (slides.length === 0) return;
+
     let currentSlide = 0;
+    let slideInterval;
+
+    function goToSlide(n) {
+      slides[currentSlide].classList.remove("active");
+      if(dots.length) dots[currentSlide].classList.remove("active");
+      
+      currentSlide = (n + slides.length) % slides.length;
+      
+      slides[currentSlide].classList.add("active");
+      if(dots.length) dots[currentSlide].classList.add("active");
+    }
+
+    function nextSlide() {
+      goToSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      goToSlide(currentSlide - 1);
+    }
+
+    function startSlideShow() {
+      slideInterval = setInterval(nextSlide, 5000);
+    }
+
+    function resetSlideShow() {
+      clearInterval(slideInterval);
+      startSlideShow();
+    }
+
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        prevSlide();
+        resetSlideShow();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        nextSlide();
+        resetSlideShow();
+      });
+    }
+
+    dots.forEach((dot, index) => {
+      dot.addEventListener("click", () => {
+        goToSlide(index);
+        resetSlideShow();
+      });
+    });
 
     slides[0].classList.add("active");
-
-    setInterval(() => {
-      slides[currentSlide].classList.remove("active");
-      currentSlide = (currentSlide + 1) % slides.length;
-      slides[currentSlide].classList.add("active");
-    }, 5000);
-    } catch (err) {
-      return;
-    }
+    startSlideShow();
   }
 
   initHeroSlider();
@@ -169,128 +215,90 @@ document.addEventListener("DOMContentLoaded", () => {
   async function initActivitySlider() {
     const sliderTrack = document.querySelector(".slider-track");
     const slides = document.querySelectorAll(".slide");
-    const dots = document.querySelectorAll(".slider-dot");
+    const dots = document.querySelectorAll(".activity-dot");
+    const prevBtn = document.querySelector(".activity-prev");
+    const nextBtn = document.querySelector(".activity-next");
     let currentSlide = 0;
     const totalSlides = slides.length;
 
+    if (!sliderTrack) return;
+
     // Cargar captions desde JSONs
     for (let i = 1; i <= totalSlides; i++) {
-      try {
-        const jsonUrl = `https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/slider/slide${i}.json`;
-        const response = await fetch(jsonUrl);
-        const data = await response.json();
-        const slide = document.querySelector(`.slide[data-slide-id="${i}"]`);
-        if (slide && data.caption) {
-          const captionParagraph = slide.querySelector(".slide-caption p");
-          if (captionParagraph) {
-            captionParagraph.textContent = data.caption;
-          }
+        try {
+            const jsonUrl = `https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/slider/slide${i}.json`;
+            const response = await fetch(jsonUrl);
+            const data = await response.json();
+            const slide = document.querySelector(`.slide[data-slide-id="${i}"]`);
+            if (slide && data.caption) {
+                const captionParagraph = slide.querySelector(".slide-caption p");
+                if (captionParagraph) {
+                    captionParagraph.textContent = data.caption;
+                }
+            }
+        } catch (error) {
+            console.warn(`Error cargando caption para slide ${i}:`, error);
         }
-      } catch (error) {
-        console.warn(`Error cargando caption para slide ${i}:`, error);
-      }
-    }
-
-    let isDragging = false;
-    let startPos = 0;
-    let currentTranslate = 0;
-    let prevTranslate = 0;
-    let animationID = 0;
-    let dragStartX = 0;
-    slides.forEach((slide) => {
-      slide.addEventListener("dragstart", (e) => e.preventDefault());
-    });
-
-    sliderTrack.addEventListener("touchstart", touchStart);
-    sliderTrack.addEventListener("touchmove", touchMove);
-    sliderTrack.addEventListener("touchend", touchEnd);
-
-    sliderTrack.addEventListener("mousedown", touchStart);
-    sliderTrack.addEventListener("mousemove", touchMove);
-    sliderTrack.addEventListener("mouseup", touchEnd);
-    sliderTrack.addEventListener("mouseleave", touchEnd);
-
-    function touchStart(event) {
-      isDragging = true;
-      startPos = getPositionX(event);
-      dragStartX = startPos;
-
-      cancelAnimationFrame(animationID);
-
-      sliderTrack.style.cursor = "grabbing";
-    }
-
-    function touchMove(event) {
-      if (!isDragging) return;
-
-      const currentPosition = getPositionX(event);
-      const diff = currentPosition - startPos;
-      const walk = currentPosition - dragStartX;
-
-      currentTranslate = prevTranslate + walk;
-      setSliderPosition();
-    }
-
-    function touchEnd() {
-      isDragging = false;
-      const movedBy = currentTranslate - prevTranslate;
-
-      if (Math.abs(movedBy) > 100) {
-        if (movedBy < 0 && currentSlide < totalSlides - 1) {
-          currentSlide++;
-        } else if (movedBy > 0 && currentSlide > 0) {
-          currentSlide--;
-        }
-      }
-
-      goToSlide(currentSlide);
-      sliderTrack.style.cursor = "grab";
-    }
-
-    function getPositionX(event) {
-      return event.type.includes("mouse")
-        ? event.pageX
-        : event.touches[0].clientX;
-    }
-
-    function setSliderPosition() {
-      sliderTrack.style.transform = `translateX(${currentTranslate}px)`;
     }
 
     function goToSlide(index) {
-      currentSlide = index;
-      const offset = -index * 100;
-      sliderTrack.style.transform = `translateX(${offset}%)`;
-      prevTranslate = (offset * sliderTrack.offsetWidth) / 100;
-      currentTranslate = prevTranslate;
-
-      dots.forEach((dot) => dot.classList.remove("active"));
-      dots[currentSlide].classList.add("active");
+        currentSlide = (index + totalSlides) % totalSlides;
+        const offset = -currentSlide * 100;
+        sliderTrack.style.transform = `translateX(${offset}%)`;
+        
+        dots.forEach((dot) => dot.classList.remove("active"));
+        if(dots[currentSlide]) dots[currentSlide].classList.add("active");
     }
 
-    let autoSlideInterval;
+    if (prevBtn) {
+        prevBtn.addEventListener("click", () => {
+            stopAutoSlide();
+            goToSlide(currentSlide - 1);
+            startAutoSlide();
+        });
+    }
 
+    if (nextBtn) {
+        nextBtn.addEventListener("click", () => {
+            stopAutoSlide();
+            goToSlide(currentSlide + 1);
+            startAutoSlide();
+        });
+    }
+
+    dots.forEach((dot, index) => {
+        dot.addEventListener("click", () => {
+            stopAutoSlide();
+            goToSlide(index);
+            startAutoSlide();
+        });
+    } );
+
+    let autoSlideInterval;
     function startAutoSlide() {
-      autoSlideInterval = setInterval(() => {
-        if (!isDragging) {
-          currentSlide = (currentSlide + 1) % totalSlides;
-          goToSlide(currentSlide);
-        }
-      }, 10000);
+        autoSlideInterval = setInterval(() => {
+            goToSlide(currentSlide + 1);
+        }, 8000);
     }
 
     function stopAutoSlide() {
-      clearInterval(autoSlideInterval);
+        clearInterval(autoSlideInterval);
     }
 
     startAutoSlide();
 
-    dots.forEach((dot, index) => {
-      dot.addEventListener("click", () => {
+    // Touch events
+    let startX;
+    sliderTrack.addEventListener("touchstart", (e) => {
+        startX = e.touches[0].clientX;
         stopAutoSlide();
-        goToSlide(index);
+    });
+
+    sliderTrack.addEventListener("touchend", (e) => {
+        const endX = e.changedTouches[0].clientX;
+        if (startX - endX > 50) goToSlide(currentSlide + 1);
+        else if (endX - startX > 50) goToSlide(currentSlide - 1);
         startAutoSlide();
-      });
     });
   }
   initActivitySlider();
