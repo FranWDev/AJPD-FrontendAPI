@@ -28,10 +28,14 @@ public class ContactRequest {
     @Size(max = 2000, message = "El mensaje es demasiado largo (máximo 2000 caracteres)")
     private String mensaje;
 
+    @Size(max = 20, message = "El teléfono es demasiado largo")
+    private String telefono;
+
     public void sanitize() {
         this.nombre = sanitizeText(this.nombre);
         this.asunto = sanitizeText(this.asunto);
         this.mensaje = sanitizeText(this.mensaje);
+        this.telefono = sanitizeText(this.telefono);
     }
 
     private String sanitizeText(String text) {

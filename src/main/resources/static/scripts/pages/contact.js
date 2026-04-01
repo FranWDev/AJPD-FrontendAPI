@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = {
             nombre: formData.get('nombre'),
             email: formData.get('email'),
+            telefono: formData.get('telefono'),
             asunto: formData.get('asunto'),
             mensaje: formData.get('mensaje')
         };

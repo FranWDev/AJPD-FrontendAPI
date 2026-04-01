@@ -33,7 +33,6 @@ public class ResendEmailService {
         this.templateEngine = templateEngine;
         this.resendProperties = resendProperties;
     }
-
     public void enviarRegistroMuseo(MuseoVisitanteRegistroRequest solicitud) {
         validarConfiguracion();
         String comentarios = normalizarComentarios(solicitud.getComentarios());
@@ -51,9 +50,9 @@ public class ResendEmailService {
         String htmlNotificacion = templateEngine.process("emails/museo-registro-notificacion", context);
         String htmlConfirmacion = templateEngine.process("emails/museo-registro-confirmacion", context);
 
-        enviarCorreoHtml(resendProperties.getAssociationEmail(), "Nueva inscripción Museo Escolar", htmlNotificacion);
-        if (resendProperties.getAssociationEmail2() != null && !resendProperties.getAssociationEmail2().isBlank()) {
-            enviarCorreoHtml(resendProperties.getAssociationEmail2(), "Nueva inscripción Museo Escolar", htmlNotificacion);
+        enviarCorreoHtml(resendProperties.getAssociationEmailMuseum(), "Nueva inscripción Museo Escolar", htmlNotificacion);
+        if (resendProperties.getAssociationEmailMuseum2() != null && !resendProperties.getAssociationEmailMuseum2().isBlank()) {
+            enviarCorreoHtml(resendProperties.getAssociationEmailMuseum2(), "Nueva inscripción Museo Escolar", htmlNotificacion);
         }
         enviarCorreoHtml(solicitud.getEmail(), "Confirmación de inscripción - Museo Escolar", htmlConfirmacion);
     }
@@ -64,14 +63,15 @@ public class ResendEmailService {
         Context context = new Context();
         context.setVariable("nombre", solicitud.getNombre());
         context.setVariable("email", solicitud.getEmail());
+        context.setVariable("telefono", solicitud.getTelefono());
         context.setVariable("asunto", solicitud.getAsunto());
         context.setVariable("mensaje", solicitud.getMensaje());
 
         String htmlContacto = templateEngine.process("emails/contact-form", context);
         String htmlConfirmacion = templateEngine.process("emails/contact-confirmation", context);
 
-        // Enviar notificación a la asociación (solo al primero como se solicitó)
-        enviarCorreoHtml(resendProperties.getAssociationEmail(), "Nuevo contacto: " + solicitud.getAsunto(), htmlContacto);
+        // Enviar notificación a la asociación al email de contacto configurado
+        enviarCorreoHtml(resendProperties.getAssociationEmailContact(), "Nuevo contacto: " + solicitud.getAsunto(), htmlContacto);
         
         // Enviar confirmación al remitente
         enviarCorreoHtml(solicitud.getEmail(), "Hemos recibido tu mensaje - AJPD", htmlConfirmacion);
@@ -112,8 +112,11 @@ public class ResendEmailService {
         if (resendProperties.getMail() == null || resendProperties.getMail().isBlank()) {
             throw new MuseoRegistroException("La propiedad resend.mail no está configurada.");
         }
-        if (resendProperties.getAssociationEmail() == null || resendProperties.getAssociationEmail().isBlank()) {
-            throw new MuseoRegistroException("La propiedad resend.association-email no está configurada.");
+        if (resendProperties.getAssociationEmailContact() == null || resendProperties.getAssociationEmailContact().isBlank()) {
+            throw new MuseoRegistroException("La propiedad resend.association-email-contact no está configurada.");
+        }
+        if (resendProperties.getAssociationEmailMuseum() == null || resendProperties.getAssociationEmailMuseum().isBlank()) {
+            throw new MuseoRegistroException("La propiedad resend.association-email-museum no está configurada.");
         }
     }
 }

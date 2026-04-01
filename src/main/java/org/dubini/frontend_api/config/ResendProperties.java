@@ -8,8 +8,9 @@ import org.springframework.stereotype.Component;
 public class ResendProperties {
 
     private String mail;
-    private String associationEmail;
-    private String associationEmail2;
+    private String associationEmailContact;
+    private String associationEmailMuseum;
+    private String associationEmailMuseum2;
     private String apiKey;
 
     public String getMail() {
@@ -20,20 +21,28 @@ public class ResendProperties {
         this.mail = mail;
     }
 
-    public String getAssociationEmail() {
-        return associationEmail;
+    public String getAssociationEmailContact() {
+        return associationEmailContact;
     }
 
-    public void setAssociationEmail(String associationEmail) {
-        this.associationEmail = associationEmail;
+    public void setAssociationEmailContact(String associationEmailContact) {
+        this.associationEmailContact = associationEmailContact;
     }
 
-    public String getAssociationEmail2() {
-        return associationEmail2;
+    public String getAssociationEmailMuseum() {
+        return associationEmailMuseum;
     }
 
-    public void setAssociationEmail2(String associationEmail2) {
-        this.associationEmail2 = associationEmail2;
+    public void setAssociationEmailMuseum(String associationEmailMuseum) {
+        this.associationEmailMuseum = associationEmailMuseum;
+    }
+
+    public String getAssociationEmailMuseum2() {
+        return associationEmailMuseum2;
+    }
+
+    public void setAssociationEmailMuseum2(String associationEmailMuseum2) {
+        this.associationEmailMuseum2 = associationEmailMuseum2;
     }
 
     public String getApiKey() {

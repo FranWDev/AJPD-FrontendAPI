@@ -12,7 +12,7 @@
             <td align="center">
                 <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border:1px solid #e1e9e7;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
                     <tr>
-                        <td style="background:linear-gradient(135deg,#10234e,#243b74);padding:24px;color:#ffffff;text-align:center;">
+                        <td style="background:linear-gradient(135deg,#4462aa,#7db3c6);padding:24px;color:#ffffff;text-align:center;">
                             <img src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/logo.png" alt="Logo AJPD" style="height:50px;margin-bottom:12px;">
                             <h1 style="margin:0;font-size:24px;font-weight:600;">Nuevo Mensaje Recibido</h1>
                         </td>
@@ -31,6 +31,10 @@
                                     <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;">
                                         <a th:href="'mailto:' + ${email}" style="color:#ca4353;text-decoration:none;" th:text="${email}">remitente@ejemplo.com</a>
                                     </td>
+                                </tr>
+                                <tr th:if="${telefono != null and !telefono.isEmpty()}">
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;"><strong>Teléfono:</strong></td>
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;" th:text="${telefono}">600 000 000</td>
                                 </tr>
                                 <tr>
                                     <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;"><strong>Asunto:</strong></td>
