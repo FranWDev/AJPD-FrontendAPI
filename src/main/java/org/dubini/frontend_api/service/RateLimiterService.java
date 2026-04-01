@@ -2,6 +2,8 @@ package org.dubini.frontend_api.service;
 
 import java.time.Instant;
 import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.springframework.stereotype.Service;
 
@@ -11,28 +13,47 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 @Service
 public class RateLimiterService {
 
-    private static final long RATE_LIMIT_HOURS = 24;
     private static final String RATE_LIMIT_MESSAGE = "Demasiadas solicitudes desde tu dirección IP. Por favor, intenta más tarde.";
     private static final boolean ENABLED = true;
 
-    private final Cache<String, Instant> ipRequestCache;
+    private final Map<String, Cache<String, Instant>> caches = new ConcurrentHashMap<>();
 
     public RateLimiterService() {
-        this.ipRequestCache = Caffeine.newBuilder()
-                .expireAfterWrite(RATE_LIMIT_HOURS, TimeUnit.HOURS)
+        // Inicializar caché por defecto para el museo (24h como estaba antes)
+        createCache("museo", 24, TimeUnit.HOURS);
+        // Inicializar caché para contacto (1h recomendado)
+        createCache("contacto", 1, TimeUnit.HOURS);
+    }
+
+    private void createCache(String context, long duration, TimeUnit unit) {
+        Cache<String, Instant> cache = Caffeine.newBuilder()
+                .expireAfterWrite(duration, unit)
                 .maximumSize(10000)
                 .build();
+        caches.put(context, cache);
     }
 
     public boolean canMakeRequest(String ip) {
+        return canMakeRequest(ip, "museo");
+    }
+
+    public boolean canMakeRequest(String ip, String context) {
         if (!ENABLED) {
             return true;
         }
-        return ipRequestCache.getIfPresent(ip) == null;
+        Cache<String, Instant> cache = caches.get(context);
+        return cache == null || cache.getIfPresent(ip) == null;
     }
 
     public void recordRequest(String ip) {
-        ipRequestCache.put(ip, Instant.now());
+        recordRequest(ip, "museo");
+    }
+
+    public void recordRequest(String ip, String context) {
+        Cache<String, Instant> cache = caches.get(context);
+        if (cache != null) {
+            cache.put(ip, Instant.now());
+        }
     }
 
     public String getRateLimitMessage() {
@@ -40,6 +61,11 @@ public class RateLimiterService {
     }
 
     public Instant getLastRequestTime(String ip) {
-        return ipRequestCache.getIfPresent(ip);
+        return getLastRequestTime(ip, "museo");
+    }
+
+    public Instant getLastRequestTime(String ip, String context) {
+        Cache<String, Instant> cache = caches.get(context);
+        return cache != null ? cache.getIfPresent(ip) : null;
     }
 }

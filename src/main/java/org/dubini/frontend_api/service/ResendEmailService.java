@@ -3,6 +3,7 @@ package org.dubini.frontend_api.service;
 
 
 import org.dubini.frontend_api.config.ResendProperties;
+import org.dubini.frontend_api.dto.ContactRequest;
 import org.dubini.frontend_api.dto.MuseoVisitanteRegistroRequest;
 import org.dubini.frontend_api.exception.MuseoRegistroException;
 import org.springframework.http.HttpEntity;
@@ -55,6 +56,25 @@ public class ResendEmailService {
             enviarCorreoHtml(resendProperties.getAssociationEmail2(), "Nueva inscripción Museo Escolar", htmlNotificacion);
         }
         enviarCorreoHtml(solicitud.getEmail(), "Confirmación de inscripción - Museo Escolar", htmlConfirmacion);
+    }
+
+    public void enviarEmailContacto(ContactRequest solicitud) {
+        validarConfiguracion();
+
+        Context context = new Context();
+        context.setVariable("nombre", solicitud.getNombre());
+        context.setVariable("email", solicitud.getEmail());
+        context.setVariable("asunto", solicitud.getAsunto());
+        context.setVariable("mensaje", solicitud.getMensaje());
+
+        String htmlContacto = templateEngine.process("emails/contact-form", context);
+        String htmlConfirmacion = templateEngine.process("emails/contact-confirmation", context);
+
+        // Enviar notificación a la asociación (solo al primero como se solicitó)
+        enviarCorreoHtml(resendProperties.getAssociationEmail(), "Nuevo contacto: " + solicitud.getAsunto(), htmlContacto);
+        
+        // Enviar confirmación al remitente
+        enviarCorreoHtml(solicitud.getEmail(), "Hemos recibido tu mensaje - AJPD", htmlConfirmacion);
     }
 
     private void enviarCorreoHtml(String destinatario, String asunto, String html) {

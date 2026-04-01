@@ -37,6 +37,10 @@ body {
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
 }
 
+main {
+  flex: 1;
+}
+
 @media (max-width: 768px) {
   .slide img {
     aspect-ratio: 1/1;

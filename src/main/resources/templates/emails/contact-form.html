@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Nuevo mensaje de contacto</title>
+</head>
+
+<body style="margin:0;padding:0;background:#f4f7f6;font-family:Arial,sans-serif;color:#10234e;">
+    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="padding:24px 0;">
+        <tr>
+            <td align="center">
+                <table role="presentation" width="600" cellspacing="0" cellpadding="0" style="max-width:600px;background:#ffffff;border:1px solid #e1e9e7;border-radius:12px;overflow:hidden;box-shadow:0 4px 12px rgba(0,0,0,0.05);">
+                    <tr>
+                        <td style="background:linear-gradient(135deg,#10234e,#243b74);padding:24px;color:#ffffff;text-align:center;">
+                            <img src="https://mcybqxqlujczgclidnar.supabase.co/storage/v1/object/public/ajpd-storage/logo.png" alt="Logo AJPD" style="height:50px;margin-bottom:12px;">
+                            <h1 style="margin:0;font-size:24px;font-weight:600;">Nuevo Mensaje Recibido</h1>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="padding:32px;">
+                            <p style="margin:0 0 20px 0;font-size:16px;line-height:1.5;">Se ha recibido una nueva consulta a través del formulario de contacto del sitio web.</p>
+                            
+                            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border-collapse:collapse;margin-bottom:24px;">
+                                <tr>
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;width:120px;"><strong>Nombre:</strong></td>
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;" th:text="${nombre}">Nombre del remitente</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;"><strong>Email:</strong></td>
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;">
+                                        <a th:href="'mailto:' + ${email}" style="color:#ca4353;text-decoration:none;" th:text="${email}">remitente@ejemplo.com</a>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;"><strong>Asunto:</strong></td>
+                                    <td style="padding:12px 0;border-bottom:1px solid #f0f4f3;" th:text="${asunto}">Asunto del mensaje</td>
+                                </tr>
+                            </table>
+
+                            <div style="background:#f8faf9;padding:20px;border-left:4px solid #ca4353;border-radius:6px;">
+                                <p style="margin:0 0 10px 0;font-weight:bold;color:#10234e;">Mensaje:</p>
+                                <p style="margin:0;line-height:1.6;white-space:pre-wrap;" th:text="${mensaje}">Contenido del mensaje...</p>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="background:#f8faf9;padding:24px;border-top:1px solid #e1e9e7;font-size:13px;color:#6d7c7a;text-align:center;">
+                            <p style="margin:0 0 8px 0;font-weight:bold;color:#10234e;">Asociación Juvenil Proyecto Dubini - AJPD</p>
+                            <p style="margin:0 0 4px 0;">Este es un correo automático generado por el sitio web oficial.</p>
+                            <p style="margin:0;"><a href="https://proyectodubini.org" style="color:#ca4353;text-decoration:none;">proyectodubini.org</a></p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

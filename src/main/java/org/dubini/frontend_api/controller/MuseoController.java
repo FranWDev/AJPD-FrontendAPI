@@ -31,6 +31,10 @@ public class MuseoController {
     @PostMapping("/visitantes")
     public ResponseEntity<HttpResponse> registrarVisitante(@Valid @RequestBody MuseoVisitanteRegistroRequest solicitud,
             HttpServletRequest request) {
+        
+        // Sanitizar entrada para prevenir XSS
+        solicitud.sanitize();
+
         if (envioSolicitudesDeshabilitado()) {
             throw new MuseoRegistroException("El envío de solicitudes no está habilitado en este momento.");
         }

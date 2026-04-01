@@ -23,6 +23,7 @@ public class NativeHintsConfig {
             registerDto(hints, "org.dubini.frontend_api.dto.UpdateStatusResponse");
             registerDto(hints, "org.dubini.frontend_api.dto.MuseoVisitanteRegistroRequest");
             registerDto(hints, "org.dubini.frontend_api.dto.MuseoVisitanteRegistroResponse");
+            registerDto(hints, "org.dubini.frontend_api.dto.ContactRequest");
 
             // ============ EXCEPCIONES ============
             registerException(hints, "org.dubini.frontend_api.exception.BackofficeException");
@@ -39,6 +40,7 @@ public class NativeHintsConfig {
             registerController(hints, "org.dubini.frontend_api.controller.MuseoController");
             registerController(hints, "org.dubini.frontend_api.controller.rest.CacheController");
             registerController(hints, "org.dubini.frontend_api.controller.rest.NewsRestController");
+            registerController(hints, "org.dubini.frontend_api.controller.rest.ContactController");
 
             // ============ SERVICIOS ============
             registerService(hints, "org.dubini.frontend_api.service.NewsService");

@@ -100,4 +100,20 @@ public class MuseoVisitanteRegistroRequest {
     public void setComentarios(String comentarios) {
         this.comentarios = comentarios;
     }
+
+    public void sanitize() {
+        this.nombre = sanitizeText(this.nombre);
+        this.tipoCaridad = sanitizeText(this.tipoCaridad);
+        this.horaRango = sanitizeText(this.horaRango);
+        this.comentarios = sanitizeText(this.comentarios);
+    }
+
+    private String sanitizeText(String text) {
+        if (text == null) return null;
+        return text.replace("&", "&amp;")
+                   .replace("<", "&lt;")
+                   .replace(">", "&gt;")
+                   .replace("\"", "&quot;")
+                   .replace("'", "&#39;");
+    }
 }
