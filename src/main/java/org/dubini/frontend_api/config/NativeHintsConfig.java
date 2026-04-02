@@ -58,6 +58,7 @@ public class NativeHintsConfig {
 
             // ============ CONFIGURATION ============
             registerConfig(hints, "org.dubini.frontend_api.config.BackofficeApiUrlProperties");
+            registerConfig(hints, "org.dubini.frontend_api.config.CorsConfig");
             registerConfig(hints, "org.dubini.frontend_api.config.JwtProperties");
             registerConfig(hints, "org.dubini.frontend_api.config.SecurityConfig");
             registerConfig(hints, "org.dubini.frontend_api.config.WebClientConfig");
