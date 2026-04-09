@@ -325,7 +325,8 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         { id: 'plant-sabina', position: { yaw: 1.639097877832575, pitch: 0.40047208111591104 }, html: '<div class="plant-marker-label">Sabina canaria</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Juniperus turbinata Guss. subsp. canariensis</i>', position: 'top center' }, anchor: 'center center' },
         { id: 'plant-jazmin', position: { yaw: 5.444544442432992, pitch: -0.40753793108819125 }, html: '<div class="plant-marker-label">Jazmín silvestre</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Jasminum odoratissimum L.</i>', position: 'top center' }, anchor: 'center center' },
-        { id: 'plant-drago', position: { yaw: 2.9519666956261106, pitch: 0.524854371934387 }, html: '<div class="plant-marker-label">Drago</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Dracaena draco (L.) L.</i>', position: 'top center' }, anchor: 'center center' }
+        { id: 'plant-drago', position: { yaw: 2.9519666956261106, pitch: 0.524854371934387 }, html: '<div class="plant-marker-label">Drago</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Dracaena draco (L.) L.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-retama', position: { yaw: 0.08404581503810024, pitch: 0.06588612615379574 }, html: '<div class="plant-marker-label">Retama canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Teline canariensis</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto3_5: {
@@ -366,7 +367,12 @@ document.addEventListener("DOMContentLoaded", () => {
         },
         { id: 'plant-palosangre', position: { yaw: 0.6031010266997419, pitch: -0.2558135119310563 }, html: '<div class="plant-marker-label">Palosangre</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Marcetella moquiniana</i>', position: 'top center' }, anchor: 'center center' },
         { id: 'plant-hediondo', position: { yaw: 1.745054095324531, pitch: -0.4232953592439781 }, html: '<div class="plant-marker-label">Hediondo o Yerbamora</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Bosea yervamora</i>', position: 'top center' }, anchor: 'center center' },
-        { id: 'plant-palmera', position: { yaw: 6.247723221306726, pitch: -0.06640254040461935 }, html: '<div class="plant-marker-label">Palmera canaria</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Phoenix canariensis</i>', position: 'top center' }, anchor: 'center center' }
+        { id: 'plant-palmera', position: { yaw: 6.247723221306726, pitch: -0.06640254040461935 }, html: '<div class="plant-marker-label">Palmera canaria</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Phoenix canariensis</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-malvarrisco', position: { yaw: 5.96614703408269, pitch: -0.26525327106812524 }, html: '<div class="plant-marker-label">Malvarrisco</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Navaea phoenicea</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-peralillo', position: { yaw: 5.264564756146173, pitch: -0.49225612757048864 }, html: '<div class="plant-marker-label">Peralillo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Gymnosporia cassinoides</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-granadillo', position: { yaw: 1.2545961642536037, pitch: -0.17675950705802967 }, html: '<div class="plant-marker-label">Granadillo canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Hypericum canariense L.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-almacigo', position: { yaw: 4.418374123832688, pitch: 0.09520026521582392 }, html: '<div class="plant-marker-label">Almácigo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Pistacia atlantica</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-guaydil', position: { yaw: 1.036912596152367, pitch: -0.16411702094652414 }, html: '<div class="plant-marker-label">Guaydil</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Convolvulus floridus</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto5: {
@@ -389,7 +395,12 @@ document.addEventListener("DOMContentLoaded", () => {
         { id: 'plant-naranjo', position: { yaw: 5.107922801598216, pitch: -0.284204470678757 }, html: '<div class="plant-marker-label">Naranjo salvaje</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Ilex perado Aiton subsp. platyphylla</i>', position: 'top center' }, anchor: 'center center' },
         { id: 'plant-bicacaro', position: { yaw: 1.107764882508876, pitch: -0.8193670189103006 }, html: '<div class="plant-marker-label">Bicácaro</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Canarina canariensis</i>', position: 'top center' }, anchor: 'center center' },
         { id: 'plant-brezo', position: { yaw: 0.37047630660511527, pitch: -0.07473119690979257 }, html: '<div class="plant-marker-label">Brezo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Erica canariensis</i>', position: 'top center' }, anchor: 'center center' },
-        { id: 'plant-til', position: { yaw: 1.901130142387064, pitch: -0.0838013955517356 }, html: '<div class="plant-marker-label">Til</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Ocotea foetens</i>', position: 'top center' }, anchor: 'center center' }
+        { id: 'plant-til', position: { yaw: 1.901130142387064, pitch: -0.0838013955517356 }, html: '<div class="plant-marker-label">Til</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Ocotea foetens</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-esparraguera', position: { yaw: 1.0206474187935428, pitch: -0.3249538518501083 }, html: '<div class="plant-marker-label">Esparraguera o Esparragón</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Sin especificar</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-laurel', position: { yaw: 4.488369733625562, pitch: -0.20006416603721622 }, html: '<div class="plant-marker-label">Laurel canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Laurus novocanariensis</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-follado', position: { yaw: 5.98501412055248, pitch: -0.3895591694535099 }, html: '<div class="plant-marker-label">Follado canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Viburnum rugosum Pers.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-aderno', position: { yaw: 2.5731882094371294, pitch: -0.18167169817480255 }, html: '<div class="plant-marker-label">Aderno</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Heberdenia excelsa</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-paloblanco', position: { yaw: 0.8325621096926331, pitch: -0.1360725088652972 }, html: '<div class="plant-marker-label">Paloblanco</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Picconia excelsa</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto6: {
@@ -409,7 +420,9 @@ document.addEventListener("DOMContentLoaded", () => {
           size: { width: 32, height: 32 },
           anchor: 'center center'
         },
-        { id: 'plant-vinatigo', position: { yaw: 3.2755463052296587, pitch: -0.15740727727732806 }, html: '<div class="plant-marker-label">Viñátigo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Persea indica (L.) Spreng.</i>', position: 'top center' }, anchor: 'center center' }
+        { id: 'plant-vinatigo', position: { yaw: 3.2755463052296587, pitch: -0.15740727727732806 }, html: '<div class="plant-marker-label">Viñátigo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Persea indica (L.) Spreng.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-gibalbera', position: { yaw: 1.605388969788126, pitch: -0.1323811526111669 }, html: '<div class="plant-marker-label">Gibalbera</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Semele androgyna</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-mocan', position: { yaw: 1.359797893047868, pitch: -0.19115118520002805 }, html: '<div class="plant-marker-label">Mocán</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Visnea mocanera L. f.</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto7: {
@@ -458,7 +471,10 @@ document.addEventListener("DOMContentLoaded", () => {
           anchor: 'center center'
         },
         { id: 'plant-rosalito', position: { yaw: 5.455670023503024, pitch: -0.2618104293330932 }, html: '<div class="plant-marker-label">Rosalito salvaje</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Pterocephalus dumetorum</i>', position: 'top center' }, anchor: 'center center' },
-        { id: 'plant-cedro', position: { yaw: 4.448176040420181, pitch: -0.33104709574760216 }, html: '<div class="plant-marker-label">Cedro canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Juniperus cedrus</i>', position: 'top center' }, anchor: 'center center' }
+        { id: 'plant-cedro', position: { yaw: 4.448176040420181, pitch: -0.33104709574760216 }, html: '<div class="plant-marker-label">Cedro canario</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Juniperus cedrus</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-jara-blanca', position: { yaw: 1.4571879599852968, pitch: -0.1929957471063184 }, html: '<div class="plant-marker-label">Jara blanca</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Cistus monspeliensis L.</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-rosalillo', position: { yaw: 5.3852790467705525, pitch: -0.21454667797903149 }, html: '<div class="plant-marker-label">Rosalillo</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Sin especificar</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-alheli', position: { yaw: 0.16085065934929765, pitch: -0.20148392400447968 }, html: '<div class="plant-marker-label">Alhelí silvestre</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Sin especificar</i>', position: 'top center' }, anchor: 'center center' }
       ]
     },
     foto9: {
@@ -484,7 +500,9 @@ document.addEventListener("DOMContentLoaded", () => {
           html: '<div class="custom-node"><i class="fas fa-home"></i></div>',
           size: { width: 32, height: 32 },
           anchor: 'center center'
-        }
+        },
+        { id: 'plant-barbusano', position: { yaw: 1.8133523652702215, pitch: 0.03464544770308575 }, html: '<div class="plant-marker-label">Barbusano</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Apollonias barbujana</i>', position: 'top center' }, anchor: 'center center' },
+        { id: 'plant-tajinaste', position: { yaw: 1.7918381168874515, pitch: -0.11505770104051516 }, html: '<div class="plant-marker-label">Tajinaste</div>', tooltip: { content: '<b>Nombre científico:</b> <i>Sin especificar</i>', position: 'top center' }, anchor: 'center center' }
       ]
     }
   };
