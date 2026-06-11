@@ -180,7 +180,7 @@ AJPD se compromete a utilizar mi imagen y/o voz de manera respetuosa y profesion
 
 5. Revocación de la Autorización:
 Podré revocar esta autorización en cualquier momento, mediante notificación por escrito a AJPD, entendiendo que dicha revocación no tendrá efectos retroactivos sobre el material ya publicado o distribuido.`,
-            authDatosTitle: "Datos y Plataformas de Gestión",
+            authDatosTitle: "Datos y Plataformas de Gestión *",
             authDatosContent: `Por medio del presente, otorgo mi autorización expresa y voluntaria a la Asociación Juvenil Proyecto Dubini (AJPD), con domicilio fiscal en Calle Leopoldo de la Rosa Olivera, 1, 38206, San Cristóbal de La Laguna, para el tratamiento de mis datos personales conforme a las siguientes condiciones y de acuerdo con lo establecido en el Reglamento General de Protección de Datos (RGPD), la Ley Orgánica de Protección de Datos Personales y garantía de los derechos digitales (LOPDGDD) y demás normativa española vigente en materia de protección de datos:
 
 Finalidad del Tratamiento:
@@ -317,7 +317,7 @@ AJPD commits to using my image and/or voice respectfully and professionally, ens
 
 5. Revocation of Authorization:
 I may revoke this authorization at any time by written notification to AJPD, understanding that such revocation will not have retroactive effects on material already published or distributed.`,
-            authDatosTitle: "Data and Management Platforms",
+            authDatosTitle: "Data and Management Platforms *",
             authDatosContent: `By means of the present, I expressly and voluntarily grant my authorization to the Asociación Juvenil Proyecto Dubini (AJPD), with registered office at Calle Leopoldo de la Rosa Olivera, 1, 38206, San Cristóbal de La Laguna, for the processing of my personal data in accordance with the following conditions and in accordance with the provisions of the General Data Protection Regulation (GDPR), the Organic Law for the Protection of Personal Data and guarantee of digital rights (LOPDGDD) and other Spanish regulations in force on data protection:
 
 Purpose of Processing:
@@ -517,19 +517,9 @@ I may revoke this authorization at any time by written notification to AJPD, wit
         
         // Custom validation for Step 4 (Authorizations)
         if (currentStep === 4) {
-            const wspCheckbox = document.getElementById('auth_whatsapp_checkbox');
-            const imagenCheckbox = document.getElementById('auth_imagen_checkbox');
             const datosCheckbox = document.getElementById('auth_datos_checkbox');
             
-            // Check if all authorizations are accepted
-            if (!wspCheckbox || !wspCheckbox.checked) {
-                alert(currentLang === 'es' ? 'Debe aceptar la autorización de WhatsApp' : 'You must accept the WhatsApp authorization');
-                isValid = false;
-            }
-            if (!imagenCheckbox || !imagenCheckbox.checked) {
-                alert(currentLang === 'es' ? 'Debe aceptar la protección de imagen' : 'You must accept the image protection');
-                isValid = false;
-            }
+            // Check if only data processing/protection authorization is accepted (WhatsApp and Image are optional)
             if (!datosCheckbox || !datosCheckbox.checked) {
                 alert(currentLang === 'es' ? 'Debe aceptar el tratamiento de datos' : 'You must accept the data processing');
                 isValid = false;
