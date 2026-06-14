@@ -43,6 +43,7 @@ public class NativeHintsConfig {
             registerController(hints, "org.dubini.frontend_api.controller.rest.NewsRestController");
             registerController(hints, "org.dubini.frontend_api.controller.rest.ContactController");
             registerController(hints, "org.dubini.frontend_api.controller.rest.InscripcionController");
+            registerController(hints, "org.dubini.frontend_api.controller.rest.HeartbeatController");
 
             // ============ SERVICIOS ============
             registerService(hints, "org.dubini.frontend_api.service.NewsService");
