@@ -107,6 +107,31 @@
                         </div>
                     </div>
 
+                    <!-- Reproductor de Audio Flotante -->
+                    <div id="museum-audio-player" class="museum-audio-player">
+                        <button id="close-audio-btn" class="close-audio-btn" aria-label="Cerrar reproductor">
+                            <svg viewBox="0 0 24 24" width="16" height="16" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                        </button>
+                        <div class="audio-player-info">
+                            <span class="audio-plant-name" id="audio-plant-name">Nombre Planta</span>
+                            <span class="audio-scientific-name" id="audio-scientific-name">Nombre Científico</span>
+                        </div>
+                        <div class="audio-controls">
+                             <button id="play-pause-btn" class="play-pause-btn" aria-label="Reproducir">
+                                 <svg id="svg-play" viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                                 <svg id="svg-pause" viewBox="0 0 24 24" width="20" height="20" fill="currentColor" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+                                 <svg id="svg-loading" class="loading-spinner-svg" viewBox="0 0 50 50" width="20" height="20" style="display: none;">
+                                     <circle class="path" cx="25" cy="25" r="20" fill="none" stroke="currentColor" stroke-width="5"></circle>
+                                 </svg>
+                             </button>
+                            <div class="audio-timeline-container">
+                                <span class="audio-time" id="audio-current-time">0:00</span>
+                                <input type="range" id="audio-progress" class="audio-progress" min="0" max="100" value="0">
+                                <span class="audio-time" id="audio-duration">0:00</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div id="virtual-tour-viewer" aria-label="Visor de museo virtual" style="position: relative;"></div>
                 </div>
             </div>
